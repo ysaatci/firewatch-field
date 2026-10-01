@@ -40,6 +40,7 @@ swift run fwgen --minutes 120 --out fixtures
 | `POST` | `/v1/reports` | `ReportDTO` | `ReceiptDTO`, or an error |
 | `GET` | `/v1/control` | | `ReplayStatusDTO` |
 | `POST` | `/v1/control` | `ReplayControlDTO` | `ReplayStatusDTO` |
+| `GET` | `/v1/control/faults` | | `FaultsDTO` |
 | `POST` | `/v1/control/faults` | `FaultsDTO` | `FaultsDTO` |
 | `POST` | `/v1/control/disconnect` | | `204`, and every stream is closed |
 

@@ -28,6 +28,8 @@ struct StreamTests {
             ws.onClose.whenComplete { _ in continuation.finish() }
         }.get()
         let services = try #require(app.simulator)
+        // The upgrade callback can run after `connect` returns, so wait for both ends.
+        try await waitUntil { socket.withLockedValue { $0 != nil } }
         try await waitUntil { await services.hub.connectionCount == 1 }
         return Client(socket: try #require(socket.withLockedValue { $0 }), messages: messages)
     }
@@ -74,6 +76,16 @@ struct StreamTests {
             #expect(await iterator.next() == nil)  // the stream ended
             let services = try #require(app.simulator)
             #expect(await services.hub.connectionCount == 0)
+        }
+    }
+
+    @Test func disconnectClosesStreams() async throws {
+        try await withRunningApp { app, _ in
+            let client = try await connect(app)
+            let response = try await app.testing().sendRequest(.POST, "v1/control/disconnect")
+            #expect(response.status == .noContent)
+            var iterator = client.messages.makeAsyncIterator()
+            #expect(await iterator.next() == nil)
         }
     }
 

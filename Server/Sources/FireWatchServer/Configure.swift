@@ -19,16 +19,19 @@ public func configure(_ app: Application, configuration: ServerConfiguration) as
 
     app.get("health") { _ in "ok" }
     let api = app.grouped(PathComponent(stringLiteral: API.pathPrefix))
+        .grouped(FaultMiddleware(faults: services.faults))
     try api.register(collection: FeedController(simulation: services.simulation))
     try api.register(collection: StreamController(hub: services.hub))
     try api.register(collection: CrewController(simulation: services.simulation, hub: services.hub))
-    try api.register(collection: ControlController(simulation: services.simulation, hub: services.hub))
+    try api.register(
+        collection: ControlController(simulation: services.simulation, hub: services.hub, faults: services.faults))
 }
 
 /// The server's long-lived parts, created once at start-up.
 struct SimulatorServices: Sendable {
     let simulation: FireSimulation
     let hub = EventHub()
+    let faults = FaultInjector()
 
     init(configuration: ServerConfiguration) {
         simulation = FireSimulation(
