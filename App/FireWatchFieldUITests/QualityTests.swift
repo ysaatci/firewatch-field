@@ -41,6 +41,8 @@ final class QualityTests: FireWatchUITestCase {
     /// Apple's automated audit (contrast, labels, hit regions, Dynamic Type) on every main screen.
     @MainActor
     func testScreensPassTheAccessibilityAudit() throws {
+        // Audit every screen even after a finding, so one run lists them all.
+        continueAfterFailure = true
         let app = XCUIApplication.demo(speed: 1)
         app.launch()
         XCTAssertTrue(app.tabBars.buttons["Map"].waitForExistence(timeout: 20))
