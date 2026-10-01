@@ -83,7 +83,7 @@ public struct ResidualHotspotModel: Sendable {
         }
         return ResidualHotspot(
             id: Hotspot.ID(String(format: "hs-r%03dc%03d", cell.row, cell.column)),
-            coordinate: terrain.projection.unproject(position),
+            coordinate: terrain.coordinate(at: position),
             smoulder: smoulder,
             flareUp: flareUp
         )

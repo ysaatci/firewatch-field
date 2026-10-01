@@ -88,10 +88,10 @@ public struct SimulatedWorld: Sendable {
         let location = route.location(atSecond: second)
         let position = DronePosition(
             time: date(atMinute: minute),
-            coordinate: scenario.terrain.projection.unproject(location.point),
+            coordinate: scenario.terrain.coordinate(at: location.point),
             headingDegrees: location.headingDegrees,
             altitudeMetres: route.altitudeMetres,
-            battery: route.battery(atSecond: second)
+            battery: route.battery(atSecond: second).rounded(toPlaces: 3)
         )
         return .droneMoved(DroneUpdate(droneID: route.droneID, name: route.name, position: position))
     }
@@ -104,8 +104,8 @@ public struct SimulatedWorld: Sendable {
             HotspotObservation(
                 hotspotID: hotspot.id,
                 coordinate: hotspot.coordinate,
-                reading: TemperatureReading(time: date(atMinute: pass.minute), celsius: (celsius * 10).rounded() / 10),
-                confidence: (confidence * 100).rounded() / 100,
+                reading: TemperatureReading(time: date(atMinute: pass.minute), celsius: celsius.rounded(toPlaces: 1)),
+                confidence: confidence.rounded(toPlaces: 2),
                 droneID: pass.droneID
             ))
     }

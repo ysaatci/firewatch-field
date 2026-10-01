@@ -49,7 +49,7 @@ public struct TerrainGrid: Sendable {
     }
 
     public func centre(of index: GridIndex) -> Coordinate {
-        projection.unproject(planarCentre(of: index))
+        coordinate(at: planarCentre(of: index))
     }
 
     /// The cell containing `point` (metres from the grid centre), or `nil` outside the grid.

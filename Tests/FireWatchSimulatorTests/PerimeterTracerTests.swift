@@ -91,7 +91,7 @@ struct PerimeterTracerTests {
         let burned = Grid(rows: 10, columns: 10) { (3...6).contains($0.row) && (3...6).contains($0.column) }
         let exact = FirePerimeter(time: .now, polygons: terrain.polygons(of: burned, smoothing: 0))
         #expect(exact.contains(centre))
-        #expect(isClose(exact.areaSquareMetres, 40_000, within: 1))  // a 200 m square
+        #expect(isClose(exact.areaSquareMetres, 40_000, within: 10))  // a 200 m square, corners at 1 cm precision
         let smoothed = FirePerimeter(time: .now, polygons: terrain.polygons(of: burned))
         #expect(smoothed.contains(centre))
         #expect(smoothed.areaSquareMetres < exact.areaSquareMetres)

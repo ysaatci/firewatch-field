@@ -53,7 +53,7 @@ public struct SurveyRoute: Sendable {
         let point = PlanarPoint(x: from.x + (to.x - from.x) * t, y: from.y + (to.y - from.y) * t)
         let direction: Double = returning ? -1 : 1
         let degrees = atan2((to.x - from.x) * direction, (to.y - from.y) * direction) * 180 / .pi
-        return (point, degrees < 0 ? degrees + 360 : degrees)
+        return (point, (degrees + 360).truncatingRemainder(dividingBy: 360))  // also turns -0 into 0
     }
 
     /// Remaining battery `seconds` into the scenario.

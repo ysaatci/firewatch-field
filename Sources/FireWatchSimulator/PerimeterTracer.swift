@@ -169,11 +169,12 @@ extension TerrainGrid {
     /// corner-cutting passes; 0 keeps the exact cell outline.
     public func polygons(of mask: Grid<Bool>, smoothing: Int = 2) -> [Polygon] {
         let toCoordinate = { (point: PlanarPoint) in
-            self.projection.unproject(
-                PlanarPoint(
-                    x: (point.x - Double(self.columns) / 2) * self.cellSize,
-                    y: (point.y - Double(self.rows) / 2) * self.cellSize
-                )
+            self.coordinate(
+                at:
+                    PlanarPoint(
+                        x: (point.x - Double(self.columns) / 2) * self.cellSize,
+                        y: (point.y - Double(self.rows) / 2) * self.cellSize
+                    )
             )
         }
         return PerimeterTracer.polygons(of: mask, smoothing: smoothing).map { polygon in
