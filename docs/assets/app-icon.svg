@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- FireWatch Field app icon: a flame inside a drone's scan ring, on an ember-dark background. -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c2230"/>
+      <stop offset="1" stop-color="#3b1a0e"/>
+    </linearGradient>
+    <linearGradient id="flame" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffc233"/>
+      <stop offset="0.55" stop-color="#ff7a1a"/>
+      <stop offset="1" stop-color="#e8410c"/>
+    </linearGradient>
+    <linearGradient id="core" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff6d6"/>
+      <stop offset="1" stop-color="#ffcf4a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#sky)"/>
+  <circle cx="512" cy="560" r="390" fill="none" stroke="#ffffff" stroke-opacity="0.16" stroke-width="10"/>
+  <circle cx="512" cy="560" r="290" fill="none" stroke="#ffffff" stroke-opacity="0.10" stroke-width="8" stroke-dasharray="26 22"/>
+  <path fill="url(#flame)" d="M512 150 C 560 300 720 380 720 600 C 720 760 628 860 512 860 C 396 860 304 760 304 612 C 304 512 356 448 404 404 C 410 480 440 528 476 548 C 456 420 466 280 512 150 Z"/>
+  <path fill="url(#core)" d="M520 520 C 548 590 616 630 616 712 C 616 780 572 820 512 820 C 452 820 408 780 408 718 C 408 668 436 636 462 614 C 466 650 482 672 500 682 C 492 626 496 572 520 520 Z"/>
+  <circle cx="788" cy="300" r="22" fill="#5fd4ff"/>
+  <circle cx="788" cy="300" r="44" fill="none" stroke="#5fd4ff" stroke-opacity="0.45" stroke-width="6"/>
+</svg>
