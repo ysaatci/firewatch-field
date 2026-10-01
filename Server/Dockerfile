@@ -13,7 +13,8 @@ RUN swift package --package-path Server resolve
 # Tests are copied only because the manifest declares the test target.
 COPY Server/Sources ./Server/Sources
 COPY Server/Tests ./Server/Tests
-RUN swift build --package-path Server -c release --product firewatch-server --static-swift-stdlib \
+# `-Xlinker -s` strips debug symbols, which are most of the binary's size.
+RUN swift build --package-path Server -c release --product firewatch-server --static-swift-stdlib -Xlinker -s \
     && mkdir /staging \
     && cp "$(swift build --package-path Server -c release --show-bin-path)/firewatch-server" /staging/
 

@@ -9,6 +9,7 @@ public func configure(_ app: Application) async throws {
 /// Sets up the simulation, routes and middleware with explicit settings.
 public func configure(_ app: Application, configuration: ServerConfiguration) async throws {
     app.middleware = Middlewares()
+    app.middleware.use(RequestLogMiddleware())
     app.middleware.use(APIErrorMiddleware())
 
     let services = SimulatorServices(configuration: configuration)
