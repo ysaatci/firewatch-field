@@ -59,10 +59,16 @@ struct HotspotDetailScreen: View {
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 3]))
                 }
                 ForEach(hotspot.readings, id: \.time) { reading in
-                    LineMark(x: .value("Time", reading.time), y: .value("Temperature", Format.temperatureValue(reading.celsius)))
-                        .interpolationMethod(.monotone)
-                    PointMark(x: .value("Time", reading.time), y: .value("Temperature", Format.temperatureValue(reading.celsius)))
-                        .symbolSize(20)
+                    LineMark(
+                        x: .value("Time", reading.time),
+                        y: .value("Temperature", Format.temperatureValue(reading.celsius))
+                    )
+                    .interpolationMethod(.monotone)
+                    PointMark(
+                        x: .value("Time", reading.time),
+                        y: .value("Temperature", Format.temperatureValue(reading.celsius))
+                    )
+                    .symbolSize(20)
                 }
                 .foregroundStyle(hotspot.severity.color)
             }
