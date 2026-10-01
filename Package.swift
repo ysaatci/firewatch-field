@@ -5,7 +5,7 @@ let package = Package(
     name: "FireWatchField",
     platforms: [.iOS(.v17), .macOS(.v14)],
     products: [
-        .library(name: "FireWatchCore", targets: ["FireWatchCore"]),
+        .library(name: "FireWatchCore", targets: ["FireWatchCore"])
     ],
     targets: [
         // Platform-neutral domain logic: must build on Linux (no Apple-only imports).

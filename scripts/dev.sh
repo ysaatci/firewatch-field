@@ -5,6 +5,8 @@
 # Usage: scripts/dev.sh <command>
 #   test     Build and run all tests
 #   build    Build all targets
+#   format   Rewrite sources with swift-format
+#   lint     Fail if any source is not formatted
 #   shell    Open a shell in the dev container
 #   server   Run the simulator server (added in M4)
 set -euo pipefail
@@ -37,6 +39,8 @@ case "${1:-help}" in
     test)   run swift test ;;
     build)  run swift build --build-tests ;;
     shell)  run bash ;;
+    format) run swift format format --in-place --recursive --parallel Package.swift Sources Tests ;;
+    lint)   run swift format lint --strict --recursive --parallel Package.swift Sources Tests ;;
     server) echo "The simulator server arrives in milestone M4." >&2; exit 1 ;;
-    *)      sed -n '2,9p' "$0" | sed 's/^# \{0,1\}//'; exit 1 ;;
+    *)      sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'; exit 1 ;;
 esac
