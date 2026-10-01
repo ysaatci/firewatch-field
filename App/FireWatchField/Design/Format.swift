@@ -43,6 +43,16 @@ enum Format {
                 .locale(UnitSystem.current.locale))
     }
 
+    /// The unit ``temperature(_:)`` shows, for places that plot numbers, such as charts.
+    static var temperatureUnit: UnitTemperature {
+        UnitSystem.current.locale.measurementSystem == .us ? .fahrenheit : .celsius
+    }
+
+    /// A Celsius reading in ``temperatureUnit``.
+    static func temperatureValue(_ celsius: Double) -> Double {
+        Measurement(value: celsius, unit: UnitTemperature.celsius).converted(to: temperatureUnit).value
+    }
+
     /// Road-style distances, which also pick sensible rounding ("650 m", "2.4 km", "2,400 ft").
     static func distance(_ metres: Double) -> String {
         Measurement(value: metres, unit: UnitLength.meters)

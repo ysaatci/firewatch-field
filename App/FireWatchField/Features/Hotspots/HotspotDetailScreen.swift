@@ -54,19 +54,19 @@ struct HotspotDetailScreen: View {
         Section("Temperature") {
             Chart {
                 ForEach(Severity.thresholds, id: \.0) { threshold in
-                    RuleMark(y: .value("Threshold", threshold.1))
+                    RuleMark(y: .value("Threshold", Format.temperatureValue(threshold.1)))
                         .foregroundStyle(threshold.0.color.opacity(0.35))
                         .lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 3]))
                 }
                 ForEach(hotspot.readings, id: \.time) { reading in
-                    LineMark(x: .value("Time", reading.time), y: .value("°C", reading.celsius))
+                    LineMark(x: .value("Time", reading.time), y: .value("Temperature", Format.temperatureValue(reading.celsius)))
                         .interpolationMethod(.monotone)
-                    PointMark(x: .value("Time", reading.time), y: .value("°C", reading.celsius))
+                    PointMark(x: .value("Time", reading.time), y: .value("Temperature", Format.temperatureValue(reading.celsius)))
                         .symbolSize(20)
                 }
                 .foregroundStyle(hotspot.severity.color)
             }
-            .chartYAxisLabel("°C")
+            .chartYAxisLabel(Format.temperatureUnit.symbol)
             .frame(height: 160)
             .accessibilityLabel("Temperature trend")
             .accessibilityValue(Text(trendDescription(hotspot)))
