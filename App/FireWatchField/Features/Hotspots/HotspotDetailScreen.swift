@@ -93,6 +93,7 @@ struct HotspotDetailScreen: View {
                     Task { await model.perform(action, on: hotspot.id) }
                 } label: {
                     Label(resource: action.label, systemImage: action.symbol)
+                        .foregroundStyle(.white)  // icons otherwise take the accent colour
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
