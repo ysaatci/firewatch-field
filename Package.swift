@@ -7,6 +7,7 @@ let package = Package(
     products: [
         .library(name: "FireWatchCore", targets: ["FireWatchCore"]),
         .library(name: "FireWatchSimulator", targets: ["FireWatchSimulator"]),
+        .library(name: "FireWatchAPI", targets: ["FireWatchAPI"]),
     ],
     targets: [
         // Platform-neutral domain logic: must build on Linux (no Apple-only imports).
@@ -16,6 +17,10 @@ let package = Package(
         // Deterministic fake-data source: a seeded wildfire scenario.
         .target(name: "FireWatchSimulator", dependencies: ["FireWatchCore"]),
         .testTarget(name: "FireWatchSimulatorTests", dependencies: ["FireWatchSimulator"]),
+
+        // The versioned wire contract shared by the server and the app.
+        .target(name: "FireWatchAPI", dependencies: ["FireWatchCore"]),
+        .testTarget(name: "FireWatchAPITests", dependencies: ["FireWatchAPI"]),
     ],
     swiftLanguageModes: [.v6]
 )
