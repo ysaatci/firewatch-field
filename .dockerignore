@@ -1,0 +1,7 @@
+.git
+.build
+Server/.build
+App
+docs
+fixtures
+artifacts

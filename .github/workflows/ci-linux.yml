@@ -9,8 +9,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
-    name: Build, lint and test (Linux)
+  core:
+    name: Core, simulator and API (Linux)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     # Keep in sync with docker/Dockerfile.dev.
@@ -26,7 +26,7 @@ jobs:
           restore-keys: spm-${{ runner.os }}-swift6.3-
 
       - name: Lint
-        run: swift format lint --strict --recursive --parallel Package.swift Sources Tests
+        run: swift format lint --strict --recursive --parallel Package.swift Sources Tests Server/Package.swift Server/Sources Server/Tests
 
       - name: Build (warnings are errors)
         run: swift build --build-tests -Xswiftc -warnings-as-errors
@@ -36,3 +36,26 @@ jobs:
 
       - name: Smoke-test fwgen
         run: swift run fwgen --out /tmp/fixtures && test -s /tmp/fixtures/snapshot.json
+
+  server:
+    name: Simulator server (Linux)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container: swift:6.3
+    steps:
+      # The checkout directory is named after the repository, which the Server package's
+      # path dependency on the root package relies on.
+      - uses: actions/checkout@v7
+
+      - name: Cache SwiftPM build
+        uses: actions/cache@v6
+        with:
+          path: Server/.build
+          key: spm-server-${{ runner.os }}-swift6.3-${{ hashFiles('Server/Package.resolved', 'Package.swift') }}
+          restore-keys: spm-server-${{ runner.os }}-swift6.3-
+
+      - name: Build (warnings are errors)
+        run: swift build --package-path Server --build-tests -Xswiftc -warnings-as-errors
+
+      - name: Test
+        run: swift test --package-path Server --skip-build

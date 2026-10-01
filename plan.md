@@ -266,7 +266,7 @@ as README screenshots.
 - [x] 3.5 `docs/api.md`: endpoints, event types and example payloads (generated with `fwgen`)
 
 ### M4: Simulator server (Vapor)
-- [ ] 4.1 Vapor target, `/health`, and a Docker image plus `docker-compose.yml`
+- [x] 4.1 Vapor target, `/health`, and a Docker image plus `docker-compose.yml`
 - [ ] 4.2 `ReplayClock` actor (start, pause, speed, reset) and control endpoints (FR-S3)
 - [ ] 4.3 REST: `GET /v1/snapshot`, `/v1/hotspots?bbox=`, `/v1/perimeters`, `/v1/drones` (FR-S1)
 - [ ] 4.4 WebSocket `/v1/stream`: pushes scenario events as the clock advances (FR-S2)

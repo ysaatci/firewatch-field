@@ -1,0 +1,13 @@
+# Runs the simulator server on http://localhost:8080. Start with `scripts/dev.sh server`.
+services:
+  simulator:
+    build:
+      context: .
+      dockerfile: Server/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      FIREWATCH_TOKEN: dev-token        # bearer token the app sends; change it if you expose the port
+      FIREWATCH_PRESET: manavgat        # or: stress
+      FIREWATCH_SPEED: "30"             # scenario seconds per real second
+      FIREWATCH_START_MINUTE: "60"      # start an hour in, so there is already something to see

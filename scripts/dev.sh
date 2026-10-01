@@ -3,13 +3,12 @@
 # Native Swift on Windows is avoided: Smart App Control blocks unsigned test binaries.
 #
 # Usage: scripts/dev.sh <command>
-#   check    Everything CI runs: lint, strict build, tests
-#   test     Build (warnings are errors) and run all tests
-#   build    Build all targets
+#   check    Everything CI runs: lint, strict build, tests (core and server)
+#   test     Build (warnings are errors) and run the core package's tests
 #   format   Rewrite sources with swift-format
 #   lint     Fail if any source is not formatted
 #   shell    Open a shell in the dev container
-#   server   Run the simulator server (added in M4)
+#   server   Run the simulator server on http://localhost:8080 (docker compose)
 set -euo pipefail
 
 IMAGE="firewatch-field-dev:latest"
@@ -29,24 +28,28 @@ run() {
     ensure_image
     local tty=()
     [ -t 0 ] && [ -t 1 ] && tty=(-it)
-    # .build lives in a named volume: faster than a bind mount and keeps Linux
-    # build products out of the Windows working tree.
+    # Mounted under the repository's own name: SwiftPM names the Server package's path
+    # dependency after this directory. Build products live in named volumes, which are
+    # faster than bind mounts and keep Linux artefacts out of the Windows working tree.
     docker run --rm "${tty[@]}" \
-        -v "$host_root:/src" -v firewatch-field-build:/src/.build \
-        -w /src "$IMAGE" "$@"
+        -v "$host_root:/firewatch-field" \
+        -v firewatch-field-build:/firewatch-field/.build \
+        -v firewatch-field-server-build:/firewatch-field/Server/.build \
+        -w /firewatch-field "$IMAGE" "$@"
 }
 
-SOURCES="Package.swift Sources Tests"
+SOURCES="Package.swift Sources Tests Server/Package.swift Server/Sources Server/Tests"
 LINT="swift format lint --strict --recursive --parallel $SOURCES"
-TEST="swift build --build-tests -Xswiftc -warnings-as-errors && swift test --skip-build"
+STRICT="-Xswiftc -warnings-as-errors"
+TEST="swift build --build-tests $STRICT && swift test --skip-build"
+SERVER_TEST="swift build --package-path Server --build-tests $STRICT && swift test --package-path Server --skip-build"
 
 case "${1:-help}" in
-    check)  run bash -c "$LINT && $TEST" ;;
+    check)  run bash -c "$LINT && $TEST && $SERVER_TEST" ;;
     test)   run bash -c "$TEST" ;;
-    build)  run swift build --build-tests ;;
     shell)  run bash ;;
     format) run swift format format --in-place --recursive --parallel $SOURCES ;;
     lint)   run bash -c "$LINT" ;;
-    server) echo "The simulator server arrives in milestone M4." >&2; exit 1 ;;
-    *)      sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'; exit 1 ;;
+    server) cd "$ROOT" && docker compose up --build ;;
+    *)      sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'; exit 1 ;;
 esac
