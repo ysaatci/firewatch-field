@@ -245,17 +245,20 @@ as README screenshots.
 - [ ] 2.1 `SeededRandom` (SplitMix64) with a determinism test
 - [ ] 2.2 `TerrainGrid`: fuel and slope fields from layered noise; origin, cell size, coordinate↔cell conversion
 - [ ] 2.3 `FireSpreadModel`: cell states and a wind-biased ignition step, with tests (no spread without fuel, downwind bias)
-- [ ] 2.4 Perimeter extraction (marching squares over burned cells → polygon)
+- [ ] 2.4 Perimeter extraction (trace cell boundaries of the burned mask → rings with holes, then smooth)
 - [ ] 2.5 Residual hotspots: spawn behind the front, exponential cooling, flare-up probability
 - [ ] 2.6 Drone planner: lawnmower survey pattern; a detection happens only when a drone's footprint covers a hotspot
-- [ ] 2.7 `Scenario` timeline: `events(from:to:)` and `snapshot(at:)`; golden-file test (fixed seed → fixed JSON)
-- [ ] 2.8 `fwgen` CLI: `fwgen --seed 42 --minutes 180 --out fixtures/`, plus a 2,000-hotspot stress preset
+- [ ] 2.7 `FeedEvent` vocabulary and `FireState` reducer in Core (observations create/update hotspots; detection-driven flare-up rule)
+- [ ] 2.8 `Scenario` timeline: precomputed fire, hotspots, drone passes and perimeters; determinism and golden-summary tests
+- [ ] 2.9 `SimulatedWorld`: scenario plus crew interventions (an extinguished hotspot reads cool until its scheduled flare-up); `events(in:)`
+- [ ] 2.10 Presets: default (Manavgat) and a 2,000-hotspot stress scenario
 
 ### M3: API contract
 - [ ] 3.1 `FireWatchAPI` module: DTOs for Snapshot, Hotspot, Perimeter, Drone, Report, StatusChange, Event
 - [ ] 3.2 GeoJSON `Feature`/`FeatureCollection`/`Polygon` Codable types, with round-trip tests
-- [ ] 3.3 Domain↔DTO mappers in Core; `schemaVersion` with a test that rejects unknown versions
-- [ ] 3.4 `docs/api.md`: endpoints, event types and example payloads (generated from fixtures)
+- [ ] 3.3 Domain↔DTO mappers in `FireWatchAPI` (Core stays free of wire concerns); `schemaVersion` with a test that rejects unknown versions
+- [ ] 3.4 `fwgen` CLI: `fwgen --preset default --minutes 180 --out fixtures/` exports snapshots and events as API JSON
+- [ ] 3.5 `docs/api.md`: endpoints, event types and example payloads (generated with `fwgen`)
 
 ### M4: Simulator server (Vapor)
 - [ ] 4.1 Vapor target, `/health`, and a Docker image plus `docker-compose.yml`
