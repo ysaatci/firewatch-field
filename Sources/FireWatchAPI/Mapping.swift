@@ -297,3 +297,23 @@ extension SnapshotDTO {
         return FireState(hotspots: hotspots, drones: drones, perimeters: perimeters)
     }
 }
+
+// MARK: Receipts
+
+extension ReceiptDTO.Outcome {
+    public init(_ outcome: SubmissionOutcome) {
+        switch outcome {
+        case .applied: self = .applied
+        case .duplicate: self = .duplicate
+        }
+    }
+}
+
+extension SubmissionOutcome {
+    public init(_ outcome: ReceiptDTO.Outcome) {
+        switch outcome {
+        case .applied: self = .applied
+        case .duplicate: self = .duplicate
+        }
+    }
+}

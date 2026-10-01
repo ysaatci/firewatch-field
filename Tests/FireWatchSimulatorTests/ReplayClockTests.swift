@@ -1,7 +1,7 @@
 import Foundation
 import Testing
 
-@testable import FireWatchServer
+@testable import FireWatchSimulator
 
 struct ReplayClockTests {
     let start = Date(timeIntervalSince1970: 1_000)

@@ -3,16 +3,16 @@ import Foundation
 /// Maps real time to scenario time: runs at a chosen speed, pauses, and stops at the end.
 ///
 /// A value type driven by explicit `now` dates, so it is trivially testable.
-struct ReplayClock: Hashable, Sendable {
-    private(set) var isRunning: Bool
+public struct ReplayClock: Hashable, Sendable {
+    public private(set) var isRunning: Bool
     /// Scenario seconds per real second.
-    private(set) var speed: Double
-    let endMinute: Double
+    public private(set) var speed: Double
+    public let endMinute: Double
     /// Scenario minute at `anchor`; the clock counts on from there.
     private var anchorMinute: Double
     private var anchor: Date
 
-    init(startMinute: Double, endMinute: Double, speed: Double, now: Date, running: Bool = true) {
+    public init(startMinute: Double, endMinute: Double, speed: Double, now: Date, running: Bool = true) {
         self.isRunning = running
         self.speed = speed
         self.endMinute = endMinute
@@ -20,27 +20,27 @@ struct ReplayClock: Hashable, Sendable {
         self.anchor = now
     }
 
-    func minute(at now: Date) -> Double {
+    public func minute(at now: Date) -> Double {
         guard isRunning else { return anchorMinute }
         let elapsedRealSeconds = max(now.timeIntervalSince(anchor), 0)
         return min(anchorMinute + elapsedRealSeconds * speed / 60, endMinute)
     }
 
-    func isFinished(at now: Date) -> Bool {
+    public func isFinished(at now: Date) -> Bool {
         minute(at: now) >= endMinute
     }
 
-    mutating func start(at now: Date) {
+    public mutating func start(at now: Date) {
         reanchor(at: now)
         isRunning = true
     }
 
-    mutating func pause(at now: Date) {
+    public mutating func pause(at now: Date) {
         reanchor(at: now)
         isRunning = false
     }
 
-    mutating func setSpeed(_ speed: Double, at now: Date) {
+    public mutating func setSpeed(_ speed: Double, at now: Date) {
         reanchor(at: now)
         self.speed = speed
     }

@@ -13,19 +13,19 @@ struct CrewController: RouteCollection {
     func boot(routes: any RoutesBuilder) throws {
         routes.post("commands") { request in
             let command = try Self.map { try HotspotCommand(request.decodeBody(CommandDTO.self)) }
-            let result: (outcome: ReceiptDTO.Outcome, event: FeedEvent?)
+            let result: (outcome: SubmissionOutcome, event: FeedEvent?)
             do throws(CommandRejection) {
                 result = try await simulation.execute(command)
             } catch {
                 throw Self.failure(for: error)
             }
             if let event = result.event { await hub.broadcast([event]) }
-            return try Response.json(ReceiptDTO(id: command.id.rawValue, outcome: result.outcome))
+            return try Response.json(ReceiptDTO(id: command.id.rawValue, outcome: .init(result.outcome)))
         }
         routes.on(.POST, "reports", body: .collect(maxSize: Self.maxReportSize)) { request in
             let report = try Self.map { try SightingReport(request.decodeBody(ReportDTO.self)) }
             let outcome = await simulation.submit(report)
-            return try Response.json(ReceiptDTO(id: report.id.rawValue, outcome: outcome))
+            return try Response.json(ReceiptDTO(id: report.id.rawValue, outcome: .init(outcome)))
         }
     }
 

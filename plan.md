@@ -275,7 +275,7 @@ as README screenshots.
 - [x] 4.7 Bearer-token middleware (D11) and XCTVapor tests for every endpoint
 
 ### M5: Core client layer
-- [ ] 5.1 Extract `ReplaySession` and `ReplayClock` into the Simulator, so the server and the on-device demo share one implementation
+- [x] 5.1 Extract `ReplaySession` and `ReplayClock` into the Simulator, so the server and the on-device demo share one implementation
 - [ ] 5.2 `DetectionFeed` and `CommandSink` protocols plus `FixtureFeed` in Core; `SimulatedFeed` (in-process `ReplaySession` on a clock) in the Simulator
 - [ ] 5.3 `FireWatchClient` module: `HTTPTransport` protocol, a `URLSession` implementation and a fake; `APIClient` with typed errors
 - [ ] 5.4 `ReconnectingSocket` actor with backoff and jitter (Core); `URLSessionWebSocketTask` adapter (Client); tests with fakes (NFR-4)
