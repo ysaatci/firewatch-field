@@ -1,0 +1,35 @@
+name: ci-linux
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Build, lint and test (Linux)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Keep in sync with docker/Dockerfile.dev.
+    container: swift:6.3
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache SwiftPM build
+        uses: actions/cache@v4
+        with:
+          path: .build
+          key: spm-${{ runner.os }}-swift6.3-${{ hashFiles('Package.swift', 'Package.resolved') }}
+          restore-keys: spm-${{ runner.os }}-swift6.3-
+
+      - name: Lint
+        run: swift format lint --strict --recursive --parallel Package.swift Sources Tests
+
+      - name: Build (warnings are errors)
+        run: swift build --build-tests -Xswiftc -warnings-as-errors
+
+      - name: Test
+        run: swift test --skip-build

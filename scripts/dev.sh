@@ -3,7 +3,7 @@
 # Native Swift on Windows is avoided: Smart App Control blocks unsigned test binaries.
 #
 # Usage: scripts/dev.sh <command>
-#   test     Build and run all tests
+#   test     Build (warnings are errors) and run all tests
 #   build    Build all targets
 #   format   Rewrite sources with swift-format
 #   lint     Fail if any source is not formatted
@@ -36,7 +36,7 @@ run() {
 }
 
 case "${1:-help}" in
-    test)   run swift test ;;
+    test)   run bash -c "swift build --build-tests -Xswiftc -warnings-as-errors && swift test --skip-build" ;;
     build)  run swift build --build-tests ;;
     shell)  run bash ;;
     format) run swift format format --in-place --recursive --parallel Package.swift Sources Tests ;;

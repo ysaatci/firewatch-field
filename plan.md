@@ -222,7 +222,7 @@ as README screenshots.
 - [x] 0.2 `Package.swift` with empty `FireWatchCore` and one passing test; Swift 6 language mode
 - [x] 0.3 Docker dev setup (`docker/Dockerfile.dev`) and `scripts/dev.sh` commands `test`, `build`, `shell`, `server` (no `make` on this machine)
 - [x] 0.4 swift-format config and `scripts/dev.sh format` / `lint` commands
-- [ ] 0.5 `ci-linux.yml`: build, test, warnings-as-errors and format check on push
+- [x] 0.5 `ci-linux.yml`: build, test, warnings-as-errors and format check on push
 - [ ] 0.6 `docs/architecture.md` with the diagrams from this plan; copy decisions into `docs/decisions/`
 
 ### M1: Core domain model
