@@ -69,3 +69,8 @@ detection (a drone measures the spot hot again), never from crews.
 The Linux toolchain's libcurl has no WebSocket support, so `URLSessionWebSocketTask` can't
 run there. Linux tests inject a WebSocketKit-based `SocketConnector` instead; the
 `URLSession` adapter runs on iOS.
+
+Linux builds compile every module except the app, so they can't catch problems that only
+appear when the app uses a package across a module boundary (for example, an actor's
+`public let` is implicitly `nonisolated` only within its own module). The `ci-ios` job is
+the safety net for those.
