@@ -5,33 +5,43 @@ import Observation
 /// The user's position while the app is in use (NFR-5, NFR-8): never in the background.
 @MainActor
 @Observable
-final class LocationProvider {
+final class LocationProvider: NSObject, CLLocationManagerDelegate {
     private(set) var coordinate: Coordinate?
     @ObservationIgnored private let manager = CLLocationManager()
-    @ObservationIgnored private var updates: Task<Void, Never>?
 
-    /// Asks for "when in use" permission if needed, then follows the position until ``stop()``.
-    /// Off when the `disableLocation` default is set, which UI tests use to avoid the prompt.
+    override init() {
+        super.init()
+        manager.delegate = self
+        manager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        manager.distanceFilter = 10
+    }
+
+    /// Asks for "when in use" permission if needed, then follows the position.
     func start() {
-        guard updates == nil, !UserDefaults.standard.bool(forKey: "disableLocation") else { return }
-        if manager.authorizationStatus == .notDetermined {
-            manager.requestWhenInUseAuthorization()
-        }
-        updates = Task { [weak self] in
-            do {
-                for try await update in CLLocationUpdate.liveUpdates() {
-                    if let location = update.location {
-                        self?.coordinate = Coordinate(location.coordinate)
-                    }
-                }
-            } catch {
-                self?.coordinate = nil
-            }
+        switch manager.authorizationStatus {
+        case .notDetermined: manager.requestWhenInUseAuthorization()
+        case .authorizedWhenInUse, .authorizedAlways: manager.startUpdatingLocation()
+        default: coordinate = nil
         }
     }
 
     func stop() {
-        updates?.cancel()
-        updates = nil
+        manager.stopUpdatingLocation()
+    }
+
+    // MARK: CLLocationManagerDelegate
+
+    nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        Task { @MainActor in self.start() }
+    }
+
+    nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let latest = locations.last else { return }
+        let coordinate = Coordinate(latest.coordinate)
+        Task { @MainActor in self.coordinate = coordinate }
+    }
+
+    nonisolated func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
+        // Keep the last known position; the manager keeps trying.
     }
 }

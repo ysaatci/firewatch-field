@@ -10,7 +10,7 @@ final class AlertTests: XCTestCase {
     func testNearbyHotspotRaisesBannerThatOpensIt() {
         // Fast replay, so drones find new hotspots within the test. CI puts the simulator
         // by the fire, so they are nearby.
-        let app = XCUIApplication.demo(speed: 600)
+        let app = XCUIApplication.demo(speed: 120, startMinute: 60)
         app.launch()
 
         let banner = app.descendants(matching: .any)["alertBanner"].firstMatch

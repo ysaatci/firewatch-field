@@ -7,10 +7,20 @@ struct ConnectionBadge: View {
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 1)) { context in
-            Label {
-                Text(text(at: context.date))
-            } icon: {
+            // Plain stacks, not Labels: toolbars show Labels as icons only.
+            HStack(spacing: 6) {
                 Circle().fill(color).frame(width: 8, height: 8)
+                Text(text(at: context.date))
+                if field.queuedCount > 0 {
+                    // Things done on this device that haven't been sent yet.
+                    HStack(spacing: 2) {
+                        Image(systemName: "tray.and.arrow.up.fill")
+                        Text("\(field.queuedCount)")
+                    }
+                    .foregroundStyle(.orange)
+                    .accessibilityLabel(Text("\(field.queuedCount) waiting to send"))
+                    .accessibilityIdentifier("queued")
+                }
             }
             .font(.caption.bold())
             .padding(.horizontal, 10)
