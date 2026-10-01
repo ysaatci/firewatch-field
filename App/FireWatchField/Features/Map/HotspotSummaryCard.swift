@@ -10,11 +10,11 @@ struct HotspotSummaryCard: View {
         if let hotspot = model.field.fire.hotspots[hotspotID] {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
-                    Label(hotspot.severity.label, systemImage: hotspot.severity.symbol)
+                    Label(resource: hotspot.severity.label, systemImage: hotspot.severity.symbol)
                         .foregroundStyle(hotspot.severity.color)
                         .font(.headline)
                     Spacer()
-                    Label(hotspot.status.label, systemImage: hotspot.status.symbol)
+                    Label(resource: hotspot.status.label, systemImage: hotspot.status.symbol)
                         .font(.subheadline)
                 }
                 Text("\(Int(hotspot.temperatureCelsius)) °C")

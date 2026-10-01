@@ -59,7 +59,7 @@ extension HotspotStatus {
 
 extension Label where Title == Text, Icon == Image {
     /// A label from a localized resource, such as ``Severity/label``.
-    init(_ title: LocalizedStringResource, systemImage: String) {
+    init(resource title: LocalizedStringResource, systemImage: String) {
         self.init {
             Text(title)
         } icon: {
