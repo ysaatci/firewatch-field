@@ -20,7 +20,13 @@ public final class ScriptedConnector: SocketConnector, @unchecked Sendable {
         let step: Step? = lock.withLock { steps.isEmpty ? nil : steps.removeFirst() }
         switch step {
         case .connect(let messages): return ScriptedSocket(messages)
-        case .fail, nil: throw ConnectionRefused()
+        case .fail: throw ConnectionRefused()
+        case nil:
+            // Past the script, attempts hang like an unreachable server until cancelled. Failing
+            // at once would let a reconnect loop with a no-op sleep spin forever after the test,
+            // and on a small thread pool (CI runners) starve every other test.
+            try await Task.sleep(for: .seconds(3600))
+            throw ConnectionRefused()
         }
     }
 }
