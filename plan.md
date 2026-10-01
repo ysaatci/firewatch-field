@@ -231,7 +231,7 @@ as README screenshots.
 - [x] 1.3 `HotspotStatus` state machine with legal transitions and tests for illegal ones
 - [x] 1.4 `FirePerimeter` (polygon rings, timestamp) and a point-in-polygon test
 - [x] 1.5 `Drone` (position + capped recent track); `SightingReport` (id, coordinate, severity, note, photo reference)
-- [ ] 1.6 `PriorityRanker`: score = f(temperature, recency, distance), with tests for ordering edge cases
+- [x] 1.6 `PriorityRanker`: score = f(temperature, recency, distance), with tests for ordering edge cases
 
 ### M2: Fake-data simulator
 - [ ] 2.1 `SeededRandom` (SplitMix64) with a determinism test
