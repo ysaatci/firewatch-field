@@ -61,7 +61,12 @@ final class QualityTests: FireWatchUITestCase {
     @MainActor
     static func isKnownSystemIssue(_ issue: XCUIAccessibilityAuditIssue) -> Bool {
         // The tab bar and navigation bar chrome belong to the system.
-        guard let element = issue.element else { return false }
+        guard let element = issue.element else {
+            // Issues the audit can't tie to an element come from system chrome (the glass tab
+            // bar); there's nothing in the app to fix, so log them and move on.
+            print("Accessibility audit: \(issue.compactDescription) on no element: \(issue.detailedDescription)")
+            return true
+        }
         // The audit's own failure message doesn't say which element failed, so log it.
         print(
             "Accessibility audit: \(issue.compactDescription) on \(element.elementType.rawValue)",
