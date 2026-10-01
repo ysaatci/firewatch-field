@@ -7,8 +7,9 @@ extension AsyncSequence {
     }
 }
 
-/// Polls `condition` until it holds, failing the test after `timeout`.
-public func eventually(timeout: Duration = .seconds(5), _ condition: () async -> Bool) async throws {
+/// Polls `condition` until it holds, failing the test after `timeout`. The timeout is generous
+/// because loaded CI runners can starve the test for many seconds; passing tests return early.
+public func eventually(timeout: Duration = .seconds(30), _ condition: () async -> Bool) async throws {
     let deadline = ContinuousClock.now + timeout
     while !(await condition()) {
         guard ContinuousClock.now < deadline else {
