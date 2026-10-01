@@ -286,7 +286,7 @@ as README screenshots.
 - [x] 5.9 Coverage report in CI, failing below 80 % for Core (NFR-9)
 
 ### M6: App skeleton and the macOS pipeline (do this before writing any real UI)
-- [ ] 6.1 `App/project.yml` (XcodeGen), linking the local package; iOS 17 deployment target
+- [x] 6.1 `App/project.yml` (XcodeGen), linking the local package; iOS 17 deployment target
 - [ ] 6.2 Minimal `FireWatchFieldApp` with a `TabView` (Map / List / Report / Settings), all placeholders
 - [ ] 6.3 `ci-ios.yml`: install XcodeGen, generate, build for the iPhone simulator
 - [ ] 6.4 One UI test that launches the app and attaches a screenshot; CI exports `.xcresult` attachments as an artifact
