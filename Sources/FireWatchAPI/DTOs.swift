@@ -209,23 +209,26 @@ public enum EventDTO: Hashable, Sendable, Codable {
         }
     }
 
+    /// The wire name of the event's type.
+    public var type: String {
+        switch self {
+        case .hotspotObserved: "hotspotObserved"
+        case .hotspotCommandApplied: "hotspotCommandApplied"
+        case .perimeterUpdated: "perimeterUpdated"
+        case .droneMoved: "droneMoved"
+        case .unknown(let type): type
+        }
+    }
+
     public func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(type, forKey: .type)
         switch self {
-        case .hotspotObserved(let data):
-            try container.encode("hotspotObserved", forKey: .type)
-            try container.encode(data, forKey: .data)
-        case .hotspotCommandApplied(let data):
-            try container.encode("hotspotCommandApplied", forKey: .type)
-            try container.encode(data, forKey: .data)
-        case .perimeterUpdated(let data):
-            try container.encode("perimeterUpdated", forKey: .type)
-            try container.encode(data, forKey: .data)
-        case .droneMoved(let data):
-            try container.encode("droneMoved", forKey: .type)
-            try container.encode(data, forKey: .data)
-        case .unknown(let type):
-            try container.encode(type, forKey: .type)
+        case .hotspotObserved(let data): try container.encode(data, forKey: .data)
+        case .hotspotCommandApplied(let data): try container.encode(data, forKey: .data)
+        case .perimeterUpdated(let data): try container.encode(data, forKey: .data)
+        case .droneMoved(let data): try container.encode(data, forKey: .data)
+        case .unknown: break
         }
     }
 }

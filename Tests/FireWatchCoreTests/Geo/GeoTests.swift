@@ -1,3 +1,4 @@
+import TestSupport
 import Testing
 
 @testable import FireWatchCore

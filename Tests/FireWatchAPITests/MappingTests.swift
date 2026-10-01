@@ -1,6 +1,7 @@
 import FireWatchCore
 import FireWatchSimulator
 import Foundation
+import TestSupport
 import Testing
 
 @testable import FireWatchAPI
@@ -100,8 +101,4 @@ struct MappingTests {
         #expect(dto.severity == "extreme")
         #expect(try SightingReport(overTheWire(dto)) == report)
     }
-}
-
-func isClose(_ a: Double, _ b: Double, within tolerance: Double) -> Bool {
-    abs(a - b) <= tolerance
 }

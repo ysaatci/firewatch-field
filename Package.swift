@@ -16,15 +16,16 @@ let package = Package(
     targets: [
         // Platform-neutral domain logic: must build on Linux (no Apple-only imports).
         .target(name: "FireWatchCore"),
-        .testTarget(name: "FireWatchCoreTests", dependencies: ["FireWatchCore"]),
+        .target(name: "TestSupport", dependencies: ["FireWatchCore"], path: "Tests/TestSupport"),
+        .testTarget(name: "FireWatchCoreTests", dependencies: ["FireWatchCore", "TestSupport"]),
 
         // Deterministic fake-data source: a seeded wildfire scenario.
         .target(name: "FireWatchSimulator", dependencies: ["FireWatchCore"]),
-        .testTarget(name: "FireWatchSimulatorTests", dependencies: ["FireWatchSimulator"]),
+        .testTarget(name: "FireWatchSimulatorTests", dependencies: ["FireWatchSimulator", "TestSupport"]),
 
         // The versioned wire contract shared by the server and the app.
         .target(name: "FireWatchAPI", dependencies: ["FireWatchCore"]),
-        .testTarget(name: "FireWatchAPITests", dependencies: ["FireWatchAPI", "FireWatchSimulator"]),
+        .testTarget(name: "FireWatchAPITests", dependencies: ["FireWatchAPI", "FireWatchSimulator", "TestSupport"]),
 
         // CLI that exports scenarios as API JSON fixtures.
         .executableTarget(

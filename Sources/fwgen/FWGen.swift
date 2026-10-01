@@ -61,13 +61,13 @@ struct FWGen: ParsableCommand {
             """)
     }
 
-    /// The first two events of each kind, in time order.
+    /// The first two events of each type, in time order.
     static func sample(of events: [FeedEvent]) -> [FeedEvent] {
         var counts: [String: Int] = [:]
         return events.filter { event in
-            let kind = String(describing: event).prefix { $0 != "(" }
-            counts[String(kind), default: 0] += 1
-            return counts[String(kind), default: 0] <= 2
+            let type = EventDTO(event).type
+            counts[type, default: 0] += 1
+            return counts[type, default: 0] <= 2
         }
     }
 }

@@ -17,10 +17,13 @@ real pipeline will use.
 
 | Path | What |
 |---|---|
-| `Sources/FireWatchCore` | Domain model, geo math, sync engine. Builds on Linux and iOS. |
+| `Sources/FireWatchCore` | Domain model, geo math, hotspot workflow, event reducer. Builds on Linux and iOS. |
+| `Sources/FireWatchSimulator` | Seeded wildfire simulator: terrain, fire spread, hotspots, drone survey. |
+| `Sources/FireWatchAPI` | Versioned wire contract (DTOs, GeoJSON) shared by server and app. |
+| `Sources/fwgen` | CLI that exports simulated scenarios as API JSON. |
 | `App/` | SwiftUI app (project generated with XcodeGen). |
 | `docs/` | [Architecture](docs/architecture.md), [API](docs/api.md) and [design decisions](docs/decisions/README.md). |
-| `scripts/dev.sh` | Dev tasks (`test`, `lint`, `format`) run in a Linux Swift container. |
+| `scripts/dev.sh` | Dev tasks (`check`, `test`, `lint`, `format`) run in a Linux Swift container. |
 
 ## License
 

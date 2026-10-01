@@ -1,4 +1,5 @@
 import FireWatchCore
+import TestSupport
 import Testing
 
 @testable import FireWatchSimulator

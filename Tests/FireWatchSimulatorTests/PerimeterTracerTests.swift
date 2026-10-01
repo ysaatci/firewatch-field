@@ -1,5 +1,6 @@
 import FireWatchCore
 import Foundation
+import TestSupport
 import Testing
 
 @testable import FireWatchSimulator
@@ -96,8 +97,4 @@ struct PerimeterTracerTests {
         #expect(smoothed.contains(centre))
         #expect(smoothed.areaSquareMetres < exact.areaSquareMetres)
     }
-}
-
-func isClose(_ a: Double, _ b: Double, within tolerance: Double) -> Bool {
-    abs(a - b) <= tolerance
 }
