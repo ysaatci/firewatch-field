@@ -65,12 +65,21 @@ final class QualityTests: FireWatchUITestCase {
         // The audit's own failure message doesn't say which element failed, so log it.
         print(
             "Accessibility audit: \(issue.compactDescription) on \(element.elementType.rawValue)",
-            "id '\(element.identifier)' label '\(element.label)' frame \(element.frame)")
+            "id '\(element.identifier)' label '\(element.label)' frame \(element.frame)",
+            "(tab bar zone \(underTabBar))")
         return element.elementType == .tabBar || element.elementType == .navigationBar
             || element.identifier.hasPrefix("_")
             // The status badge sits in a toolbar, which doesn't scale with Dynamic Type.
             || element.identifier == "connection"
-            // List rows scrolled under the translucent tab bar are measured against its blur.
-            || element.frame.intersects(XCUIApplication().tabBars.firstMatch.frame)
+            // List rows scrolled under the floating tab bar, or into the blurred scroll edge
+            // just above it, are measured against the blur.
+            || element.frame.intersects(underTabBar)
+    }
+
+    /// The floating tab bar and the scroll edge effect above it.
+    @MainActor
+    static var underTabBar: CGRect {
+        let tabBar = XCUIApplication().tabBars.firstMatch.frame
+        return CGRect(x: tabBar.minX, y: tabBar.minY - 80, width: tabBar.width, height: tabBar.height + 80)
     }
 }
