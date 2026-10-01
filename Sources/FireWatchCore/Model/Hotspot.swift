@@ -30,6 +30,26 @@ public struct Hotspot: Identifiable, Hashable, Sendable {
         self.history = TimeOrderedLog(first: reading, limit: Self.historyLimit)
     }
 
+    /// Restores a stored hotspot, or `nil` without readings. `firstSeen` may predate the
+    /// oldest reading, which can have been trimmed from the history.
+    public init?(
+        id: ID,
+        coordinate: Coordinate,
+        confidence: Double,
+        firstSeen: Date,
+        readings: [TemperatureReading],
+        workflow: HotspotWorkflow
+    ) {
+        guard let first = readings.first else { return nil }
+        self.id = id
+        self.coordinate = coordinate
+        self.confidence = confidence
+        self.firstSeen = min(firstSeen, first.time)
+        self.workflow = workflow
+        self.history = TimeOrderedLog(first: first, limit: Self.historyLimit)
+        for reading in readings.dropFirst() { history.append(reading) }
+    }
+
     public var status: HotspotStatus { workflow.status }
     /// Recent readings, oldest first.
     public var readings: [TemperatureReading] { history.samples }

@@ -46,7 +46,8 @@ public struct SimulatedWorld: Sendable {
     }
 
     public func date(atMinute minute: Double) -> Date {
-        start.addingTimeInterval(minute * 60)
+        // Whole milliseconds, so times survive the ISO 8601 wire format exactly.
+        start.addingTimeInterval((minute * 60_000).rounded() / 1_000)
     }
 
     /// Records a crew command; only `extinguish` changes what drones measure.

@@ -19,6 +19,13 @@ public struct FireState: Hashable, Sendable {
         for event in events { apply(event) }
     }
 
+    /// Restores a stored state, such as a server snapshot.
+    public init(hotspots: some Sequence<Hotspot>, drones: some Sequence<Drone>, perimeters: [FirePerimeter]) {
+        self.hotspots = Dictionary(hotspots.map { ($0.id, $0) }) { _, latest in latest }
+        self.drones = Dictionary(drones.map { ($0.id, $0) }) { _, latest in latest }
+        self.perimeters = perimeters.sorted { $0.time < $1.time }
+    }
+
     public var latestPerimeter: FirePerimeter? { perimeters.last }
 
     /// Applies one event. Commands that are no longer legal are ignored; use ``execute(_:)``

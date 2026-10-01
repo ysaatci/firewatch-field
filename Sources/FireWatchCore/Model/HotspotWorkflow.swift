@@ -38,6 +38,19 @@ public struct HotspotWorkflow: Hashable, Sendable {
         self.flareUps = flareUps
     }
 
+    /// Restores a stored workflow, or `nil` if no sequence of actions could reach it:
+    /// `new` only exists before any flare-up, and `flaredUp` only after one.
+    public init?(restoring status: HotspotStatus, flareUps: Int) {
+        let reachable =
+            switch status {
+            case .new: flareUps == 0
+            case .flaredUp: flareUps >= 1
+            case .assigned, .extinguished, .verifiedCold: flareUps >= 0
+            }
+        guard reachable else { return nil }
+        self.init(status: status, flareUps: flareUps)
+    }
+
     public func canApply(_ action: HotspotAction) -> Bool {
         (try? applying(action)) != nil
     }

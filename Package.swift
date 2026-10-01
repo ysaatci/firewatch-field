@@ -20,7 +20,7 @@ let package = Package(
 
         // The versioned wire contract shared by the server and the app.
         .target(name: "FireWatchAPI", dependencies: ["FireWatchCore"]),
-        .testTarget(name: "FireWatchAPITests", dependencies: ["FireWatchAPI"]),
+        .testTarget(name: "FireWatchAPITests", dependencies: ["FireWatchAPI", "FireWatchSimulator"]),
     ],
     swiftLanguageModes: [.v6]
 )
