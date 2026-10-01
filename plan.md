@@ -229,7 +229,7 @@ as README screenshots.
 - [x] 1.1 `Coordinate`, `BoundingBox`, haversine distance and bearing (with tests against known city pairs)
 - [x] 1.2 `Hotspot` (id, coordinate, temperatureC, confidence, firstSeen, lastSeen, status, history)
 - [x] 1.3 `HotspotStatus` state machine with legal transitions and tests for illegal ones
-- [ ] 1.4 `FirePerimeter` (polygon rings, timestamp) and a point-in-polygon test
+- [x] 1.4 `FirePerimeter` (polygon rings, timestamp) and a point-in-polygon test
 - [ ] 1.5 `Drone`, `DroneTrack`; `SightingReport` (id, coordinate, severity, note, photo reference)
 - [ ] 1.6 `PriorityRanker`: score = f(temperature, recency, distance), with tests for ordering edge cases
 
