@@ -14,7 +14,7 @@ struct FeedTests {
 
     @Test func snapshotMatchesTheSimulation() async throws {
         try await withTestApp { app, clock in
-            let simulation = try #require(app.simulation)
+            let simulation = try #require(app.simulator).simulation
             clock.advance(seconds: 30)
             _ = await simulation.advance()
 

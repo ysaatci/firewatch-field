@@ -149,6 +149,9 @@ the same reducer (`FireState`), so they always agree.
 After a reconnect, a client fetches a fresh snapshot rather than trying to catch up on
 missed events.
 
+Batches that carry a perimeter can be a few hundred kilobytes, so clients must accept
+WebSocket messages of at least 1 MB (`URLSessionWebSocketTask`'s default).
+
 ## Commands
 
 Crews change a hotspot's status by sending **actions**, not statuses (D9). The client
