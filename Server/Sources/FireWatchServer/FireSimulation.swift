@@ -41,6 +41,11 @@ actor FireSimulation {
     /// Scenario time up to which events have been applied.
     var scenarioNow: Date { world.date(atMinute: emittedMinute) }
 
+    /// The state and the scenario time it is valid for, read together.
+    func current() -> (state: FireState, time: Date) {
+        (state, scenarioNow)
+    }
+
     /// Applies and returns the events since the previous call, in time order.
     func advance() -> [FeedEvent] {
         let minute = clock.minute(at: now())

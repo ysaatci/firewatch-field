@@ -268,7 +268,7 @@ as README screenshots.
 ### M4: Simulator server (Vapor)
 - [x] 4.1 Vapor target, `/health`, and a Docker image plus `docker-compose.yml`
 - [x] 4.2 `ReplayClock` actor (start, pause, speed, reset) and control endpoints (FR-S3)
-- [ ] 4.3 REST: `GET /v1/snapshot`, `/v1/hotspots?bbox=`, `/v1/perimeters`, `/v1/drones` (FR-S1)
+- [x] 4.3 REST: `GET /v1/snapshot`, `/v1/hotspots?bbox=`, `/v1/perimeters`, `/v1/drones` (FR-S1)
 - [ ] 4.4 WebSocket `/v1/stream`: pushes scenario events as the clock advances (FR-S2)
 - [ ] 4.5 `POST /v1/reports`, `POST /v1/hotspots/:id/status`; idempotency by client UUID (FR-S4)
 - [ ] 4.6 Fault-injection middleware: latency, drop rate, `/v1/control/disconnect` (FR-S5)
