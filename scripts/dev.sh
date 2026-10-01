@@ -39,7 +39,7 @@ run() {
         -w /firewatch-field "$IMAGE" "$@"
 }
 
-SOURCES="Package.swift Sources Tests Server/Package.swift Server/Sources Server/Tests"
+SOURCES="Package.swift Sources Tests Server/Package.swift Server/Sources Server/Tests App"
 LINT="swift format lint --strict --recursive --parallel $SOURCES"
 STRICT="-Xswiftc -warnings-as-errors"
 TEST="swift build --build-tests $STRICT && swift test --skip-build"

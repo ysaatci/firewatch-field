@@ -1,3 +1,4 @@
+import FireWatchCore
 import SwiftUI
 
 /// The app's four sections.
@@ -26,23 +27,34 @@ struct RootView: View {
         }
     }
 
+    @Environment(AppModel.self) private var model
     @State private var selection = Section.map
 
     var body: some View {
         TabView(selection: $selection) {
             ForEach(Section.allCases) { section in
                 NavigationStack {
-                    ContentUnavailableView(section.title, systemImage: section.symbol)
+                    placeholder(for: section)
                         .navigationTitle(section.title)
                 }
                 .tabItem { Label(section.title, systemImage: section.symbol) }
                 .tag(section)
-                .accessibilityIdentifier("tab.\(section.rawValue)")
             }
+        }
+    }
+
+    /// Stand-in content until each section is built; shows the live session is running.
+    private func placeholder(for section: Section) -> some View {
+        ContentUnavailableView {
+            Label(section.title, systemImage: section.symbol)
+        } description: {
+            Text("\(model.field.fire.hotspots.count) hotspots · \(model.field.fire.drones.count) drones")
+                .accessibilityIdentifier("summary")
         }
     }
 }
 
 #Preview {
     RootView()
+        .environment(AppModel())
 }

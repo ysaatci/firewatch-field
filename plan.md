@@ -291,7 +291,7 @@ as README screenshots.
 - [x] 6.3 `ci-ios.yml`: install XcodeGen, generate, build for the iPhone simulator
 - [x] 6.4 One UI test that launches the app and attaches a screenshot; CI exports `.xcresult` attachments as an artifact
 - [x] 6.5 Simulator screen recording (`xcrun simctl io booted recordVideo`) during UI tests, uploaded as an artifact
-- [ ] 6.6 App-wide dependency container (`AppEnvironment`) choosing `SimulatedFeed` or `ServerFeed`
+- [x] 6.6 `FieldSession` in Core wires feed, store, outbox and alerts; the app's `AppEnvironment` only chooses `SimulatedFeed` or `ServerFeed`
 
 ### M7: Map (FR-1, FR-2, FR-3)
 - [ ] 7.1 `MapScreen` with SwiftUI `Map`, centred on the scenario bounding box
