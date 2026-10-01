@@ -11,7 +11,7 @@ struct ReportScreen: View {
 
     @State private var severity = Severity.moderate
     @State private var note = ""
-    @State private var position = MapCameraPosition.userLocation(fallback: .automatic)
+    @State private var position = MapCameraPosition.automatic
     @State private var pin: Coordinate?
     @State private var photoItem: PhotosPickerItem?
     @State private var photo: Data?
@@ -33,6 +33,7 @@ struct ReportScreen: View {
                         .accessibilityHidden(true)
                 }
                 .onMapCameraChange { context in pin = Coordinate(context.region.center) }
+                .onAppear(perform: startAtKnownPosition)
                 .listRowInsets(EdgeInsets())
                 .accessibilityLabel("Location of the sighting; move the map to adjust")
             } header: {
@@ -88,6 +89,19 @@ struct ReportScreen: View {
                         .accessibilityIdentifier("reportConfirmation")
                 }
             }
+
+            if !model.field.queuedReports.isEmpty {
+                Section("Waiting to send") {
+                    ForEach(model.field.queuedReports) { report in
+                        Label {
+                            Text(report.note).lineLimit(2)
+                        } icon: {
+                            Image(systemName: report.severity.symbol).foregroundStyle(report.severity.color)
+                        }
+                        .accessibilityIdentifier("queuedReport")
+                    }
+                }
+            }
         }
         .navigationTitle("Report")
         .onChange(of: photoItem) { _, item in
@@ -96,6 +110,14 @@ struct ReportScreen: View {
                 photo = PhotoProcessor.prepare(data)
             }
         }
+    }
+
+    /// Starts the map at the user, or failing that at the fire, about a kilometre across.
+    private func startAtKnownPosition() {
+        let fire = model.field.fire.latestPerimeter?.boundingBox?.center
+        guard let centre = location.coordinate ?? fire else { return }
+        position = .region(
+            MKCoordinateRegion(center: centre.clLocation, latitudinalMeters: 1_000, longitudinalMeters: 1_000))
     }
 
     private func submit() {

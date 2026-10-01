@@ -601,32 +601,32 @@
         }
       }
     },
+    "Offline · %@" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çevrimdışı · %@"
+          }
+        }
+      }
+    },
+    "Offline · data from %@ · %@" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çevrimdışı · veri %1$@ · %2$@"
+          }
+        }
+      }
+    },
     "Nothing matches the filter yet. Drones report new hotspots as they find them." : {
       "localizations" : {
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Henüz filtreye uyan bir şey yok. Dronlar yeni sıcak noktaları buldukça bildirir."
-          }
-        }
-      }
-    },
-    "Offline · data from %@ · retry in %lld s" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Çevrimdışı · veri %1$@ · %2$lld sn sonra yeniden denenecek"
-          }
-        }
-      }
-    },
-    "Offline · retry in %lld s" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Çevrimdışı · %lld sn sonra yeniden denenecek"
           }
         }
       }
@@ -911,6 +911,16 @@
         }
       }
     },
+    "Waiting to send" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gönderilmeyi bekliyor"
+          }
+        }
+      }
+    },
     "What you see" : {
       "localizations" : {
         "tr" : {
@@ -957,6 +967,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "az önce"
+          }
+        }
+      }
+    },
+    "retry in %lld s" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld sn sonra yeniden denenecek"
+          }
+        }
+      }
+    },
+    "retrying…" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "yeniden deneniyor…"
           }
         }
       }

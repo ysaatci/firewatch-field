@@ -1,11 +1,7 @@
 import XCTest
 
 /// A crew member works a hotspot from detection to verified cold (FR-6).
-final class HotspotWorkflowTests: XCTestCase {
-    override func setUp() {
-        continueAfterFailure = false
-    }
-
+final class HotspotWorkflowTests: FireWatchUITestCase {
     @MainActor
     func testAssignExtinguishAndVerify() {
         // Slow replay, so the hotspot doesn't flare up mid-test.

@@ -29,6 +29,12 @@ final class AppModel {
         self.configuration = configuration
     }
 
+    /// A model frozen at `field`, with no session behind it, for previews and snapshot tests.
+    init(previewing field: FieldState) {
+        self.configuration = AppConfiguration()
+        self.field = field
+    }
+
     /// Starts (or restarts) the session for the current configuration.
     func start() async {
         await stop()

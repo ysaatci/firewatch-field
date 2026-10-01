@@ -6,6 +6,11 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      record_snapshots:
+        description: Record new snapshot reference images instead of comparing
+        type: boolean
+        default: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -60,6 +65,8 @@ jobs:
           echo "RECORDER=$!" >> "$GITHUB_ENV"
 
       - name: Test
+        env:
+          TEST_RUNNER_SNAPSHOT_RECORD: ${{ inputs.record_snapshots && '1' || '0' }}
         run: >
           xcodebuild test-without-building
           -project App/FireWatchField.xcodeproj
@@ -67,6 +74,28 @@ jobs:
           -destination "id=$SIMULATOR"
           -derivedDataPath DerivedData
           -resultBundlePath artifacts/Tests.xcresult
+
+      - name: Snapshot tests in Turkish
+        if: always()
+        env:
+          TEST_RUNNER_SNAPSHOT_RECORD: ${{ inputs.record_snapshots && '1' || '0' }}
+        run: >
+          xcodebuild test-without-building
+          -project App/FireWatchField.xcodeproj
+          -scheme FireWatchField
+          -destination "id=$SIMULATOR"
+          -derivedDataPath DerivedData
+          -only-testing:FireWatchFieldTests/SnapshotTests
+          -testLanguage tr -testRegion TR
+          -resultBundlePath artifacts/SnapshotsTR.xcresult
+
+      - name: Upload snapshot images
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: snapshots
+          path: App/FireWatchFieldTests/__Snapshots__
+          if-no-files-found: ignore
 
       - name: Export screenshots
         if: always()

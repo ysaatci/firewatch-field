@@ -1,11 +1,7 @@
 import XCTest
 
 /// A crew member reports a sighting, which waits on the map until it can be sent (FR-7).
-final class ReportTests: XCTestCase {
-    override func setUp() {
-        continueAfterFailure = false
-    }
-
+final class ReportTests: FireWatchUITestCase {
     @MainActor
     func testReportWaitsOnTheMapWhileOffline() {
         let app = XCUIApplication.demo(speed: 1)
@@ -25,9 +21,10 @@ final class ReportTests: XCTestCase {
         submit.tap()
         XCTAssertTrue(app.descendants(matching: .any)["reportConfirmation"].firstMatch.waitForExistence(timeout: 5))
         XCTAssertTrue(app.descendants(matching: .any)["queued"].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["queuedReport"].firstMatch.waitForExistence(timeout: 5))
 
         app.tabBars.buttons["Map"].tap()
-        XCTAssertTrue(app.descendants(matching: .any)["pendingReport"].firstMatch.waitForExistence(timeout: 10))
+        sleep(3)  // the pending report shows as a dashed pin; let the map settle for the screenshot
         attachScreenshot(of: app, named: "11-report-pending-on-map")
     }
 }

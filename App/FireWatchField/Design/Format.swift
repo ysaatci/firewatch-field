@@ -43,12 +43,9 @@ enum Format {
                 .locale(UnitSystem.current.locale))
     }
 
+    /// Road-style distances, which also pick sensible rounding ("650 m", "2.4 km", "2,400 ft").
     static func distance(_ metres: Double) -> String {
         Measurement(value: metres, unit: UnitLength.meters)
-            .formatted(
-                .measurement(
-                    width: .abbreviated, usage: .road, numberFormatStyle: .number.precision(.fractionLength(0...1))
-                )
-                .locale(UnitSystem.current.locale))
+            .formatted(.measurement(width: .abbreviated, usage: .road).locale(UnitSystem.current.locale))
     }
 }

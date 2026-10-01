@@ -11,6 +11,14 @@ public struct HotspotAlert: Hashable, Sendable, Identifiable {
     /// Which flare-up this is, so a hotspot that flares up twice alerts twice.
     public var flareUps: Int
 
+    public init(kind: Kind, hotspotID: Hotspot.ID, severity: Severity, distanceMetres: Double, flareUps: Int) {
+        self.kind = kind
+        self.hotspotID = hotspotID
+        self.severity = severity
+        self.distanceMetres = distanceMetres
+        self.flareUps = flareUps
+    }
+
     /// Stable across recomputation, so the same alert is never shown twice.
     public var id: String { "\(kind.rawValue)/\(hotspotID)/\(flareUps)" }
 }

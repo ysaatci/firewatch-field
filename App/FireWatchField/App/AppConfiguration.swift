@@ -1,3 +1,4 @@
+import FireWatchSimulator
 import Foundation
 
 /// Where the app gets its data, and how the demo runs.
@@ -25,6 +26,7 @@ struct AppConfiguration: Hashable, Sendable {
         static let demoSpeed = "demoSpeed"
         static let demoStartMinute = "demoStartMinute"
         static let alertRadius = "alertRadiusMetres"
+        static let demoPreset = "demoPreset"
     }
 
     var source: Source = .demo
@@ -32,6 +34,8 @@ struct AppConfiguration: Hashable, Sendable {
     var demoSpeed: Double = 30
     /// Where the demo starts, so there is something to see at once.
     var demoStartMinute: Double = 60
+    /// The simulated fire; `stress` has over 2,000 hotspots for performance tests (NFR-2).
+    var demoPreset = ScenarioPreset.default
     var alertRadiusMetres: Double = 2_000
 
     /// Settings from user defaults and the Keychain. Launch arguments such as
@@ -46,6 +50,9 @@ struct AppConfiguration: Hashable, Sendable {
         if let speed = defaults.number(forKey: Keys.demoSpeed) { configuration.demoSpeed = speed }
         if let minute = defaults.number(forKey: Keys.demoStartMinute) { configuration.demoStartMinute = minute }
         if let radius = defaults.number(forKey: Keys.alertRadius) { configuration.alertRadiusMetres = radius }
+        if let name = defaults.string(forKey: Keys.demoPreset), let preset = ScenarioPreset(rawValue: name) {
+            configuration.demoPreset = preset
+        }
         return configuration
     }
 }

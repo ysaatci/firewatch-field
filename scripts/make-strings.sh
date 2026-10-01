@@ -67,9 +67,9 @@ New	Yeni
 New %@ hotspot nearby	Yakında yeni %@ sıcak nokta
 No hotspots	Sıcak nokta yok
 No signal? Actions and reports wait on the phone and send later.	Sinyal yok mu? İşlemler ve raporlar telefonda bekler, sonra gönderilir.
+Offline · %@	Çevrimdışı · %@
+Offline · data from %@ · %@	Çevrimdışı · veri %1$@ · %2$@
 Nothing matches the filter yet. Drones report new hotspots as they find them.	Henüz filtreye uyan bir şey yok. Dronlar yeni sıcak noktaları buldukça bildirir.
-Offline · data from %@ · retry in %lld s	Çevrimdışı · veri %1$@ · %2$lld sn sonra yeniden denenecek
-Offline · retry in %lld s	Çevrimdışı · %lld sn sonra yeniden denenecek
 Perimeter time	Sınır zamanı
 Photo	Fotoğraf
 Remove the photo	Fotoğrafı kaldır
@@ -98,11 +98,14 @@ Verified cold	Soğuk olduğu doğrulandı
 Verify cold	Soğuk olduğunu doğrula
 Version	Sürüm
 Walking directions	Yürüyüş yol tarifi
+Waiting to send	Gönderilmeyi bekliyor
 What you see	Ne görüyorsunuz
 Where	Nerede
 Work hotspots from new to verified cold, most urgent first.	Sıcak noktaları yeniden soğuk olarak doğrulanana kadar işleyin; en acil olan önce.
 Your %@ report, waiting to send	%@ raporunuz gönderilmeyi bekliyor
 just now	az önce
+retry in %lld s	%lld sn sonra yeniden denenecek
+retrying…	yeniden deneniyor…
 seen %@	görülme: %@
 EOF
 )

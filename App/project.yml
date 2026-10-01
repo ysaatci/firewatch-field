@@ -20,6 +20,9 @@ settings:
 packages:
   FireWatchField:
     path: ..
+  SnapshotTesting:
+    url: https://github.com/pointfreeco/swift-snapshot-testing
+    from: "1.19.0"
 
 targets:
   FireWatchField:
@@ -77,6 +80,8 @@ targets:
       - FireWatchFieldTests
     dependencies:
       - target: FireWatchField
+      - package: SnapshotTesting
+        product: SnapshotTesting
     settings:
       base:
         GENERATE_INFOPLIST_FILE: true

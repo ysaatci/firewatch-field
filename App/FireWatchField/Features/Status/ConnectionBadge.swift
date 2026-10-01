@@ -48,12 +48,11 @@ struct ConnectionBadge: View {
         case .connecting:
             return String(localized: "Connecting…")
         case .offline(let retryAt):
-            let retry = max(Int(retryAt.timeIntervalSince(now).rounded(.up)), 0)
-            let age = field.receivedAt.map { RelativeTime(from: $0, to: now).text }
-            if let age {
-                return String(localized: "Offline · data from \(age) · retry in \(retry) s")
-            }
-            return String(localized: "Offline · retry in \(retry) s")
+            let retry = Int(retryAt.timeIntervalSince(now).rounded(.up))
+            // Once the retry time has passed the attempt is under way; never show "retry in 0 s".
+            let next = retry > 0 ? String(localized: "retry in \(retry) s") : String(localized: "retrying…")
+            guard let receivedAt = field.receivedAt else { return String(localized: "Offline · \(next)") }
+            return String(localized: "Offline · data from \(RelativeTime(from: receivedAt, to: now).text) · \(next)")
         }
     }
 }

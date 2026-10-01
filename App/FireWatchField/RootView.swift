@@ -74,6 +74,7 @@ struct RootView: View {
         }
         .animation(.spring(duration: 0.4), value: model.banner)
         .sheet(isPresented: $hasSeenIntro.inverted) { IntroSheet() }
+        .tint(.brand)
     }
 }
 

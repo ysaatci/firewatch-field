@@ -29,7 +29,9 @@ enum AppEnvironment {
         case .demo:
             // Building the scenario takes a moment: keep it off the main thread.
             let feed = await Task.detached(priority: .userInitiated) {
-                SimulatedFeed(speed: configuration.demoSpeed, startMinute: configuration.demoStartMinute)
+                SimulatedFeed(
+                    preset: configuration.demoPreset, speed: configuration.demoSpeed,
+                    startMinute: configuration.demoStartMinute)
             }.value
             return (feed, feed)
         case .server(let url, let token):

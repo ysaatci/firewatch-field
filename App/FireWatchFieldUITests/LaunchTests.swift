@@ -2,11 +2,7 @@ import XCTest
 
 /// Launches the app and keeps screenshots as test attachments. CI exports them, which is
 /// how this project sees its UI without a Mac.
-final class LaunchTests: XCTestCase {
-    override func setUp() {
-        continueAfterFailure = false
-    }
-
+final class LaunchTests: FireWatchUITestCase {
     @MainActor
     func testDemoModeStartsWithHotspots() {
         let app = XCUIApplication.demo()
@@ -18,7 +14,7 @@ final class LaunchTests: XCTestCase {
         app.tabBars.buttons["Hotspots"].tap()
         let rows = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'row.'"))
         XCTAssertTrue(rows.firstMatch.waitForExistence(timeout: 20))
-        let withDistance = NSPredicate(format: "label MATCHES %@", ".*[0-9] (m|km) (N|NE|E|SE|S|SW|W|NW).*")
+        let withDistance = NSPredicate(format: "label MATCHES %@", ".*[0-9] (m|km|ft|mi) (N|NE|E|SE|S|SW|W|NW).*")
         expectation(for: withDistance, evaluatedWith: rows.firstMatch)
         waitForExpectations(timeout: 10)
         attachScreenshot(of: app, named: "01-launch")

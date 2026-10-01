@@ -1,11 +1,7 @@
 import XCTest
 
 /// Actions taken with no signal survive the app being killed and sync once it's back (NFR-3).
-final class OfflineTests: XCTestCase {
-    override func setUp() {
-        continueAfterFailure = false
-    }
-
+final class OfflineTests: FireWatchUITestCase {
     @MainActor
     func testQueuedActionSurvivesRelaunchAndSyncs() {
         // Online first, with a clean store, so there is data to act on.
@@ -37,7 +33,10 @@ final class OfflineTests: XCTestCase {
         let relaunched = XCUIApplication.demo(speed: 1)
         relaunched.launch()
         relaunched.tabBars.buttons["Hotspots"].tap()
-        let row = relaunched.buttons[rowID]
+        XCTAssertTrue(
+            relaunched.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'row.'")).firstMatch
+                .waitForExistence(timeout: 30))
+        let row = self.row(rowID, in: relaunched)  // the ranking changed, so it may be further down
         XCTAssertTrue(row.waitForExistence(timeout: 30))
         row.tap()
 
