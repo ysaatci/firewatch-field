@@ -23,6 +23,7 @@ struct ConnectionBadge: View {
                 }
             }
             .font(.caption.bold())
+            .fixedSize()  // toolbars otherwise squeeze it to a dot
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
             .background(.regularMaterial, in: Capsule())

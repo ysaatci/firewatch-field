@@ -27,7 +27,7 @@ struct HotspotDetailScreen: View {
     private func summary(_ hotspot: Hotspot) -> some View {
         Section {
             HStack(alignment: .firstTextBaseline) {
-                Text("\(Int(hotspot.temperatureCelsius)) °C")
+                Text(Format.temperature(hotspot.temperatureCelsius))
                     .font(.system(size: 44, weight: .bold, design: .rounded).monospacedDigit())
                     .accessibilityIdentifier("temperature")
                 Spacer()
@@ -118,13 +118,13 @@ struct HotspotDetailScreen: View {
         guard let first = hotspot.readings.first else { return "" }
         return String(
             localized:
-                "From \(Int(first.celsius)) to \(Int(hotspot.temperatureCelsius)) °C over \(hotspot.readings.count) readings"
+                "From \(Format.temperature(first.celsius)) to \(Format.temperature(hotspot.temperatureCelsius)) over \(hotspot.readings.count) readings"
         )
     }
 
     private func openInMaps(_ hotspot: Hotspot) {
         let item = MKMapItem(placemark: MKPlacemark(coordinate: hotspot.coordinate.clLocation))
-        item.name = String(localized: "Hotspot \(Int(hotspot.temperatureCelsius)) °C")
+        item.name = String(localized: "Hotspot \(Format.temperature(hotspot.temperatureCelsius))")
         item.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeWalking])
     }
 }

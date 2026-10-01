@@ -30,6 +30,11 @@ struct MapScreen: View {
                 .annotationTitles(.hidden)
                 .tag(cluster.id)
             }
+            ForEach(model.field.queuedReports) { report in
+                Annotation("Report waiting to send", coordinate: report.coordinate.clLocation) {
+                    PendingReportMarker(report: report)
+                }
+            }
             UserAnnotation()
         }
         .mapStyle(.hybrid(elevation: .realistic))

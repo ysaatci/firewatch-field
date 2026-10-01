@@ -31,7 +31,7 @@ struct HotspotMarker: View {
     private var accessibilityText: String {
         String(
             localized:
-                "\(String(localized: hotspot.severity.label)) hotspot, \(Int(hotspot.temperatureCelsius)) °C, \(String(localized: hotspot.status.label))"
+                "\(String(localized: hotspot.severity.label)) hotspot, \(Format.temperature(hotspot.temperatureCelsius)),\(String(localized: hotspot.status.label))"
         )
     }
 }
@@ -94,5 +94,21 @@ extension FireWatchCore.Polygon {
         }
         let outer = ring(exterior)
         return MKPolygon(coordinates: outer, count: outer.count, interiorPolygons: holes)
+    }
+}
+
+/// A sighting reported from this device that hasn't reached the server yet.
+struct PendingReportMarker: View {
+    let report: SightingReport
+
+    var body: some View {
+        Image(systemName: "exclamationmark.bubble.fill")
+            .font(.system(size: 16, weight: .bold))
+            .foregroundStyle(report.severity.color)
+            .padding(7)
+            .background(.white, in: Circle())
+            .overlay(Circle().stroke(.orange, style: StrokeStyle(lineWidth: 2, dash: [3, 3])))
+            .accessibilityLabel(Text("Your \(String(localized: report.severity.label)) report, waiting to send"))
+            .accessibilityIdentifier("pendingReport")
     }
 }

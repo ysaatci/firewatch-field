@@ -322,14 +322,14 @@ as README screenshots.
 - [x] 10.5 UI test: go offline (server fault injection), make changes, kill and relaunch, reconnect, check everything synced
 
 ### M11: Report a sighting (FR-7)
-- [ ] 11.1 Report form: severity, note, current location (editable pin)
-- [ ] 11.2 Photo from `PhotosPicker` (the simulator has no camera) and the camera on a real device; strip EXIF except GPS
-- [ ] 11.3 Submit through the Outbox; show the report on the map as "pending" until acknowledged
+- [x] 11.1 Report form: severity, note, current location (editable pin)
+- [x] 11.2 Photo from `PhotosPicker` (the simulator has no camera) and the camera on a real device; strip EXIF except GPS
+- [x] 11.3 Submit through the Outbox; show the report on the map as "pending" until acknowledged
 
 ### M12: Settings, demo mode and localisation (FR-10, FR-11, NFR-7)
-- [ ] 12.1 Settings screen: data source, server URL, alert radius, units
-- [ ] 12.2 Token entry stored in Keychain (D11)
-- [ ] 12.3 Demo mode as the first-launch default, with a short onboarding card
+- [x] 12.1 Settings screen: data source, server URL, alert radius, units
+- [x] 12.2 Token entry stored in Keychain (D11)
+- [x] 12.3 Demo mode as the first-launch default, with a short onboarding card
 - [ ] 12.4 String Catalog with a full Turkish translation; units formatted with `Measurement`
 
 ### M13: Quality pass (NFR-2, NFR-6)

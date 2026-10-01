@@ -8,12 +8,19 @@ final class OfflineTests: XCTestCase {
 
     @MainActor
     func testQueuedActionSurvivesRelaunchAndSyncs() {
-        // No signal, and a clean store.
+        // Online first, with a clean store, so there is data to act on.
         let app = XCUIApplication.demo(speed: 1)
-        app.launchArguments += ["-simulateOutage", "YES", "-resetStorage", "YES"]
+        app.launchArguments += ["-resetStorage", "YES"]
         app.launch()
-        app.tabBars.buttons["Hotspots"].tap()
 
+        // Lose signal, as Settings lets anyone demonstrate.
+        app.tabBars.buttons["Settings"].tap()
+        let outage = app.switches["simulateOutage"]
+        XCTAssertTrue(outage.waitForExistence(timeout: 10))
+        outage.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()  // the switch, not the label
+        XCTAssertEqual(outage.value as? String, "1")
+
+        app.tabBars.buttons["Hotspots"].tap()
         let firstRow = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'row.'")).firstMatch
         XCTAssertTrue(firstRow.waitForExistence(timeout: 30))
         let rowID = firstRow.identifier
@@ -37,8 +44,7 @@ final class OfflineTests: XCTestCase {
         // The queued action was restored, sent and confirmed.
         XCTAssertTrue(relaunched.buttons["action.unassign"].waitForExistence(timeout: 15))
         let pending = relaunched.descendants(matching: .any)["pending"].firstMatch
-        let synced = NSPredicate(format: "exists == false")
-        expectation(for: synced, evaluatedWith: pending)
+        expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: pending)
         waitForExpectations(timeout: 20)
         attachScreenshot(of: relaunched, named: "09-synced-after-relaunch")
     }

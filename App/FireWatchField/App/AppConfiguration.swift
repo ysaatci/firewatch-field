@@ -17,6 +17,16 @@ struct AppConfiguration: Hashable, Sendable {
         }
     }
 
+    /// Where settings are stored. The token is in the Keychain, never in user defaults (D11).
+    enum Keys {
+        static let useServer = "useServer"
+        static let serverURL = "serverURL"
+        static let serverToken = "serverToken"
+        static let demoSpeed = "demoSpeed"
+        static let demoStartMinute = "demoStartMinute"
+        static let alertRadius = "alertRadiusMetres"
+    }
+
     var source: Source = .demo
     /// Scenario seconds per real second in demo mode.
     var demoSpeed: Double = 30
@@ -24,17 +34,25 @@ struct AppConfiguration: Hashable, Sendable {
     var demoStartMinute: Double = 60
     var alertRadiusMetres: Double = 2_000
 
-    /// Settings from user defaults, which launch arguments such as `-demoSpeed 600` override.
-    /// UI tests use that to run the demo fast and deterministically.
+    /// Settings from user defaults and the Keychain. Launch arguments such as
+    /// `-demoSpeed 600` override defaults, which UI tests use to run deterministically.
     static func fromDefaults(_ defaults: UserDefaults = .standard) -> AppConfiguration {
         var configuration = AppConfiguration()
-        if let speed = defaults.object(forKey: "demoSpeed") as? Double { configuration.demoSpeed = speed }
-        if let minute = defaults.object(forKey: "demoStartMinute") as? Double {
-            configuration.demoStartMinute = minute
+        if defaults.bool(forKey: Keys.useServer),
+            let text = defaults.string(forKey: Keys.serverURL), let url = URL(string: text), url.scheme != nil
+        {
+            configuration.source = .server(url: url, token: Keychain.string(for: Keys.serverToken) ?? "")
         }
-        if let radius = defaults.object(forKey: "alertRadiusMetres") as? Double {
-            configuration.alertRadiusMetres = radius
-        }
+        if let speed = defaults.number(forKey: Keys.demoSpeed) { configuration.demoSpeed = speed }
+        if let minute = defaults.number(forKey: Keys.demoStartMinute) { configuration.demoStartMinute = minute }
+        if let radius = defaults.number(forKey: Keys.alertRadius) { configuration.alertRadiusMetres = radius }
         return configuration
+    }
+}
+
+extension UserDefaults {
+    /// A number stored as a number or as text (launch arguments arrive as text), or `nil` if absent.
+    func number(forKey key: String) -> Double? {
+        object(forKey: key) == nil ? nil : double(forKey: key)
     }
 }

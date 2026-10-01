@@ -19,7 +19,7 @@ struct HotspotSummaryCard: View {
                     Label(resource: hotspot.status.label, systemImage: hotspot.status.symbol)
                         .font(.subheadline)
                 }
-                Text("\(Int(hotspot.temperatureCelsius)) °C")
+                Text(Format.temperature(hotspot.temperatureCelsius))
                     .font(.system(size: 40, weight: .bold, design: .rounded).monospacedDigit())
                 if let asOf = model.field.asOf {
                     Text("Last measured \(RelativeTime(from: hotspot.lastSeen, to: asOf).text)")

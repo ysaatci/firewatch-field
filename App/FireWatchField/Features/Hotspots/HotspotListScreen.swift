@@ -70,7 +70,7 @@ struct HotspotRow: View {
                 .font(.title2)
                 .frame(width: 32)
             VStack(alignment: .leading, spacing: 2) {
-                Text("\(Int(hotspot.temperatureCelsius)) °C")
+                Text(Format.temperature(hotspot.temperatureCelsius))
                     .font(.headline.monospacedDigit())
                 Text(details)
                     .font(.subheadline)
@@ -98,11 +98,6 @@ struct Direction {
     let to: Coordinate
 
     var text: String {
-        let metres = from.distance(to: to)
-        let distance = Measurement(value: metres, unit: UnitLength.meters)
-            .formatted(
-                .measurement(
-                    width: .abbreviated, usage: .road, numberFormatStyle: .number.precision(.fractionLength(0...1))))
-        return "\(distance) \(CompassPoint(degrees: from.bearing(to: to)).rawValue)"
+        "\(Format.distance(from.distance(to: to))) \(CompassPoint(degrees: from.bearing(to: to)).rawValue)"
     }
 }

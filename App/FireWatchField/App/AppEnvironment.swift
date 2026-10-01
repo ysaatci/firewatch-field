@@ -34,7 +34,7 @@ enum AppEnvironment {
             return (feed, feed)
         case .server(let url, let token):
             let client = APIClient(configuration: .init(baseURL: url, token: token))
-            return (ServerFeed(client: client), ServerCommandSink(client: client))
+            return (ServerFeed(client: client), ServerCommandSink(client: client, loadPhoto: PhotoStore.load))
         }
     }
 }

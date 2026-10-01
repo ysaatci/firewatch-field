@@ -29,6 +29,8 @@ struct RootView: View {
 
     @Environment(AppModel.self) private var model
     @Environment(Router.self) private var router
+    /// Whether the first-launch introduction has been seen.
+    @AppStorage("hasSeenIntro") private var hasSeenIntro = false
 
     var body: some View {
         @Bindable var router = router
@@ -45,13 +47,17 @@ struct RootView: View {
             .tabItem { Label(Section.hotspots.title, systemImage: Section.hotspots.symbol) }
             .tag(Section.hotspots)
 
-            ForEach([Section.report, .settings]) { section in
-                NavigationStack {
-                    placeholder(for: section).navigationTitle(section.title)
-                }
-                .tabItem { Label(section.title, systemImage: section.symbol) }
-                .tag(section)
+            NavigationStack {
+                ReportScreen().withStatus(model.field)
             }
+            .tabItem { Label(Section.report.title, systemImage: Section.report.symbol) }
+            .tag(Section.report)
+
+            NavigationStack {
+                SettingsScreen()
+            }
+            .tabItem { Label(Section.settings.title, systemImage: Section.settings.symbol) }
+            .tag(Section.settings)
         }
         .overlay(alignment: .top) {
             if let alert = model.banner {
@@ -67,16 +73,14 @@ struct RootView: View {
             }
         }
         .animation(.spring(duration: 0.4), value: model.banner)
+        .sheet(isPresented: $hasSeenIntro.inverted) { IntroSheet() }
     }
+}
 
-    /// Stand-in content until each section is built; shows the live session is running.
-    private func placeholder(for section: Section) -> some View {
-        ContentUnavailableView {
-            Label(section.title, systemImage: section.symbol)
-        } description: {
-            Text("\(model.field.fire.hotspots.count) hotspots · \(model.field.fire.drones.count) drones")
-                .accessibilityIdentifier("summary")
-        }
+extension Binding where Value == Bool {
+    /// The opposite of this binding, for presenting something while a flag is still unset.
+    var inverted: Binding<Bool> {
+        Binding(get: { !wrappedValue }, set: { wrappedValue = !$0 })
     }
 }
 

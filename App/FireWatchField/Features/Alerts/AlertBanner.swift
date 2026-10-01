@@ -48,8 +48,6 @@ extension HotspotAlert {
     }
 
     var subtitle: String {
-        let distance = Measurement(value: distanceMetres, unit: UnitLength.meters)
-            .formatted(.measurement(width: .abbreviated, usage: .road))
-        return String(localized: "\(distance) from you · tap to open")
+        String(localized: "\(Format.distance(distanceMetres)) from you · tap to open")
     }
 }

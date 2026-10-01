@@ -73,6 +73,11 @@ final class AppModel {
         await session?.submit(report)
     }
 
+    func setAlertRadius(_ metres: Double) async {
+        configuration.alertRadiusMetres = metres
+        await session?.setAlertRadius(metres: metres)
+    }
+
     /// Saves the current state now, so the next launch opens with it.
     func saveCache() async {
         await session?.saveCache()
