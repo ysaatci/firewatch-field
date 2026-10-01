@@ -36,13 +36,11 @@ final class LaunchTests: XCTestCase {
 }
 
 extension XCUIApplication {
-    /// The app in demo mode at a fixed speed with location off, so runs are comparable and
-    /// no permission prompt gets in the way.
+    /// The app in demo mode at a fixed speed, so runs are comparable. CI grants location
+    /// permission beforehand and places the simulator near the fire.
     static func demo(speed: Int = 60) -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments += [
-            "-demoSpeed", "\(speed)", "-demoStartMinute", "150", "-disableLocation", "YES",
-        ]
+        app.launchArguments += ["-demoSpeed", "\(speed)", "-demoStartMinute", "150"]
         return app
     }
 }

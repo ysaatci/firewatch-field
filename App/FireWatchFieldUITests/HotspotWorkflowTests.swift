@@ -17,24 +17,28 @@ final class HotspotWorkflowTests: XCTestCase {
         XCTAssertTrue(firstRow.waitForExistence(timeout: 30))
         attachScreenshot(of: app, named: "03-hotspot-list")
         firstRow.tap()
-
-        let status = app.descendants(matching: .any)["status"].firstMatch
-        XCTAssertTrue(status.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["action.assign"].waitForExistence(timeout: 5))
         attachScreenshot(of: app, named: "04-hotspot-detail")
 
-        tap("action.assign", in: app, expecting: "Assigned", status: status)
-        tap("action.extinguish", in: app, expecting: "Extinguished", status: status)
+        // Each step offers exactly the next actions the workflow allows.
+        // (The status label can scroll out of the lazily built list, so the buttons are checked instead.)
+        tap("action.assign", in: app, thenOffers: ["action.unassign", "action.extinguish"])
+        tap("action.extinguish", in: app, thenOffers: ["action.verifyCold"])
         attachScreenshot(of: app, named: "05-hotspot-extinguished")
-        tap("action.verifyCold", in: app, expecting: "Verified cold", status: status)
-        XCTAssertFalse(app.buttons["action.verifyCold"].exists)
+        tap("action.verifyCold", in: app, thenOffers: [])
     }
 
     @MainActor
-    private func tap(_ identifier: String, in app: XCUIApplication, expecting label: String, status: XCUIElement) {
+    private func tap(_ identifier: String, in app: XCUIApplication, thenOffers expected: [String]) {
         let button = app.buttons[identifier]
         XCTAssertTrue(button.waitForExistence(timeout: 5), "\(identifier) missing")
         button.tap()
-        expectation(for: NSPredicate(format: "label CONTAINS %@", label), evaluatedWith: status)
+        for next in expected {
+            XCTAssertTrue(app.buttons[next].waitForExistence(timeout: 10), "\(next) not offered after \(identifier)")
+        }
+        let actions = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'action.'"))
+        let onlyExpected = NSPredicate { _, _ in actions.count == expected.count }
+        expectation(for: onlyExpected, evaluatedWith: nil)
         waitForExpectations(timeout: 10)
     }
 }

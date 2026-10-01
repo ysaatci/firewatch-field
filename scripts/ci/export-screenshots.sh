@@ -14,7 +14,9 @@ manifest="$out/manifest.json"
 [ -f "$manifest" ] || exit 0
 jq -r '.[].attachments[] | [.exportedFileName, .suggestedHumanReadableName] | @tsv' "$manifest" |
     while IFS=$'\t' read -r file name; do
-        clean="$(echo "$name" | sed -E 's/_[0-9]+_[0-9A-Fa-f-]{36}(\.[A-Za-z0-9]+)$/\1/')"
+        # Drop the "_0_<UUID>" suffix, and characters artifact uploads reject (failure
+        # descriptions are named like 'Debug description for "status" Any').
+        clean="$(echo "$name" | sed -E 's/_[0-9]+_[0-9A-Fa-f-]{36}(\.[A-Za-z0-9]+)$/\1/; s/["*:<>?|\\]/_/g')"
         [ "$file" != "$clean" ] && mv "$out/$file" "$out/$clean"
     done
 ls -la "$out"

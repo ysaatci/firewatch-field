@@ -44,10 +44,17 @@ jobs:
           -derivedDataPath DerivedData
           CODE_SIGNING_ALLOWED=NO
 
-      - name: Start screen recording
+      - name: Boot the simulator near the fire, with location allowed
         run: |
           xcrun simctl boot "$SIMULATOR" || true
           xcrun simctl bootstatus "$SIMULATOR" -b
+          # No permission prompt in UI tests, and a position ~1 km from the demo fire, so
+          # distances, ranking and alerts are exercised.
+          xcrun simctl privacy "$SIMULATOR" grant location dev.ysaatci.firewatchfield
+          xcrun simctl location "$SIMULATOR" set 36.825,31.47
+
+      - name: Start screen recording
+        run: |
           mkdir -p artifacts
           xcrun simctl io "$SIMULATOR" recordVideo --codec h264 --force artifacts/ui-tests.mp4 &
           echo "RECORDER=$!" >> "$GITHUB_ENV"
