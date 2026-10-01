@@ -13,11 +13,12 @@ final class AlertTests: FireWatchUITestCase {
         XCTAssertTrue(banner.waitForExistence(timeout: 90), "no alert within the timeout")
         attachScreenshot(of: app, named: "06-alert-banner")
 
+        XCTAssertTrue(app.descendants(matching: .any)["connection"].firstMatch.exists)
+
         banner.tap()
         app.swipeUp()  // the actions sit below the summary, chart and location
         let actions = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'action.'"))
         XCTAssertTrue(actions.firstMatch.waitForExistence(timeout: 10), "the banner didn't open the hotspot")
-        XCTAssertTrue(app.descendants(matching: .any)["connection"].firstMatch.exists)
         attachScreenshot(of: app, named: "07-alert-opened")
     }
 }
