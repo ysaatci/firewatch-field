@@ -19,7 +19,7 @@ real pipeline will use.
 |---|---|
 | `Sources/FireWatchCore` | Domain model, geo math, sync engine. Builds on Linux and iOS. |
 | `App/` | SwiftUI app (project generated with XcodeGen). |
-| `docs/` | [Architecture](docs/architecture.md) and [design decisions](docs/decisions/README.md). |
+| `docs/` | [Architecture](docs/architecture.md), [API](docs/api.md) and [design decisions](docs/decisions/README.md). |
 | `scripts/dev.sh` | Dev tasks (`test`, `lint`, `format`) run in a Linux Swift container. |
 
 ## License

@@ -100,8 +100,8 @@ struct DTOTests {
     }
 
     @Test func receiptsAndErrorsRoundTrip() throws {
-        let receipt = CommandReceiptDTO(commandID: "c-1", outcome: .duplicate)
-        #expect(try json(receipt) == #"{"commandID":"c-1","outcome":"duplicate"}"#)
+        let receipt = ReceiptDTO(id: "c-1", outcome: .duplicate)
+        #expect(try json(receipt) == #"{"id":"c-1","outcome":"duplicate"}"#)
         let error = ErrorDTO(code: "notAllowed", message: "verifyCold is not allowed from new")
         #expect(try roundTrip(error) == error)
     }

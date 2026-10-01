@@ -152,8 +152,8 @@ public struct CommandDTO: Hashable, Sendable, Codable {
     }
 }
 
-/// The server's answer to a command it accepted.
-public struct CommandReceiptDTO: Hashable, Sendable, Codable {
+/// The server's answer to a command or report it accepted.
+public struct ReceiptDTO: Hashable, Sendable, Codable {
     public enum Outcome: String, Hashable, Sendable, Codable {
         /// Applied now.
         case applied
@@ -161,11 +161,12 @@ public struct CommandReceiptDTO: Hashable, Sendable, Codable {
         case duplicate
     }
 
-    public var commandID: String
+    /// The command or report ID.
+    public var id: String
     public var outcome: Outcome
 
-    public init(commandID: String, outcome: Outcome) {
-        self.commandID = commandID
+    public init(id: String, outcome: Outcome) {
+        self.id = id
         self.outcome = outcome
     }
 }
