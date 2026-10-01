@@ -98,8 +98,7 @@ public struct SimulatedWorld: Sendable {
     private func observationEvent(_ pass: DronePass) -> FeedEvent {
         let hotspot = scenario.hotspots[pass.hotspot]
         let celsius = celsius(of: hotspot, atMinute: pass.minute) ?? scenario.configuration.ambientCelsius
-        let footprint = scenario.configuration.survey.footprintRadius
-        let confidence = min(max(0.55 + 0.4 * (celsius - 60) / 400 - 0.15 * pass.distance / footprint, 0.3), 0.99)
+        let confidence = scenario.configuration.survey.confidence(celsius: celsius, distance: pass.distance)
         return .hotspotObserved(
             HotspotObservation(
                 hotspotID: hotspot.id,
@@ -110,7 +109,7 @@ public struct SimulatedWorld: Sendable {
             ))
     }
 
-    private func perimeterEvent(_ perimeter: (minute: Int, polygons: [Polygon])) -> FeedEvent {
+    private func perimeterEvent(_ perimeter: ScenarioPerimeter) -> FeedEvent {
         .perimeterUpdated(FirePerimeter(time: date(atMinute: Double(perimeter.minute)), polygons: perimeter.polygons))
     }
 }

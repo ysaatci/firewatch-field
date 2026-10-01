@@ -15,21 +15,22 @@ See [decisions/](decisions/README.md) for the reasoning behind each choice.
 | `fwgen` | CLI that exports scenarios as JSON fixtures for the app bundle and tests | Linux |
 | `App/FireWatchField` | SwiftUI app: screens, view models, SwiftData persistence adapters | iOS |
 
-Dependency direction: `App → Core → API`; `Server → Simulator → Core`. Core and API
+Dependency direction: `App → API → Core`, `App → Simulator → Core` (demo mode), and
+`Server → API, Simulator`. Core, API and Simulator
 never import Apple-only frameworks (UIKit, SwiftUI, MapKit, CoreLocation, SwiftData).
 
 ## Data flow
 
 ```
-FireWatchSimulator ──► FireWatchServer ──REST/WS──► ServerFeed ┐
-        │                                                    ├─► FeedStore (actor) ─► ViewModels ─► SwiftUI
-        └──── fwgen ──► bundled JSON fixtures ─► FixtureFeed ┘           │
-                                                                 Outbox (actor) ──► server (writes)
-                                                                         │
-                                                                 Persistence (SwiftData, app layer)
+FireWatchSimulator ─► FireWatchServer ─REST/WS─► ServerFeed ─────┐
+        │                                                        ├─► FeedStore (actor) ─► ViewModels ─► SwiftUI
+        └─── in-process, demo mode ─────────────► SimulatedFeed ─┘      │
+                                                                     Outbox (actor) ──► server (writes)
+                                                                        │
+                                                                     Persistence (SwiftData, app layer)
 ```
 
-- **Reads:** a `DetectionFeed` (fixtures in demo mode, the server otherwise, and the real
+- **Reads:** a `DetectionFeed` (the on-device simulator in demo mode, the server otherwise, and the real
   FireWatch pipeline later) produces events. `FeedStore` applies them and publishes state
   as an `AsyncStream`, which view models observe.
 - **Writes:** status changes and sighting reports go to the `Outbox` first, each with a

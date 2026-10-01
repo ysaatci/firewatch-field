@@ -56,7 +56,7 @@ public struct Scenario: Sendable {
     /// Every drone measurement of a hotspot, in time order.
     public let passes: [DronePass]
     /// The fire outline every ``ScenarioConfiguration/perimeterIntervalMinutes``.
-    public let perimeters: [(minute: Int, polygons: [Polygon])]
+    public let perimeters: [ScenarioPerimeter]
 
     public init(_ configuration: ScenarioConfiguration) {
         self.configuration = configuration
@@ -85,12 +85,12 @@ public struct Scenario: Sendable {
             minutes: configuration.minutes,
             ambientCelsius: configuration.ambientCelsius
         )
-        let fire = fire
-        let terrain = terrain
-        perimeters = stride(from: 0, through: configuration.minutes, by: configuration.perimeterIntervalMinutes).map {
-            minute in
-            (minute, terrain.perimeter(of: fire.affectedMask(atMinute: minute), at: .distantPast).polygons)
+        var perimeters: [ScenarioPerimeter] = []
+        for minute in stride(from: 0, through: configuration.minutes, by: configuration.perimeterIntervalMinutes) {
+            let polygons = terrain.polygons(of: fire.affectedMask(atMinute: minute))
+            perimeters.append(ScenarioPerimeter(minute: minute, polygons: polygons))
         }
+        self.perimeters = perimeters
     }
 
     /// The most heavily fuelled cell within three cells of `point`, so the fire never starts on bare rock.
@@ -101,5 +101,15 @@ public struct Scenario: Sendable {
             candidates
             .filter { (terrain.fuel.value(at: $0) ?? 0) > 0 }
             .max { (terrain.fuel[$0], $1) < (terrain.fuel[$1], $0) }
+    }
+}
+
+/// The fire outline at one minute of a scenario.
+public struct ScenarioPerimeter: Hashable, Sendable {
+    public var minute: Int
+    public var polygons: [Polygon]
+
+    public var areaSquareMetres: Double {
+        polygons.reduce(0) { $0 + $1.areaSquareMetres }
     }
 }

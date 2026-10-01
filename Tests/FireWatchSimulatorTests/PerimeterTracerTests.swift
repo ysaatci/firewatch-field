@@ -89,10 +89,10 @@ struct PerimeterTracerTests {
             elevation: Grid(rows: 10, columns: 10, repeating: 0)
         )
         let burned = Grid(rows: 10, columns: 10) { (3...6).contains($0.row) && (3...6).contains($0.column) }
-        let exact = terrain.perimeter(of: burned, at: Date(timeIntervalSince1970: 0), smoothing: 0)
+        let exact = FirePerimeter(time: .now, polygons: terrain.polygons(of: burned, smoothing: 0))
         #expect(exact.contains(centre))
         #expect(isClose(exact.areaSquareMetres, 40_000, within: 1))  // a 200 m square
-        let smoothed = terrain.perimeter(of: burned, at: Date(timeIntervalSince1970: 0))
+        let smoothed = FirePerimeter(time: .now, polygons: terrain.polygons(of: burned))
         #expect(smoothed.contains(centre))
         #expect(smoothed.areaSquareMetres < exact.areaSquareMetres)
     }

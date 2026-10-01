@@ -165,9 +165,9 @@ enum PerimeterTracer {
 }
 
 extension TerrainGrid {
-    /// The fire perimeter for a mask of burned cells, in coordinates. `smoothing` is the
-    /// number of corner-cutting passes; 0 keeps the exact cell outline.
-    public func perimeter(of mask: Grid<Bool>, at time: Date, smoothing: Int = 2) -> FirePerimeter {
+    /// The outline of a mask of burned cells, in coordinates. `smoothing` is the number of
+    /// corner-cutting passes; 0 keeps the exact cell outline.
+    public func polygons(of mask: Grid<Bool>, smoothing: Int = 2) -> [Polygon] {
         let toCoordinate = { (point: PlanarPoint) in
             self.projection.unproject(
                 PlanarPoint(
@@ -176,9 +176,8 @@ extension TerrainGrid {
                 )
             )
         }
-        let polygons = PerimeterTracer.polygons(of: mask, smoothing: smoothing).map { polygon in
+        return PerimeterTracer.polygons(of: mask, smoothing: smoothing).map { polygon in
             Polygon(exterior: polygon.exterior.map(toCoordinate), holes: polygon.holes.map { $0.map(toCoordinate) })
         }
-        return FirePerimeter(time: time, polygons: polygons)
     }
 }

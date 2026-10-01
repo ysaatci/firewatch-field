@@ -16,9 +16,7 @@ struct ScenarioTests {
         let ignited = scenario.fire.ignitedAt.values.compactMap { $0 }.count
         let detected = Set(scenario.passes.map(\.hotspot)).count
         let flareUps = scenario.hotspots.filter { $0.flareUp != nil }.count
-        let lastArea = scenario.perimeters.last.map {
-            FirePerimeter(time: .now, polygons: $0.polygons).areaSquareMetres
-        }
+        let lastArea = scenario.perimeters.last?.areaSquareMetres
         return [
             "ignited=\(ignited)",
             "hotspots=\(scenario.hotspots.count)",
@@ -34,7 +32,7 @@ struct ScenarioTests {
         let again = Scenario(Self.configuration)
         #expect(again.hotspots == scenario.hotspots)
         #expect(again.passes == scenario.passes)
-        #expect(again.perimeters.map(\.polygons) == scenario.perimeters.map(\.polygons))
+        #expect(again.perimeters == scenario.perimeters)
     }
 
     @Test func differentSeedDifferentScenario() {
@@ -51,7 +49,7 @@ struct ScenarioTests {
     }
 
     @Test func fireGrowsOverTime() {
-        let areas = scenario.perimeters.map { FirePerimeter(time: .now, polygons: $0.polygons).areaSquareMetres }
+        let areas = scenario.perimeters.map { $0.areaSquareMetres }
         #expect(areas.first ?? 0 < 10_000)
         #expect(areas.last ?? 0 > 1_000_000)  // over 100 ha after three hours
         #expect(zip(areas, areas.dropFirst()).filter { $1 < $0 * 0.95 }.isEmpty)

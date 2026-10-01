@@ -82,6 +82,14 @@ public struct DroneSurvey: Sendable {
 
     public init() {}
 
+    /// How sure the camera is of a reading: hotter spots stand out more, and readings get
+    /// less certain towards the edge of the footprint. In `0.3...0.99`.
+    public func confidence(celsius: Double, distance: Double) -> Double {
+        let heat = 0.4 * (celsius - detectionCelsius) / 400
+        let edge = 0.15 * distance / footprintRadius
+        return min(max(0.55 + heat - edge, 0.3), 0.99)
+    }
+
     /// One route per drone, each covering an equal vertical strip of the terrain.
     public func routes(over terrain: TerrainGrid) -> [SurveyRoute] {
         let width = Double(terrain.columns) * terrain.cellSize

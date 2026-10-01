@@ -47,7 +47,7 @@ in that same commit. Always continue from the first unchecked step.
 | FR-8 | **Alerts**: a new hotspot or flare-up within *R* km of the user triggers an in-app banner and a local notification. |
 | FR-9 | **Offline mode**: the last-known data stays usable, a banner shows how stale it is, and a badge shows the number of queued actions. |
 | FR-10 | **Settings**: data source (Demo / Server URL), alert radius, units (metric/imperial), language (EN/TR). |
-| FR-11 | **Demo mode**: replays a bundled scenario with no server. This is the default on first launch. |
+| FR-11 | **Demo mode**: runs the simulator on the device, with no server. This is the default on first launch. |
 
 ### Simulator server
 | ID | Requirement |
@@ -104,12 +104,12 @@ firewatch-field/
 
 ### Data flow
 ```
-FireWatchSimulator ──► FireWatchServer ──REST/WS──► ServerFeed ┐
-        │                                                    ├─► FeedStore (actor) ─► ViewModels ─► SwiftUI
-        └──── fwgen ──► bundled JSON fixtures ─► FixtureFeed ┘           │
-                                                                 Outbox (actor) ──► server (writes)
-                                                                         │
-                                                                 Persistence (SwiftData, app layer)
+FireWatchSimulator ─► FireWatchServer ─REST/WS─► ServerFeed ─────┐
+        │                                                        ├─► FeedStore (actor) ─► ViewModels ─► SwiftUI
+        └─── in-process, demo mode ─────────────► SimulatedFeed ─┘      │
+                                                                     Outbox (actor) ──► server (writes)
+                                                                        │
+                                                                     Persistence (SwiftData, app layer)
 ```
 
 ---
@@ -143,7 +143,7 @@ heavier than this project needs.
 *Why:* a believable demo needs fire that *moves*: a spreading front, residual hotspots
 that cool, and occasional flare-ups. Seeding (SplitMix64, because Foundation's RNG
 can't be seeded) makes tests and screenshots reproducible (NFR-12). One generator feeds
-the server, the bundled fixtures and the tests, so they never disagree.
+the server, the app's demo mode and the tests, so they never disagree.
 
 **D5. The fire model is a simple cellular automaton, not real fire physics.**
 A grid of roughly 50 m cells with fuel, slope and wind factors. Each burning cell can
@@ -160,9 +160,14 @@ error. GeoJSON is what GIS tools and the real drone pipeline will produce. Paths
 versioned (`/v1`) and every payload carries `schemaVersion`.
 
 **D7. A `DetectionFeed` protocol with interchangeable sources.**
-`FixtureFeed` (demo mode, previews, tests), `ServerFeed` (simulator), and later
+`SimulatedFeed` (demo mode: the simulator runs on the device), `ServerFeed` (the
+simulator server), `FixtureFeed` (previews and snapshot tests: a frozen state), and later
 `FireWatchFeed` (real data). *Why:* this is how the fake data gets replaced without
 touching the UI. It's the dependency-inversion principle in practice.
+*Revised in the M2 review:* demo mode originally replayed bundled JSON. Running the
+deterministic simulator on the device is simpler (no fixture files to keep in sync),
+reacts to crew actions exactly like the server, and builds a four-hour scenario in about
+a second.
 
 **D8. MVVM with `@Observable`, no TCA.**
 *Alternative:* The Composable Architecture.
@@ -270,7 +275,7 @@ as README screenshots.
 - [ ] 4.7 Bearer-token middleware (D11) and XCTVapor tests for every endpoint
 
 ### M5: Core client layer
-- [ ] 5.1 `DetectionFeed` protocol; `FixtureFeed` that replays bundled JSON on a virtual clock
+- [ ] 5.1 `DetectionFeed` protocol; `SimulatedFeed` (in-process `SimulatedWorld` on a clock) and `FixtureFeed` (frozen state for previews)
 - [ ] 5.2 `HTTPTransport` protocol, a `URLSession` implementation and a fake; `APIClient` with typed errors
 - [ ] 5.3 `ReconnectingSocket` actor: backoff with jitter; tests with a fake clock and a fake socket (NFR-4)
 - [ ] 5.4 `ServerFeed` combining snapshot plus stream, resyncing from a snapshot after reconnect
@@ -285,7 +290,7 @@ as README screenshots.
 - [ ] 6.3 `ci-ios.yml`: install XcodeGen, generate, build for the iPhone simulator
 - [ ] 6.4 One UI test that launches the app and attaches a screenshot; CI exports `.xcresult` attachments as an artifact
 - [ ] 6.5 Simulator screen recording (`xcrun simctl io booted recordVideo`) during UI tests, uploaded as an artifact
-- [ ] 6.6 App-wide dependency container (`AppEnvironment`) choosing `FixtureFeed` or `ServerFeed`
+- [ ] 6.6 App-wide dependency container (`AppEnvironment`) choosing `SimulatedFeed` or `ServerFeed`
 
 ### M7: Map (FR-1, FR-2, FR-3)
 - [ ] 7.1 `MapScreen` with SwiftUI `Map`, centred on the scenario bounding box
