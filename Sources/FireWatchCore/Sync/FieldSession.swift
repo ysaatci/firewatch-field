@@ -114,11 +114,11 @@ public actor FieldSession {
     private func handle(_ event: OutboxEvent) async {
         switch event {
         case .pending(let entries):
-            await store.setPending(
-                entries.compactMap {
-                    guard case .command(let command) = $0.item else { return nil }
-                    return command
-                })
+            let commands = entries.compactMap { entry -> HotspotCommand? in
+                guard case .command(let command) = entry.item else { return nil }
+                return command
+            }
+            await store.setPending(commands, queuedReports: entries.count - commands.count)
         case .rejected(let item, let reason):
             rejectionBroadcast.yield(Rejection(item: item, reason: reason))
         }

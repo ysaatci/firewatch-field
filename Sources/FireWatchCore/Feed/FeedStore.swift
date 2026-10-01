@@ -12,9 +12,14 @@ public struct FieldState: Hashable, Sendable {
     public var receivedAt: Date?
     /// Commands made on this device that the feed hasn't confirmed yet.
     public var pendingCommands: [HotspotCommand]
+    /// Sighting reports made on this device that haven't been sent yet.
+    public var queuedReports: Int
+
+    /// Everything still waiting to be sent from this device.
+    public var queuedCount: Int { pendingCommands.count + queuedReports }
 
     public static let empty = FieldState(
-        fire: FireState(), asOf: nil, connection: .connecting, receivedAt: nil, pendingCommands: [])
+        fire: FireState(), asOf: nil, connection: .connecting, receivedAt: nil, pendingCommands: [], queuedReports: 0)
 }
 
 /// Holds the feed's state and publishes what the app should show (D9).
@@ -27,6 +32,7 @@ public actor FeedStore {
     private var connection = ConnectionStatus.connecting
     private var receivedAt: Date?
     private var pending: [HotspotCommand] = []
+    private var queuedReports = 0
     private let broadcast = Broadcast<FieldState>()
     private let now: @Sendable () -> Date
 
@@ -38,7 +44,8 @@ public actor FeedStore {
         var fire = base
         for command in pending { _ = try? fire.execute(command) }
         return FieldState(
-            fire: fire, asOf: asOf, connection: connection, receivedAt: receivedAt, pendingCommands: pending)
+            fire: fire, asOf: asOf, connection: connection, receivedAt: receivedAt, pendingCommands: pending,
+            queuedReports: queuedReports)
     }
 
     /// The current state now, then every change. Slow readers only ever get the newest state.
@@ -86,7 +93,8 @@ public actor FeedStore {
     }
 
     /// Replaces the commands shown optimistically on top of the feed's state.
-    public func setPending(_ commands: [HotspotCommand]) {
+    public func setPending(_ commands: [HotspotCommand], queuedReports: Int = 0) {
+        self.queuedReports = queuedReports
         pending = commands
         publish()
     }

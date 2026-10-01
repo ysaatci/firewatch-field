@@ -88,3 +88,13 @@ struct FeedStoreTests {
         following.cancel()
     }
 }
+
+struct FeedStoreQueueTests {
+    @Test func countsQueuedCommandsAndReports() async {
+        let store = FeedStore()
+        let command = HotspotCommand(hotspotID: "hs", action: .assign, issuedAt: .now)
+        await store.setPending([command], queuedReports: 2)
+        #expect(await store.current.queuedCount == 3)
+        #expect(FieldState.empty.queuedCount == 0)
+    }
+}
