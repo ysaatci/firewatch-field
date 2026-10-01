@@ -13,8 +13,7 @@ public struct Hotspot: Identifiable, Hashable, Sendable {
     public var confidence: Double
     public let firstSeen: Date
     public var workflow: HotspotWorkflow
-    /// Readings in time order, newest last. Never empty.
-    public private(set) var readings: [TemperatureReading]
+    private var history: TimeOrderedLog<TemperatureReading>
 
     public init(
         id: ID,
@@ -28,32 +27,26 @@ public struct Hotspot: Identifiable, Hashable, Sendable {
         self.confidence = confidence
         self.firstSeen = reading.time
         self.workflow = workflow
-        self.readings = [reading]
-    }
-
-    public var latestReading: TemperatureReading {
-        // `readings` is never empty: it starts with one element and only grows or is trimmed to the limit.
-        readings[readings.count - 1]
+        self.history = TimeOrderedLog(first: reading, limit: Self.historyLimit)
     }
 
     public var status: HotspotStatus { workflow.status }
-    public var temperatureCelsius: Double { latestReading.celsius }
-    public var lastSeen: Date { latestReading.time }
+    /// Recent readings, oldest first.
+    public var readings: [TemperatureReading] { history.samples }
+    public var temperatureCelsius: Double { history.latest.celsius }
+    public var lastSeen: Date { history.latest.time }
     public var severity: Severity { Severity(celsius: temperatureCelsius) }
 
     /// Adds a newer reading. Readings older than the latest are ignored.
     public mutating func record(_ reading: TemperatureReading, confidence: Double) {
-        guard reading.time >= lastSeen else { return }
-        readings.append(reading)
-        if readings.count > Self.historyLimit {
-            readings.removeFirst(readings.count - Self.historyLimit)
+        if history.append(reading) {
+            self.confidence = confidence
         }
-        self.confidence = confidence
     }
 }
 
 /// A surface temperature measured at a point in time.
-public struct TemperatureReading: Hashable, Sendable {
+public struct TemperatureReading: Timestamped, Hashable, Sendable {
     public var time: Date
     public var celsius: Double
 

@@ -35,17 +35,21 @@ FireWatchSimulator ──► FireWatchServer ──REST/WS──► ServerFeed �
 - **Writes:** status changes and sighting reports go to the `Outbox` first, each with a
   client-generated UUID. They are flushed when the connection is up and retried with
   backoff. The server treats the UUID as an idempotency key.
-- **Conflicts:** the server is authoritative for detection data. For hotspot status, the
-  most advanced workflow state wins (see D9).
+- **Conflicts:** the server is authoritative for detection data. Crews send workflow actions;
+  the server applies each only if it is still legal from the current status (see D9).
 
 ## Hotspot workflow
 
+Status changes happen through actions, validated by `HotspotWorkflow`:
+
 ```
-new ──► assigned ──► extinguished ──► verifiedCold
- ▲          ▲              │
- │          └── flaredUp ◄─┘
- └─ (detected)
+new ──assign──► assigned ──extinguish──► extinguished ──verifyCold──► verifiedCold
+ ▲                │  ▲                       │                            │
+ └────unassign────┘  └──assign── flaredUp ◄──┴────────── flareUp ─────────┘
 ```
+
+`extinguish` is also allowed straight from `new` or `flaredUp`. `flareUp` comes from
+detection (a drone measures the spot hot again), never from crews.
 
 ## Build and test
 

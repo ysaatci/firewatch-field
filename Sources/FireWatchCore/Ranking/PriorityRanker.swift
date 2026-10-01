@@ -33,8 +33,7 @@ public struct PriorityRanker: Sendable {
     }
 
     /// `hotspots` from most to least urgent. Ties are broken by ID so the order is stable.
-    public func ranked(_ hotspots: some Sequence<Hotspot>, now: Date, userLocation: Coordinate?) -> [Hotspot]
-    {
+    public func ranked(_ hotspots: some Sequence<Hotspot>, now: Date, userLocation: Coordinate?) -> [Hotspot] {
         hotspots
             .map { (hotspot: $0, score: score(of: $0, now: now, userLocation: userLocation)) }
             .sorted { $0.score != $1.score ? $0.score > $1.score : $0.hotspot.id < $1.hotspot.id }

@@ -170,11 +170,19 @@ touching the UI. It's the dependency-inversion principle in practice.
 easy for a reviewer to follow. Testable logic sits in Core actors anyway, so view models
 stay thin. The trade-off (less enforced structure than TCA) is acceptable at this size.
 
-**D9. Offline-first with an outbox, and server-wins merge with a field-level exception.**
+**D9. Offline-first with an outbox; conflicts resolved by replaying workflow actions.**
 Writes go to a persistent outbox (client UUID, attempt count, next retry time) and are
-flushed when connectivity returns. *Conflict policy:* the server is authoritative for
-detections (temperature, position). For status, the **most advanced workflow state
-wins**, so an `extinguished` from the field is never overwritten by a stale `assigned`.
+flushed when connectivity returns. Crews send *actions* (`assign`, `extinguish`, …), not
+target statuses. *Conflict policy:* the server is authoritative for detections
+(temperature, position) and applies each queued action only if the workflow state
+machine allows it from the hotspot's **current** status, rejecting it otherwise. On the
+device, the displayed state is the server state with still-pending actions replayed on
+top (an optimistic rebase); a rejected action is dropped and the user is told.
+*Example:* a crew marks a hotspot `verifyCold` offline, but a drone saw it flare up in the
+meantime. `verifyCold` isn't legal from `flaredUp`, so it's rejected, and the crew sees the
+flare-up instead of a false "cold".
+*Alternative considered:* "most advanced status wins". It breaks on flare-ups (a cycle,
+not a line) and on unassign (a legitimate step backwards).
 *Why:* this is the real need for crews out of signal, and a strong interview topic.
 
 **D10. SwiftData for the cache and outbox in the app; storage protocols in Core.**
@@ -263,7 +271,7 @@ as README screenshots.
 - [ ] 5.2 `HTTPTransport` protocol, a `URLSession` implementation and a fake; `APIClient` with typed errors
 - [ ] 5.3 `ReconnectingSocket` actor: backoff with jitter; tests with a fake clock and a fake socket (NFR-4)
 - [ ] 5.4 `ServerFeed` combining snapshot plus stream, resyncing from a snapshot after reconnect
-- [ ] 5.5 `FeedStore` actor: applies events, exposes an `AsyncStream` of state, and applies the merge policy (D9)
+- [ ] 5.5 `FeedStore` actor: applies events, exposes an `AsyncStream` of state, and replays pending actions over server state (D9)
 - [ ] 5.6 `Outbox` actor + `OutboxStore` protocol (in-memory impl): enqueue, flush, retry, dedupe
 - [ ] 5.7 `AlertEngine`: emits alerts for new hotspots or flare-ups within radius *R* of the user (FR-8 logic)
 - [ ] 5.8 Coverage report in CI, failing below 80 % (NFR-9)

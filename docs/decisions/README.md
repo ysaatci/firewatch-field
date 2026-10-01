@@ -10,7 +10,7 @@ Each record states the choice, the main alternative, and why. New decisions get 
 - [D6. A shared `FireWatchAPI` contract module, using GeoJSON for geometry](0006-a-shared-firewatchapi-contract-module-using.md)
 - [D7. A `DetectionFeed` protocol with interchangeable sources](0007-a-detectionfeed-protocol-with-interchangeable.md)
 - [D8. MVVM with `@Observable`, no TCA](0008-mvvm-with-observable-no-tca.md)
-- [D9. Offline-first with an outbox, and server-wins merge with a field-level exception](0009-offline-first-with-an-outbox-and-server-wins.md)
+- [D9. Offline-first with an outbox; conflicts resolved by replaying workflow actions](0009-offline-first-outbox-replaying-actions.md)
 - [D10. SwiftData for the cache and outbox in the app; storage protocols in Core](0010-swiftdata-for-the-cache-and-outbox-in-the-app.md)
 - [D11. Static bearer token, stored in Keychain](0011-static-bearer-token-stored-in-keychain.md)
 - [D12. Swift 6 strict concurrency from day one](0012-swift-6-strict-concurrency-from-day-one.md)

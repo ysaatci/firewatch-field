@@ -9,32 +9,26 @@ public struct Drone: Identifiable, Hashable, Sendable {
 
     public let id: ID
     public var name: String
-    /// Positions in time order, newest last. Never empty.
-    public private(set) var track: [DronePosition]
+    private var log: TimeOrderedLog<DronePosition>
 
     public init(id: ID, name: String, position: DronePosition) {
         self.id = id
         self.name = name
-        self.track = [position]
+        self.log = TimeOrderedLog(first: position, limit: Self.trackLimit)
     }
 
-    public var position: DronePosition {
-        // `track` is never empty: it starts with one element and is only trimmed to the limit.
-        track[track.count - 1]
-    }
+    public var position: DronePosition { log.latest }
+    /// Recent positions, oldest first.
+    public var track: [DronePosition] { log.samples }
 
     /// Records a newer position. Older positions are ignored.
     public mutating func move(to position: DronePosition) {
-        guard position.time >= self.position.time else { return }
-        track.append(position)
-        if track.count > Self.trackLimit {
-            track.removeFirst(track.count - Self.trackLimit)
-        }
+        log.append(position)
     }
 }
 
 /// A drone's state at a point in time.
-public struct DronePosition: Hashable, Sendable {
+public struct DronePosition: Timestamped, Hashable, Sendable {
     public var time: Date
     public var coordinate: Coordinate
     /// Degrees clockwise from true north.
