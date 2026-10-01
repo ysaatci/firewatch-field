@@ -45,7 +45,7 @@ struct ScenarioTests {
     @Test func goldenSummary() {
         #expect(
             Self.summary(scenario)
-                == "ignited=1985 hotspots=278 flareUps=69 detected=232 passes=923 perimeters=37 areaHa=500")
+                == "ignited=1985 hotspots=278 flareUps=69 detected=232 passes=923 perimeters=37 areaHa=501")
     }
 
     @Test func fireGrowsOverTime() {

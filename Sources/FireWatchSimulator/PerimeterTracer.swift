@@ -25,7 +25,7 @@ enum PerimeterTracer {
         }
         return zip(exteriors, holesByExterior).map { exterior, holes in
             LatticePolygon(
-                exterior: smooth(exterior, iterations: smoothing),
+                exterior: smooth(fillingPockets(exterior, smallerThan: minimumHoleCells), iterations: smoothing),
                 holes: holes.map { smooth($0, iterations: smoothing) }
             )
         }
@@ -144,6 +144,48 @@ enum PerimeterTracer {
             previous = vertex
         }
         return inside
+    }
+
+    /// Removes small unburned pockets that open to the outside only through a corner.
+    ///
+    /// The walk enters such a pocket through the shared corner and leaves through it again, so
+    /// the ring visits that corner twice. Smoothing would turn the detour into a small loop
+    /// hanging off the perimeter, so pockets below `minimumArea` are filled, like small holes.
+    static func fillingPockets(_ ring: [PlanarPoint], smallerThan minimumArea: Double) -> [PlanarPoint] {
+        var kept: [PlanarPoint] = []
+        var position: [PlanarPoint: Int] = [:]
+        for point in ring {
+            if let start = position[point] {
+                let pocket = Array(kept[start...])
+                if signedArea(pocket) < 0, -signedArea(pocket) < minimumArea {
+                    for removed in kept[(start + 1)...] { position[removed] = nil }
+                    kept.removeSubrange((start + 1)...)
+                    continue
+                }
+            }
+            position[point] = kept.count
+            kept.append(point)
+        }
+        return withoutCollinearPoints(kept)
+    }
+
+    /// The ring without points that lie on a straight line between their neighbours.
+    private static func withoutCollinearPoints(_ ring: [PlanarPoint]) -> [PlanarPoint] {
+        var points = ring
+        var index = 0
+        while points.count > 3, index < points.count {
+            let previous = points[(index + points.count - 1) % points.count]
+            let next = points[(index + 1) % points.count]
+            let point = points[index]
+            let cross = (point.x - previous.x) * (next.y - previous.y) - (point.y - previous.y) * (next.x - previous.x)
+            if cross == 0 {
+                points.remove(at: index)
+                index = max(index - 1, 0)
+            } else {
+                index += 1
+            }
+        }
+        return points
     }
 
     /// Chaikin corner cutting: softens the stair-step cell outline.
