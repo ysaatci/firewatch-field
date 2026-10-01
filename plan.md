@@ -281,7 +281,7 @@ as README screenshots.
 - [x] 5.4 `ReconnectingSocket` with backoff and jitter (Core); `URLSessionWebSocketTask` adapter (Client); tests with fakes (NFR-4)
 - [x] 5.5 `ServerFeed` (snapshot, then stream; fresh snapshot after every reconnect) and `ServerCommandSink`
 - [x] 5.6 `FeedStore` actor: applies feed updates, replays pending commands over server state (D9), publishes an `AsyncStream` of state
-- [ ] 5.7 `Outbox` actor + `OutboxStore` protocol (in-memory impl): enqueue, flush in order, retry with backoff, drop rejected
+- [x] 5.7 `Outbox` actor + `OutboxStore` protocol (in-memory impl): enqueue, flush in order, retry with backoff, drop rejected
 - [ ] 5.8 `AlertEngine`: alerts for new hotspots or flare-ups within radius *R* of the user (FR-8 logic)
 - [ ] 5.9 Coverage report in CI, failing below 80 % for Core (NFR-9)
 
