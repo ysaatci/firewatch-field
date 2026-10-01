@@ -3,6 +3,7 @@
 # Native Swift on Windows is avoided: Smart App Control blocks unsigned test binaries.
 #
 # Usage: scripts/dev.sh <command>
+#   check    Everything CI runs: lint, strict build, tests
 #   test     Build (warnings are errors) and run all tests
 #   build    Build all targets
 #   format   Rewrite sources with swift-format
@@ -35,12 +36,17 @@ run() {
         -w /src "$IMAGE" "$@"
 }
 
+SOURCES="Package.swift Sources Tests"
+LINT="swift format lint --strict --recursive --parallel $SOURCES"
+TEST="swift build --build-tests -Xswiftc -warnings-as-errors && swift test --skip-build"
+
 case "${1:-help}" in
-    test)   run bash -c "swift build --build-tests -Xswiftc -warnings-as-errors && swift test --skip-build" ;;
+    check)  run bash -c "$LINT && $TEST" ;;
+    test)   run bash -c "$TEST" ;;
     build)  run swift build --build-tests ;;
     shell)  run bash ;;
-    format) run swift format format --in-place --recursive --parallel Package.swift Sources Tests ;;
-    lint)   run swift format lint --strict --recursive --parallel Package.swift Sources Tests ;;
+    format) run swift format format --in-place --recursive --parallel $SOURCES ;;
+    lint)   run bash -c "$LINT" ;;
     server) echo "The simulator server arrives in milestone M4." >&2; exit 1 ;;
-    *)      sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'; exit 1 ;;
+    *)      sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'; exit 1 ;;
 esac
