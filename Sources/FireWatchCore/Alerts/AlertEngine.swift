@@ -1,5 +1,5 @@
 /// Something near the crew worth interrupting them for (FR-8).
-public struct Alert: Hashable, Sendable, Identifiable {
+public struct HotspotAlert: Hashable, Sendable, Identifiable {
     public enum Kind: String, Hashable, Sendable {
         case newHotspot, flareUp
     }
@@ -28,20 +28,20 @@ public struct AlertEngine: Sendable {
     /// Without a user location nothing counts as near, so there are no alerts. The first
     /// state after launch (an empty `old`) raises none either; otherwise every existing
     /// hotspot would alert at once. Hotspots found while offline do alert after a reconnect.
-    public func alerts(from old: FireState, to new: FireState, near user: Coordinate?) -> [Alert] {
+    public func alerts(from old: FireState, to new: FireState, near user: Coordinate?) -> [HotspotAlert] {
         guard let user, !old.hotspots.isEmpty else { return [] }
         return new.hotspots.values
-            .compactMap { hotspot -> Alert? in
+            .compactMap { hotspot -> HotspotAlert? in
                 let distance = user.distance(to: hotspot.coordinate)
                 guard distance <= radiusMetres, let kind = change(of: hotspot, since: old) else { return nil }
-                return Alert(
+                return HotspotAlert(
                     kind: kind, hotspotID: hotspot.id, severity: hotspot.severity, distanceMetres: distance,
                     flareUps: hotspot.workflow.flareUps)
             }
             .sorted { ($0.distanceMetres, $0.id) < ($1.distanceMetres, $1.id) }
     }
 
-    private func change(of hotspot: Hotspot, since old: FireState) -> Alert.Kind? {
+    private func change(of hotspot: Hotspot, since old: FireState) -> HotspotAlert.Kind? {
         guard let before = old.hotspots[hotspot.id] else { return .newHotspot }
         return hotspot.workflow.flareUps > before.workflow.flareUps ? .flareUp : nil
     }

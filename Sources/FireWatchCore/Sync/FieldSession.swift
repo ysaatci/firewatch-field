@@ -17,7 +17,7 @@ public actor FieldSession {
     private var lastFire = FireState()
     private var alerted: Set<String> = []
     private var tasks: [Task<Void, Never>] = []
-    private let alertBroadcast = Broadcast<Alert>()
+    private let alertBroadcast = Broadcast<HotspotAlert>()
     private let rejectionBroadcast = Broadcast<Rejection>()
 
     /// A crew action or report the server refused, to show to the user.
@@ -65,7 +65,7 @@ public actor FieldSession {
     }
 
     /// New hotspots and flare-ups near the user.
-    public nonisolated func alerts() -> AsyncStream<Alert> {
+    public nonisolated func alerts() -> AsyncStream<HotspotAlert> {
         alertBroadcast.subscribe().stream
     }
 

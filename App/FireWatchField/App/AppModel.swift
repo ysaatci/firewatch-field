@@ -9,7 +9,7 @@ final class AppModel {
     private(set) var field = FieldState.empty
     private(set) var configuration: AppConfiguration
     /// Recent alerts, newest first.
-    private(set) var alerts: [Alert] = []
+    private(set) var alerts: [HotspotAlert] = []
     /// The latest action the server refused, until dismissed.
     var rejection: FieldSession.Rejection?
     private(set) var isReady = false
