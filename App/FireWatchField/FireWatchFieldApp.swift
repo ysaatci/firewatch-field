@@ -3,7 +3,7 @@ import SwiftUI
 
 @main
 struct FireWatchFieldApp: App {
-    static let refreshTaskID = "dev.ysaatci.firewatchfield.refresh"
+    nonisolated static let refreshTaskID = "dev.ysaatci.firewatchfield.refresh"
 
     @Environment(\.scenePhase) private var scenePhase
     @State private var model = AppModel()
