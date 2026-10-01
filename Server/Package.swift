@@ -21,7 +21,11 @@ let package = Package(
         .executableTarget(name: "firewatch-server", dependencies: ["FireWatchServer"]),
         .testTarget(
             name: "FireWatchServerTests",
-            dependencies: ["FireWatchServer", .product(name: "VaporTesting", package: "vapor")]
+            dependencies: [
+                "FireWatchServer",
+                .product(name: "FireWatchClient", package: "firewatch-field"),
+                .product(name: "VaporTesting", package: "vapor"),
+            ]
         ),
     ],
     swiftLanguageModes: [.v6]

@@ -25,41 +25,6 @@ struct BackoffTests {
     }
 }
 
-/// A connector that plays a script: each entry either fails or yields a socket with messages.
-final class ScriptedConnector: SocketConnector, @unchecked Sendable {
-    enum Step {
-        case fail
-        case connect([String])
-    }
-
-    struct Socket: MessageSocket {
-        let messages: Messages
-
-        final class Messages: @unchecked Sendable {
-            private let lock = NSLock()
-            private var queue: [String]
-            init(_ queue: [String]) { self.queue = queue }
-            func next() -> String? { lock.withLock { queue.isEmpty ? nil : queue.removeFirst() } }
-        }
-
-        func receive() async throws -> String? { messages.next() }
-        func close() async {}
-    }
-
-    private let lock = NSLock()
-    private var steps: [Step]
-
-    init(_ steps: [Step]) { self.steps = steps }
-
-    func connect() async throws -> any MessageSocket {
-        let step: Step? = lock.withLock { steps.isEmpty ? nil : steps.removeFirst() }
-        switch step {
-        case .connect(let messages): return Socket(messages: .init(messages))
-        case .fail, nil: throw CancellationError()
-        }
-    }
-}
-
 struct ReconnectingSocketTests {
     let clock = TestClock()
 

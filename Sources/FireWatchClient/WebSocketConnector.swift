@@ -6,6 +6,9 @@ import FoundationNetworking
 #endif
 
 /// Opens the event stream with `URLSessionWebSocketTask`.
+///
+/// Apple platforms only in practice: the Linux toolchain's libcurl lacks WebSocket support,
+/// so Linux tests inject a different ``SocketConnector``.
 public struct WebSocketConnector: SocketConnector {
     /// Batches carrying perimeters can be a few hundred kilobytes.
     public static let maximumMessageSize = 4 * 1_024 * 1_024
