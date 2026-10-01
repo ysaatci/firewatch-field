@@ -7,7 +7,8 @@ public protocol Timestamped {
 
 /// The most recent samples of something, oldest first.
 ///
-/// Out-of-order samples are dropped and only the newest `limit` are kept. Never empty.
+/// Samples not newer than the latest are dropped, which makes replaying the same samples
+/// harmless, and only the newest `limit` are kept. Never empty.
 public struct TimeOrderedLog<Sample: Timestamped & Hashable & Sendable>: Hashable, Sendable {
     public let limit: Int
     public private(set) var samples: [Sample]
@@ -20,11 +21,11 @@ public struct TimeOrderedLog<Sample: Timestamped & Hashable & Sendable>: Hashabl
 
     public var latest: Sample { samples[samples.count - 1] }
 
-    /// Appends `sample` unless it is older than ``latest``.
+    /// Appends `sample` if it is newer than ``latest``.
     /// - Returns: Whether `sample` was appended.
     @discardableResult
     public mutating func append(_ sample: Sample) -> Bool {
-        guard sample.time >= latest.time else { return false }
+        guard sample.time > latest.time else { return false }
         samples.append(sample)
         if samples.count > limit {
             samples.removeFirst(samples.count - limit)

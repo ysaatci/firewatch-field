@@ -37,7 +37,7 @@ public struct FireState: Hashable, Sendable {
         case .hotspotCommandApplied(let command):
             _ = try? execute(command)
         case .perimeterUpdated(let perimeter):
-            guard perimeter.time >= latestPerimeter?.time ?? .distantPast else { return }
+            guard perimeter.time > latestPerimeter?.time ?? .distantPast else { return }
             perimeters.append(perimeter)
         case .droneMoved(let update):
             if drones[update.droneID] == nil {
@@ -72,9 +72,10 @@ public struct FireState: Hashable, Sendable {
             )
             return
         }
-        hotspot.record(observation.reading, confidence: observation.confidence)
+        // Old or repeated readings change nothing, so replaying events is harmless.
+        guard hotspot.record(observation.reading, confidence: observation.confidence) else { return }
         let putOut = [HotspotStatus.extinguished, .verifiedCold].contains(hotspot.status)
-        if putOut, hotspot.lastSeen == observation.reading.time, observation.reading.celsius >= Self.flareUpCelsius {
+        if putOut, observation.reading.celsius >= Self.flareUpCelsius {
             hotspot.workflow = (try? hotspot.workflow.applying(.flareUp)) ?? hotspot.workflow
         }
         hotspots[observation.hotspotID] = hotspot

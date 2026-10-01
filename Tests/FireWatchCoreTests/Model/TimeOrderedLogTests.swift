@@ -18,12 +18,12 @@ struct TimeOrderedLogTests {
         #expect(log.latest.celsius == 5)
     }
 
-    @Test func rejectsOlderSamplesButAcceptsEqualTimes() {
+    @Test func rejectsOlderAndRepeatedSamples() {
         var log = TimeOrderedLog(first: reading(10), limit: 3)
         let older = log.append(reading(9))
-        let sameTime = log.append(reading(10))
+        let repeated = log.append(reading(10))
         #expect(!older)
-        #expect(sameTime)
-        #expect(log.samples.count == 2)
+        #expect(!repeated)
+        #expect(log.samples.count == 1)
     }
 }

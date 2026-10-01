@@ -119,3 +119,28 @@ struct FireStateTests {
         #expect(FeedEvent.perimeterUpdated(FirePerimeter(time: at(4), polygons: [])).time == at(4))
     }
 }
+
+struct FireStateIdempotenceTests {
+    let start = Date(timeIntervalSince1970: 1_800_000_000)
+
+    func observed(celsius: Double, minute: Double) -> FeedEvent {
+        .hotspotObserved(
+            HotspotObservation(
+                hotspotID: "hs-1", coordinate: .manavgat,
+                reading: TemperatureReading(time: start.addingTimeInterval(minute * 60), celsius: celsius),
+                confidence: 0.9, droneID: "drone-1"))
+    }
+
+    /// A feed may resend events already folded into a snapshot; replaying them changes nothing.
+    @Test func replayingEventsChangesNothing() {
+        let events: [FeedEvent] = [
+            observed(celsius: 400, minute: 0),
+            .hotspotCommandApplied(
+                HotspotCommand(hotspotID: "hs-1", action: .extinguish, issuedAt: start.addingTimeInterval(600))),
+            .perimeterUpdated(FirePerimeter(time: start, polygons: [])),
+        ]
+        let once = FireState(events: events)
+        #expect(FireState(events: events + events) == once)
+        #expect(once.hotspots["hs-1"]?.status == .extinguished)  // the replayed hot reading is not a flare-up
+    }
+}

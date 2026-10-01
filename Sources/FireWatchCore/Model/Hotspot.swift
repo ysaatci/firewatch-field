@@ -57,11 +57,13 @@ public struct Hotspot: Identifiable, Hashable, Sendable {
     public var lastSeen: Date { history.latest.time }
     public var severity: Severity { Severity(celsius: temperatureCelsius) }
 
-    /// Adds a newer reading. Readings older than the latest are ignored.
-    public mutating func record(_ reading: TemperatureReading, confidence: Double) {
-        if history.append(reading) {
-            self.confidence = confidence
-        }
+    /// Adds a reading newer than the latest; older or repeated readings are ignored.
+    /// - Returns: Whether the reading was recorded.
+    @discardableResult
+    public mutating func record(_ reading: TemperatureReading, confidence: Double) -> Bool {
+        guard history.append(reading) else { return false }
+        self.confidence = confidence
+        return true
     }
 }
 
