@@ -71,6 +71,20 @@ public actor FeedStore {
         publish()
     }
 
+    /// Shows a cached state from an earlier run until the feed sends something newer.
+    public func restore(_ cached: CachedFire) {
+        base = cached.state
+        asOf = cached.asOf
+        receivedAt = cached.receivedAt
+        publish()
+    }
+
+    /// The feed's own state, without pending commands, for caching: those are restored from
+    /// the outbox instead, so nothing unconfirmed is ever saved as fact.
+    public var cacheable: CachedFire? {
+        asOf.map { CachedFire(state: base, asOf: $0, receivedAt: receivedAt) }
+    }
+
     /// Replaces the commands shown optimistically on top of the feed's state.
     public func setPending(_ commands: [HotspotCommand]) {
         pending = commands

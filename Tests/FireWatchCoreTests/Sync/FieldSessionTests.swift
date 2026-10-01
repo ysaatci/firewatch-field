@@ -74,3 +74,68 @@ struct FieldSessionTests {
         await session.stop()
     }
 }
+
+struct FieldSessionCacheTests {
+    let start = Date(timeIntervalSince1970: 1_800_000_000)
+    let clock = TestClock()
+
+    func observed(_ id: Hotspot.ID, minute: Double) -> FeedEvent {
+        .hotspotObserved(
+            HotspotObservation(
+                hotspotID: id, coordinate: .manavgat,
+                reading: TemperatureReading(time: start.addingTimeInterval(minute * 60), celsius: 300),
+                confidence: 0.9, droneID: "drone-1"))
+    }
+
+    func makeSession(feed: ManualFeed, cache: InMemoryFieldCache) -> FieldSession {
+        let clock = clock
+        return FieldSession(
+            feed: feed, sink: ScriptedSink(), outboxStore: InMemoryOutboxStore(), cache: cache, cacheInterval: 30,
+            now: { clock.now })
+    }
+
+    @Test func opensWithTheCachedStateBeforeTheFeedAnswers() async throws {
+        let cached = CachedFire(state: FireState(events: [observed("hs-1", minute: 0)]), asOf: start, receivedAt: start)
+        let session = makeSession(feed: ManualFeed(), cache: InMemoryFieldCache(cached))
+        await session.start()
+        let current = await session.store.current
+        #expect(current.fire.hotspots["hs-1"] != nil)
+        #expect(current.connection == .connecting)
+        #expect(current.receivedAt == start)
+        await session.stop()
+    }
+
+    @Test func savesTheFeedStateAtMostOncePerInterval() async throws {
+        let feed = ManualFeed()
+        let cache = InMemoryFieldCache()
+        let session = makeSession(feed: feed, cache: cache)
+        await session.start()
+        try await eventually { feed.hasSubscribers }
+
+        feed.send(.snapshot(FireState(events: [observed("hs-1", minute: 0)]), asOf: start))
+        try await eventually { await cache.saveCount == 1 }
+        feed.send(.events([observed("hs-2", minute: 1)]))  // within the interval: not saved
+        clock.advance(seconds: 31)
+        feed.send(.events([observed("hs-3", minute: 2)]))
+        try await eventually { await cache.saveCount == 2 }
+        #expect(await cache.saved?.state.hotspots.count == 3)
+        await session.stop()
+    }
+
+    @Test func pendingCommandsAreNotCachedAsFact() async throws {
+        let feed = ManualFeed()
+        let cache = InMemoryFieldCache()
+        let session = FieldSession(
+            feed: feed, sink: ScriptedSink([.failure(.unavailable)]), outboxStore: InMemoryOutboxStore(),
+            cache: cache)
+        await session.start()
+        try await eventually { feed.hasSubscribers }
+        feed.send(.snapshot(FireState(events: [observed("hs-1", minute: 0)]), asOf: start))
+        await session.perform(.assign, on: "hs-1")
+        try await eventually { await session.store.current.fire.hotspots["hs-1"]?.status == .assigned }
+
+        await session.saveCache()
+        #expect(await cache.saved?.state.hotspots["hs-1"]?.status == .new)
+        await session.stop()
+    }
+}

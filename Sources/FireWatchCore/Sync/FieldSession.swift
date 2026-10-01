@@ -11,6 +11,10 @@ public actor FieldSession {
     public nonisolated let store: FeedStore
     public nonisolated let outbox: Outbox
     private let feed: any DetectionFeed
+    private let cache: (any FieldCache)?
+    /// Saving every update would be wasteful; at most once per interval (seconds).
+    private let cacheInterval: TimeInterval
+    private var lastCacheSave: Date?
     private var alertEngine: AlertEngine
     private let now: @Sendable () -> Date
     private var userLocation: Coordinate?
@@ -30,18 +34,25 @@ public actor FieldSession {
         feed: any DetectionFeed,
         sink: any CommandSink,
         outboxStore: any OutboxStore,
+        cache: (any FieldCache)? = nil,
+        cacheInterval: TimeInterval = 30,
         alertRadiusMetres: Double = 2_000,
         now: @escaping @Sendable () -> Date = Date.init
     ) {
         self.feed = feed
         self.store = FeedStore(now: now)
         self.outbox = Outbox(store: outboxStore, sink: sink, now: now)
+        self.cache = cache
+        self.cacheInterval = cacheInterval
         self.alertEngine = AlertEngine(radiusMetres: alertRadiusMetres)
         self.now = now
     }
 
-    /// Restores the saved outbox and starts the background work. Call once.
+    /// Shows the cached state, restores the saved outbox and starts the background work. Call once.
     public func start() async {
+        if let cached = await cache?.load() {
+            await store.restore(cached)
+        }
         try? await outbox.restore()
         let store = store
         let outbox = outbox
@@ -62,6 +73,13 @@ public actor FieldSession {
     public func stop() {
         for task in tasks { task.cancel() }
         tasks = []
+    }
+
+    /// Saves the current state now, for example when the app goes to the background.
+    public func saveCache() async {
+        guard let cache, let fire = await store.cacheable else { return }
+        await cache.save(fire)
+        lastCacheSave = now()
     }
 
     /// New hotspots and flare-ups near the user.
@@ -108,6 +126,8 @@ public actor FieldSession {
 
     private func handle(_ state: FieldState) async {
         if state.connection == .live { await outbox.retryNow() }
+        let dueForSave = lastCacheSave.map { now().timeIntervalSince($0) >= cacheInterval } ?? true
+        if dueForSave, state.asOf != nil { await saveCache() }
         for alert in alertEngine.alerts(from: lastFire, to: state.fire, near: userLocation)
         where alerted.insert(alert.id).inserted {
             alertBroadcast.yield(alert)
