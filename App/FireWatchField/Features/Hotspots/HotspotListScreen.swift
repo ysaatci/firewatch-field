@@ -101,7 +101,7 @@ struct HotspotRow: View {
                 .font(.headline.monospacedDigit())
             Text(details)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.secondaryText)
         }
     }
 

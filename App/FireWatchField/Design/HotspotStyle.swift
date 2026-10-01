@@ -77,4 +77,12 @@ extension Color {
                 ? UIColor(red: 0.91, green: 0.42, blue: 0.0, alpha: 1)
                 : UIColor(red: 0.76, green: 0.32, blue: 0.0, alpha: 1)
         })
+
+    /// Secondary text that keeps 4.5:1 contrast at small sizes; the system grey falls just short.
+    static let secondaryText = Color(
+        UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor(red: 0.68, green: 0.68, blue: 0.71, alpha: 1)
+                : UIColor(red: 0.40, green: 0.40, blue: 0.43, alpha: 1)
+        })
 }
