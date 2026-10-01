@@ -46,6 +46,9 @@ enum Storage {
     /// The app's store, or an empty one when the `resetStorage` default is set (UI tests).
     static func makeContainer() -> ModelContainer {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: false)
+        // A fresh install has no Application Support folder, and the store can't create it.
+        try? FileManager.default.createDirectory(
+            at: configuration.url.deletingLastPathComponent(), withIntermediateDirectories: true)
         if UserDefaults.standard.bool(forKey: "resetStorage") {
             for suffix in ["", "-wal", "-shm"] {
                 try? FileManager.default.removeItem(atPath: configuration.url.path + suffix)
