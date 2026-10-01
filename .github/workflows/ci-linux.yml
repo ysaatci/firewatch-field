@@ -33,3 +33,6 @@ jobs:
 
       - name: Test
         run: swift test --skip-build
+
+      - name: Smoke-test fwgen
+        run: swift run fwgen --out /tmp/fixtures && test -s /tmp/fixtures/snapshot.json

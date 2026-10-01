@@ -19,3 +19,6 @@ Thumbs.db
 
 # Local artifacts
 /artifacts/
+
+# fwgen default output
+/fixtures/

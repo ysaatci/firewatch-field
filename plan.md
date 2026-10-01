@@ -262,7 +262,7 @@ as README screenshots.
 - [x] 3.1 `FireWatchAPI` module with GeoJSON `Geometry`/`Feature`/`FeatureCollection` Codable types and round-trip tests
 - [x] 3.2 DTOs for Snapshot, Hotspot, Perimeter, Drone, Report, Command, Event batch and Error; shared JSON coding (ISO 8601 with milliseconds)
 - [x] 3.3 Domain↔DTO mappers in `FireWatchAPI` (Core stays free of wire concerns); `schemaVersion` with a test that rejects unknown versions
-- [ ] 3.4 `fwgen` CLI: `fwgen --preset default --minutes 180 --out fixtures/` exports snapshots and events as API JSON
+- [x] 3.4 `fwgen` CLI: `fwgen --preset default --minutes 180 --out fixtures/` exports snapshots and events as API JSON
 - [ ] 3.5 `docs/api.md`: endpoints, event types and example payloads (generated with `fwgen`)
 
 ### M4: Simulator server (Vapor)
