@@ -244,7 +244,7 @@ as README screenshots.
 ### M2: Fake-data simulator
 - [x] 2.1 `SeededRandom` (SplitMix64) with a determinism test
 - [x] 2.2 `TerrainGrid`: fuel and slope fields from layered noise; origin, cell size, coordinate↔cell conversion
-- [ ] 2.3 `FireSpreadModel`: cell states and a wind-biased ignition step, with tests (no spread without fuel, downwind bias)
+- [x] 2.3 `FireSpreadModel`: cell states and a wind-biased ignition step, with tests (no spread without fuel, downwind bias)
 - [ ] 2.4 Perimeter extraction (trace cell boundaries of the burned mask → rings with holes, then smooth)
 - [ ] 2.5 Residual hotspots: spawn behind the front, exponential cooling, flare-up probability
 - [ ] 2.6 Drone planner: lawnmower survey pattern; a detection happens only when a drone's footprint covers a hotspot

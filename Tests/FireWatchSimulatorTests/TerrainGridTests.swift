@@ -39,7 +39,7 @@ struct TerrainGridTests {
     }
 
     @Test func noiseIsSmooth() {
-        // Neighbouring cells differ far less than the full 0...1 range.
+        // Neighbouring cells differ by a small fraction of the 400 m range.
         let elevation = generate(seed: 1).elevation
         let steps = elevation.indices.compactMap { index in
             elevation.value(at: index.offset(rows: 0, columns: 1)).map { abs($0 - elevation[index]) }
