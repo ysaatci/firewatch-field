@@ -8,6 +8,7 @@ let package = Package(
         .library(name: "FireWatchCore", targets: ["FireWatchCore"]),
         .library(name: "FireWatchSimulator", targets: ["FireWatchSimulator"]),
         .library(name: "FireWatchAPI", targets: ["FireWatchAPI"]),
+        .library(name: "FireWatchClient", targets: ["FireWatchClient"]),
         .executable(name: "fwgen", targets: ["fwgen"]),
     ],
     dependencies: [
@@ -26,6 +27,11 @@ let package = Package(
         // The versioned wire contract shared by the server and the app.
         .target(name: "FireWatchAPI", dependencies: ["FireWatchCore"]),
         .testTarget(name: "FireWatchAPITests", dependencies: ["FireWatchAPI", "FireWatchSimulator", "TestSupport"]),
+
+        // Talks to the simulator server (and later the real backend) over HTTP and WebSocket.
+        .target(name: "FireWatchClient", dependencies: ["FireWatchCore", "FireWatchAPI"]),
+        .testTarget(
+            name: "FireWatchClientTests", dependencies: ["FireWatchClient", "FireWatchSimulator", "TestSupport"]),
 
         // CLI that exports scenarios as API JSON fixtures.
         .executableTarget(
