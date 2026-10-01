@@ -25,6 +25,8 @@ struct BackoffTests {
     }
 }
 
+// A hung async test fails by name instead of stalling the whole run.
+@Suite(.timeLimit(.minutes(1)))
 struct ReconnectingSocketTests {
     let clock = TestClock()
 

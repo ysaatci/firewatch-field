@@ -31,6 +31,8 @@ actor ScriptedSink: CommandSink {
     }
 }
 
+// A hung async test fails by name instead of stalling the whole run.
+@Suite(.timeLimit(.minutes(1)))
 struct OutboxTests {
     let store = InMemoryOutboxStore()
 

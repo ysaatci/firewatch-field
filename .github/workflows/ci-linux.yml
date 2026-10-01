@@ -32,6 +32,7 @@ jobs:
         run: swift build --build-tests -Xswiftc -warnings-as-errors
 
       - name: Test
+        timeout-minutes: 5
         run: swift test --skip-build
 
       - name: Coverage (FireWatchCore at least 80 %)

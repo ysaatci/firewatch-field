@@ -7,6 +7,8 @@ import Testing
 
 @testable import FireWatchClient
 
+// A hung async test fails by name instead of stalling the whole run.
+@Suite(.timeLimit(.minutes(1)))
 struct ServerFeedTests {
     static let start = Date(timeIntervalSince1970: 1_800_000_000)
     let configuration = APIClient.Configuration(baseURL: URL("http://sim.test"), token: "t")

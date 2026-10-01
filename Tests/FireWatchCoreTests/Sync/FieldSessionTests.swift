@@ -4,6 +4,8 @@ import Testing
 
 @testable import FireWatchCore
 
+// A hung async test fails by name instead of stalling the whole run.
+@Suite(.timeLimit(.minutes(1)))
 struct FieldSessionTests {
     let start = Date(timeIntervalSince1970: 1_800_000_000)
     let projection = LocalProjection(origin: .manavgat)
@@ -77,6 +79,8 @@ struct FieldSessionTests {
     }
 }
 
+// A hung async test fails by name instead of stalling the whole run.
+@Suite(.timeLimit(.minutes(1)))
 struct FieldSessionCacheTests {
     let start = Date(timeIntervalSince1970: 1_800_000_000)
     let clock = TestClock()

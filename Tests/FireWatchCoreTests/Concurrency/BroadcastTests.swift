@@ -3,6 +3,8 @@ import Testing
 
 @testable import FireWatchCore
 
+// A hung async test fails by name instead of stalling the whole run.
+@Suite(.timeLimit(.minutes(1)))
 struct BroadcastTests {
     @Test func everySubscriberGetsEveryValue() async {
         let broadcast = Broadcast<Int>()
