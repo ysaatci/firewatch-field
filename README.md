@@ -1,5 +1,7 @@
 # FireWatch Field
 
+[![ci-linux](https://github.com/ysaatci/firewatch-field/actions/workflows/ci-linux.yml/badge.svg)](https://github.com/ysaatci/firewatch-field/actions/workflows/ci-linux.yml)
+
 An iOS app for wildfire ground crews. It shows drone-detected hotspots and the live
 fire perimeter, lets crews claim and close out hotspots during mop-up, and keeps
 working with no signal.
@@ -17,7 +19,8 @@ real pipeline will use.
 |---|---|
 | `Sources/FireWatchCore` | Domain model, geo math, sync engine. Builds on Linux and iOS. |
 | `App/` | SwiftUI app (project generated with XcodeGen). |
-| `docs/` | Architecture and design decisions. |
+| `docs/` | [Architecture](docs/architecture.md) and [design decisions](docs/decisions/README.md). |
+| `scripts/dev.sh` | Dev tasks (`test`, `lint`, `format`) run in a Linux Swift container. |
 
 ## License
 

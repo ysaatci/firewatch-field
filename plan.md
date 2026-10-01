@@ -223,7 +223,7 @@ as README screenshots.
 - [x] 0.3 Docker dev setup (`docker/Dockerfile.dev`) and `scripts/dev.sh` commands `test`, `build`, `shell`, `server` (no `make` on this machine)
 - [x] 0.4 swift-format config and `scripts/dev.sh format` / `lint` commands
 - [x] 0.5 `ci-linux.yml`: build, test, warnings-as-errors and format check on push
-- [ ] 0.6 `docs/architecture.md` with the diagrams from this plan; copy decisions into `docs/decisions/`
+- [x] 0.6 `docs/architecture.md` with the diagrams from this plan; copy decisions into `docs/decisions/`
 
 ### M1: Core domain model
 - [ ] 1.1 `Coordinate`, `BoundingBox`, haversine distance and bearing (with tests against known city pairs)
