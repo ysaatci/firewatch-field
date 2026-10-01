@@ -1,0 +1,45 @@
+name: ci-ios
+
+# macOS minutes are the expensive ones, so this runs on main and pull requests only (D13).
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ios:
+    name: Build and test the app (iOS Simulator)
+    runs-on: macos-26
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Toolchain
+        run: xcodebuild -version && swift --version
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate the Xcode project
+        working-directory: App
+        run: xcodegen generate
+
+      - name: Pick a simulator
+        run: |
+          udid="$(scripts/ci/pick-simulator.sh)"
+          echo "Using simulator $udid"
+          echo "SIMULATOR=$udid" >> "$GITHUB_ENV"
+
+      - name: Build
+        run: >
+          xcodebuild build-for-testing
+          -project App/FireWatchField.xcodeproj
+          -scheme FireWatchField
+          -destination "id=$SIMULATOR"
+          -derivedDataPath DerivedData
+          CODE_SIGNING_ALLOWED=NO
