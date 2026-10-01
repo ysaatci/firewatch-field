@@ -36,6 +36,7 @@ struct RootView: View {
                 NavigationStack {
                     switch section {
                     case .map: MapScreen()
+                    case .hotspots: HotspotListScreen()
                     default: placeholder(for: section).navigationTitle(section.title)
                     }
                 }
