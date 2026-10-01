@@ -22,7 +22,7 @@ extension Severity {
         }
     }
 
-    var label: LocalizedStringKey {
+    var label: LocalizedStringResource {
         switch self {
         case .low: "Low"
         case .moderate: "Moderate"
@@ -43,7 +43,7 @@ extension HotspotStatus {
         }
     }
 
-    var label: LocalizedStringKey {
+    var label: LocalizedStringResource {
         switch self {
         case .new: "New"
         case .assigned: "Assigned"
@@ -55,4 +55,15 @@ extension HotspotStatus {
 
     /// Hotspots nobody needs to act on fade back on the map.
     var isSettled: Bool { self == .verifiedCold || self == .extinguished }
+}
+
+extension Label where Title == Text, Icon == Image {
+    /// A label from a localized resource, such as ``Severity/label``.
+    init(_ title: LocalizedStringResource, systemImage: String) {
+        self.init {
+            Text(title)
+        } icon: {
+            Image(systemName: systemImage)
+        }
+    }
 }
