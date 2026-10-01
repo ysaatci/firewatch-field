@@ -32,8 +32,12 @@ jobs:
         run: swift build --build-tests -Xswiftc -warnings-as-errors
 
       - name: Test
-        timeout-minutes: 5
-        run: swift test --skip-build
+        timeout-minutes: 6
+        # A pty keeps the output line-buffered, so a hang shows which test started last; on a
+        # hang, SIGQUIT makes the Swift runtime print every thread's backtrace.
+        env:
+          SWIFT_BACKTRACE: enable=yes,threads=all,interactive=no
+        run: timeout -s QUIT 240 script -qec "swift test --skip-build" /dev/null
 
       - name: Coverage (FireWatchCore at least 80 %)
         run: scripts/coverage.sh 80
