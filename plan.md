@@ -275,14 +275,15 @@ as README screenshots.
 - [x] 4.7 Bearer-token middleware (D11) and XCTVapor tests for every endpoint
 
 ### M5: Core client layer
-- [ ] 5.1 `DetectionFeed` protocol; `SimulatedFeed` (in-process `SimulatedWorld` on a clock) and `FixtureFeed` (frozen state for previews)
-- [ ] 5.2 `HTTPTransport` protocol, a `URLSession` implementation and a fake; `APIClient` with typed errors
-- [ ] 5.3 `ReconnectingSocket` actor: backoff with jitter; tests with a fake clock and a fake socket (NFR-4)
-- [ ] 5.4 `ServerFeed` combining snapshot plus stream, resyncing from a snapshot after reconnect
-- [ ] 5.5 `FeedStore` actor: applies events, exposes an `AsyncStream` of state, and replays pending actions over server state (D9)
-- [ ] 5.6 `Outbox` actor + `OutboxStore` protocol (in-memory impl): enqueue, flush, retry, dedupe
-- [ ] 5.7 `AlertEngine`: emits alerts for new hotspots or flare-ups within radius *R* of the user (FR-8 logic)
-- [ ] 5.8 Coverage report in CI, failing below 80 % (NFR-9)
+- [ ] 5.1 Extract `ReplaySession` and `ReplayClock` into the Simulator, so the server and the on-device demo share one implementation
+- [ ] 5.2 `DetectionFeed` and `CommandSink` protocols plus `FixtureFeed` in Core; `SimulatedFeed` (in-process `ReplaySession` on a clock) in the Simulator
+- [ ] 5.3 `FireWatchClient` module: `HTTPTransport` protocol, a `URLSession` implementation and a fake; `APIClient` with typed errors
+- [ ] 5.4 `ReconnectingSocket` actor with backoff and jitter (Core); `URLSessionWebSocketTask` adapter (Client); tests with fakes (NFR-4)
+- [ ] 5.5 `ServerFeed` (snapshot, then stream; fresh snapshot after every reconnect) and `ServerCommandSink`
+- [ ] 5.6 `FeedStore` actor: applies feed updates, replays pending commands over server state (D9), publishes an `AsyncStream` of state
+- [ ] 5.7 `Outbox` actor + `OutboxStore` protocol (in-memory impl): enqueue, flush in order, retry with backoff, drop rejected
+- [ ] 5.8 `AlertEngine`: alerts for new hotspots or flare-ups within radius *R* of the user (FR-8 logic)
+- [ ] 5.9 Coverage report in CI, failing below 80 % for Core (NFR-9)
 
 ### M6: App skeleton and the macOS pipeline (do this before writing any real UI)
 - [ ] 6.1 `App/project.yml` (XcodeGen), linking the local package; iOS 17 deployment target
