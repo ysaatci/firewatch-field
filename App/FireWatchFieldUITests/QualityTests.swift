@@ -70,5 +70,7 @@ final class QualityTests: FireWatchUITestCase {
             || element.identifier.hasPrefix("_")
             // The status badge sits in a toolbar, which doesn't scale with Dynamic Type.
             || element.identifier == "connection"
+            // List rows scrolled under the translucent tab bar are measured against its blur.
+            || element.frame.intersects(XCUIApplication().tabBars.firstMatch.frame)
     }
 }
