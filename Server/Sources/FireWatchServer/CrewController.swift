@@ -40,12 +40,10 @@ struct CrewController: RouteCollection {
 
     private static func failure(for rejection: CommandRejection) -> APIFailure {
         switch rejection {
-        case .unknownHotspot(let id):
-            APIFailure(status: .notFound, code: "unknownHotspot", message: "No hotspot \(id) has been detected")
-        case .notAllowed(let error):
-            APIFailure(
-                status: .conflict, code: "notAllowed",
-                message: "\(error.action.rawValue) is not allowed from \(error.status.rawValue)")
+        case .unknownHotspot:
+            APIFailure(status: .notFound, code: "unknownHotspot", message: rejection.description)
+        case .notAllowed:
+            APIFailure(status: .conflict, code: "notAllowed", message: rejection.description)
         }
     }
 }

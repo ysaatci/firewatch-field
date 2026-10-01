@@ -86,3 +86,13 @@ public enum CommandRejection: Error, Hashable, Sendable {
     case unknownHotspot(Hotspot.ID)
     case notAllowed(WorkflowError)
 }
+
+extension CommandRejection: CustomStringConvertible {
+    /// A sentence for logs, error bodies and the user.
+    public var description: String {
+        switch self {
+        case .unknownHotspot(let id): "No hotspot \(id) has been detected"
+        case .notAllowed(let error): "\(error.action.rawValue) is not allowed from \(error.status.rawValue)"
+        }
+    }
+}
