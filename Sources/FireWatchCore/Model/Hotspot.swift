@@ -12,7 +12,7 @@ public struct Hotspot: Identifiable, Hashable, Sendable {
     /// Detection confidence in `0...1`.
     public var confidence: Double
     public let firstSeen: Date
-    public var status: HotspotStatus
+    public var workflow: HotspotWorkflow
     /// Readings in time order, newest last. Never empty.
     public private(set) var readings: [TemperatureReading]
 
@@ -21,13 +21,13 @@ public struct Hotspot: Identifiable, Hashable, Sendable {
         coordinate: Coordinate,
         confidence: Double,
         reading: TemperatureReading,
-        status: HotspotStatus = .new
+        workflow: HotspotWorkflow = .initial
     ) {
         self.id = id
         self.coordinate = coordinate
         self.confidence = confidence
         self.firstSeen = reading.time
-        self.status = status
+        self.workflow = workflow
         self.readings = [reading]
     }
 
@@ -36,6 +36,7 @@ public struct Hotspot: Identifiable, Hashable, Sendable {
         readings[readings.count - 1]
     }
 
+    public var status: HotspotStatus { workflow.status }
     public var temperatureCelsius: Double { latestReading.celsius }
     public var lastSeen: Date { latestReading.time }
     public var severity: Severity { Severity(celsius: temperatureCelsius) }
@@ -74,9 +75,4 @@ public enum Severity: Int, CaseIterable, Comparable, Sendable {
     }
 
     public static func < (lhs: Self, rhs: Self) -> Bool { lhs.rawValue < rhs.rawValue }
-}
-
-/// Where a hotspot is in the crew workflow.
-public enum HotspotStatus: String, CaseIterable, Sendable {
-    case new, assigned, extinguished, verifiedCold, flaredUp
 }
