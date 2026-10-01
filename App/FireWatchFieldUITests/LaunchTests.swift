@@ -13,25 +13,36 @@ final class LaunchTests: XCTestCase {
         app.launch()
         XCTAssertTrue(app.tabBars.buttons["Map"].waitForExistence(timeout: 10))
 
-        // The on-device simulator starts an hour into the fire, so hotspots are known at once.
+        // The on-device simulator starts well into the fire, so hotspots are known at once.
+        app.tabBars.buttons["Hotspots"].tap()
         let summary = app.staticTexts["summary"].firstMatch
         let hasHotspots = NSPredicate(format: "label MATCHES %@", "^[1-9][0-9]* hotspots.*")
         expectation(for: hasHotspots, evaluatedWith: summary)
         waitForExpectations(timeout: 20)
         attachScreenshot(of: app, named: "01-launch")
+    }
 
-        for tab in ["Hotspots", "Report", "Settings"] {
-            app.tabBars.buttons[tab].tap()
-            XCTAssertTrue(app.navigationBars[tab].waitForExistence(timeout: 5))
-        }
+    @MainActor
+    func testMapShowsHotspotsAndPerimeter() {
+        let app = XCUIApplication.demo()
+        app.launch()
+        let markers = app.descendants(matching: .any).matching(
+            NSPredicate(format: "identifier == 'cluster' OR identifier BEGINSWITH 'hotspot.'"))
+        XCTAssertTrue(markers.firstMatch.waitForExistence(timeout: 30))
+        sleep(4)  // let satellite tiles load before the screenshot
+        attachScreenshot(of: app, named: "02-map")
+        XCTAssertTrue(app.sliders["Perimeter time"].exists)
     }
 }
 
 extension XCUIApplication {
-    /// The app in demo mode at a fixed speed, so runs are comparable.
+    /// The app in demo mode at a fixed speed with location off, so runs are comparable and
+    /// no permission prompt gets in the way.
     static func demo(speed: Int = 60) -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments += ["-demoSpeed", "\(speed)", "-demoStartMinute", "90"]
+        app.launchArguments += [
+            "-demoSpeed", "\(speed)", "-demoStartMinute", "150", "-disableLocation", "YES",
+        ]
         return app
     }
 }

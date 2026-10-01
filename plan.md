@@ -294,12 +294,12 @@ as README screenshots.
 - [x] 6.6 `FieldSession` in Core wires feed, store, outbox and alerts; the app's `AppEnvironment` only chooses `SimulatedFeed` or `ServerFeed`
 
 ### M7: Map (FR-1, FR-2, FR-3)
-- [ ] 7.1 `MapScreen` with SwiftUI `Map`, centred on the scenario bounding box
-- [ ] 7.2 Hotspot annotations: severity colour **plus** symbol (NFR-6), with VoiceOver labels
+- [x] 7.1 `MapScreen` with SwiftUI `Map`, centred on the scenario bounding box
+- [x] 7.2 Hotspot annotations: severity colour **plus** symbol (NFR-6), with VoiceOver labels
 - [x] 7.3 Clustering at low zoom (grid clustering computed in Core, so it's tested on Linux)
-- [ ] 7.4 Perimeter `MapPolygon` overlay and a timeline scrubber over perimeter history
-- [ ] 7.5 Drone annotations with heading and a recent-track polyline
-- [ ] 7.6 User location ("when in use" permission, purpose string) and a recentre button
+- [x] 7.4 Perimeter `MapPolygon` overlay and a timeline scrubber over perimeter history
+- [x] 7.5 Drone annotations with heading and a recent-track polyline
+- [x] 7.6 User location ("when in use" permission, purpose string) and a recentre button
 
 ### M8: Hotspot list, detail and workflow (FR-4, FR-5, FR-6)
 - [ ] 8.1 `HotspotListScreen` sorted by `PriorityRanker`, with status and severity filters

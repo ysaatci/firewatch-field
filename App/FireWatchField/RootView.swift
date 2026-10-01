@@ -34,8 +34,10 @@ struct RootView: View {
         TabView(selection: $selection) {
             ForEach(Section.allCases) { section in
                 NavigationStack {
-                    placeholder(for: section)
-                        .navigationTitle(section.title)
+                    switch section {
+                    case .map: MapScreen()
+                    default: placeholder(for: section).navigationTitle(section.title)
+                    }
                 }
                 .tabItem { Label(section.title, systemImage: section.symbol) }
                 .tag(section)
