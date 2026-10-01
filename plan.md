@@ -242,7 +242,7 @@ as README screenshots.
 - [x] 1.6 `PriorityRanker`: score = f(temperature, recency, distance), with tests for ordering edge cases
 
 ### M2: Fake-data simulator
-- [ ] 2.1 `SeededRandom` (SplitMix64) with a determinism test
+- [x] 2.1 `SeededRandom` (SplitMix64) with a determinism test
 - [ ] 2.2 `TerrainGrid`: fuel and slope fields from layered noise; origin, cell size, coordinate↔cell conversion
 - [ ] 2.3 `FireSpreadModel`: cell states and a wind-biased ignition step, with tests (no spread without fuel, downwind bias)
 - [ ] 2.4 Perimeter extraction (trace cell boundaries of the burned mask → rings with holes, then smooth)
