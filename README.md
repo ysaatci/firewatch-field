@@ -8,7 +8,7 @@ live fire perimeter, ranks hotspots by urgency, lets crews work them from *new* 
 cold*, and keeps working with no signal.
 
 <p align="center">
-  <img src="docs/screenshots/demo.gif" width="260" alt="The app replaying a simulated wildfire">
+  <img src="docs/screenshots/demo.gif" width="260" alt="Over 2,000 simulated hotspots on the map, clustered as it zooms">
   <img src="docs/screenshots/map.png" width="260" alt="Map with hotspots, the fire perimeter and drones">
   <img src="docs/screenshots/hotspot-list.png" width="260" alt="Hotspots ranked by urgency">
 </p>
