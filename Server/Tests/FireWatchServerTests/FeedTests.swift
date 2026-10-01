@@ -7,7 +7,7 @@ import VaporTesting
 
 struct FeedTests {
     func get<T: Decodable>(_ app: Application, _ path: String, as type: T.Type) async throws -> T {
-        let response = try await app.testing().sendRequest(.GET, path)
+        let response = try await app.send(.GET, path)
         #expect(response.status == .ok)
         return try response.decoded(as: T.self)
     }
@@ -51,7 +51,7 @@ struct FeedTests {
     @Test(arguments: ["1,2,3", "a,b,c,d", "5,5,1,1"])
     func rejectsMalformedBoundingBoxes(bbox: String) async throws {
         try await withTestApp { app, _ in
-            let response = try await app.testing().sendRequest(.GET, "v1/hotspots?bbox=\(bbox)")
+            let response = try await app.send(.GET, "v1/hotspots?bbox=\(bbox)")
             #expect(response.status == .badRequest)
         }
     }

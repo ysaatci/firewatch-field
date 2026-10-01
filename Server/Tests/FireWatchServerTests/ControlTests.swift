@@ -6,11 +6,11 @@ import VaporTesting
 
 struct ControlTests {
     func status(_ app: Application) async throws -> ReplayStatusDTO {
-        try await app.testing().sendRequest(.GET, "v1/control").decoded(as: ReplayStatusDTO.self)
+        try await app.send(.GET, "v1/control").decoded(as: ReplayStatusDTO.self)
     }
 
     func control(_ app: Application, _ request: ReplayControlDTO) async throws -> TestingHTTPResponse {
-        try await app.testing().sendRequest(.POST, "v1/control") { try $0.encode(request) }
+        try await app.send(.POST, "v1/control") { try $0.encode(request) }
     }
 
     @Test func startsAtConfiguredMinuteAndRunsAtSpeed() async throws {
@@ -70,7 +70,7 @@ struct ControlTests {
 
     @Test func rejectsMalformedBodies() async throws {
         try await withTestApp { app, _ in
-            let response = try await app.testing().sendRequest(.POST, "v1/control") { request in
+            let response = try await app.send(.POST, "v1/control") { request in
                 request.body = ByteBuffer(string: #"{"action":"rewind"}"#)
             }
             #expect(response.status == .badRequest)
@@ -79,7 +79,7 @@ struct ControlTests {
 
     @Test func unknownRoutesUseTheErrorShape() async throws {
         try await withTestApp { app, _ in
-            let response = try await app.testing().sendRequest(.GET, "v1/nothing-here")
+            let response = try await app.send(.GET, "v1/nothing-here")
             #expect(response.status == .notFound)
             #expect(try response.decoded(as: ErrorDTO.self).code == "notFound")
         }

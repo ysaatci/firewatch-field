@@ -272,7 +272,7 @@ as README screenshots.
 - [x] 4.4 WebSocket `/v1/stream`: pushes scenario events as the clock advances (FR-S2)
 - [x] 4.5 `POST /v1/reports`, `POST /v1/hotspots/:id/status`; idempotency by client UUID (FR-S4)
 - [x] 4.6 Fault-injection middleware: latency, drop rate, `/v1/control/disconnect` (FR-S5)
-- [ ] 4.7 Bearer-token middleware (D11) and XCTVapor tests for every endpoint
+- [x] 4.7 Bearer-token middleware (D11) and XCTVapor tests for every endpoint
 
 ### M5: Core client layer
 - [ ] 5.1 `DetectionFeed` protocol; `SimulatedFeed` (in-process `SimulatedWorld` on a clock) and `FixtureFeed` (frozen state for previews)

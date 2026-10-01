@@ -8,7 +8,7 @@ import VaporTesting
 
 struct CrewTests {
     func send(_ app: Application, _ command: CommandDTO) async throws -> TestingHTTPResponse {
-        try await app.testing().sendRequest(.POST, "v1/commands") { try $0.encode(command) }
+        try await app.send(.POST, "v1/commands") { try $0.encode(command) }
     }
 
     /// A hotspot the simulation has already detected, hottest first so it is still being observed.
@@ -92,8 +92,8 @@ struct CrewTests {
             let report = ReportDTO(
                 id: "r-1", createdAt: .now, location: Position(longitude: 31.47, latitude: 36.83),
                 severity: "high", note: "Smoke behind the ridge", photoJPEG: Data(count: 2_000_000))
-            let first = try await app.testing().sendRequest(.POST, "v1/reports") { try $0.encode(report) }
-            let retry = try await app.testing().sendRequest(.POST, "v1/reports") { try $0.encode(report) }
+            let first = try await app.send(.POST, "v1/reports") { try $0.encode(report) }
+            let retry = try await app.send(.POST, "v1/reports") { try $0.encode(report) }
             #expect(try first.decoded(as: ReceiptDTO.self).outcome == .applied)
             #expect(try retry.decoded(as: ReceiptDTO.self).outcome == .duplicate)
             let simulation = try #require(app.simulator).simulation
@@ -106,7 +106,7 @@ struct CrewTests {
             let report = ReportDTO(
                 id: "r-1", createdAt: .now, location: Position(longitude: 0, latitude: 0), severity: "huge",
                 note: "", photoJPEG: nil)
-            let response = try await app.testing().sendRequest(.POST, "v1/reports") { try $0.encode(report) }
+            let response = try await app.send(.POST, "v1/reports") { try $0.encode(report) }
             #expect(response.status == .badRequest)
         }
     }
@@ -115,7 +115,7 @@ struct CrewTests {
         try await withTestApp { app, _ in
             let hotspot = try await detectedHotspot(app)
             _ = try await send(app, command("assign", on: hotspot, id: "c-1"))
-            _ = try await app.testing().sendRequest(.POST, "v1/control") {
+            _ = try await app.send(.POST, "v1/control") {
                 try $0.encode(ReplayControlDTO(action: .reset))
             }
             let again = try await send(app, command("assign", on: hotspot, id: "c-1"))

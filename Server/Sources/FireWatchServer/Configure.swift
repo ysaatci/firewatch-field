@@ -19,6 +19,7 @@ public func configure(_ app: Application, configuration: ServerConfiguration) as
 
     app.get("health") { _ in "ok" }
     let api = app.grouped(PathComponent(stringLiteral: API.pathPrefix))
+        .grouped(BearerAuthMiddleware(token: configuration.token))
         .grouped(FaultMiddleware(faults: services.faults))
     try api.register(collection: FeedController(simulation: services.simulation))
     try api.register(collection: StreamController(hub: services.hub))

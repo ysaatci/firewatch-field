@@ -33,6 +33,21 @@ func withTestApp(
     }
 }
 
+extension Application {
+    /// Sends a request carrying `token` as a bearer token (the test token unless overridden).
+    func send(
+        _ method: HTTPMethod,
+        _ path: String,
+        token: String? = testToken,
+        beforeRequest: (inout TestingHTTPRequest) async throws -> Void = { _ in }
+    ) async throws -> TestingHTTPResponse {
+        try await testing().sendRequest(method, path) { request in
+            if let token { request.headers.bearerAuthorization = BearerAuthorization(token: token) }
+            try await beforeRequest(&request)
+        }
+    }
+}
+
 extension TestingHTTPResponse {
     /// The body decoded with the API's decoder.
     func decoded<T: Decodable>(as type: T.Type) throws -> T {

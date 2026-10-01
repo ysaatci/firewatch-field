@@ -20,8 +20,11 @@ struct StreamTests {
         let socket = NIOLockedValueBox<WebSocket?>(nil)
         // Batches with perimeters exceed the 16 KB default frame limit.
         let configuration = WebSocketClient.Configuration(maxFrameSize: 1 << 22)
+        var headers = HTTPHeaders()
+        headers.bearerAuthorization = BearerAuthorization(token: testToken)
         try await WebSocket.connect(
-            to: "ws://127.0.0.1:\(port)/v1/stream", configuration: configuration, on: app.eventLoopGroup
+            to: "ws://127.0.0.1:\(port)/v1/stream", headers: headers, configuration: configuration,
+            on: app.eventLoopGroup
         ) { ws in
             socket.withLockedValue { $0 = ws }
             ws.onText { _, text in continuation.yield(text) }
@@ -69,7 +72,7 @@ struct StreamTests {
     @Test func resetClosesStreams() async throws {
         try await withRunningApp { app, _ in
             let client = try await connect(app)
-            _ = try await app.testing().sendRequest(.POST, "v1/control") {
+            _ = try await app.send(.POST, "v1/control") {
                 try $0.encode(ReplayControlDTO(action: .reset))
             }
             var iterator = client.messages.makeAsyncIterator()
@@ -82,7 +85,7 @@ struct StreamTests {
     @Test func disconnectClosesStreams() async throws {
         try await withRunningApp { app, _ in
             let client = try await connect(app)
-            let response = try await app.testing().sendRequest(.POST, "v1/control/disconnect")
+            let response = try await app.send(.POST, "v1/control/disconnect")
             #expect(response.status == .noContent)
             var iterator = client.messages.makeAsyncIterator()
             #expect(await iterator.next() == nil)
