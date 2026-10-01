@@ -48,17 +48,18 @@ final class QualityTests: FireWatchUITestCase {
 
         for tab in ["Hotspots", "Report", "Settings"] {
             app.tabBars.buttons[tab].tap()
-            try app.performAccessibilityAudit { issue in Self.isKnownSystemIssue(issue) }
+            try app.performAccessibilityAudit { issue in MainActor.assumeIsolated { Self.isKnownSystemIssue(issue) } }
         }
         app.tabBars.buttons["Hotspots"].tap()
         let firstRow = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'row.'")).firstMatch
         XCTAssertTrue(firstRow.waitForExistence(timeout: 20))
         firstRow.tap()
         XCTAssertTrue(app.buttons["action.assign"].waitForExistence(timeout: 5))
-        try app.performAccessibilityAudit { issue in Self.isKnownSystemIssue(issue) }
+        try app.performAccessibilityAudit { issue in MainActor.assumeIsolated { Self.isKnownSystemIssue(issue) } }
     }
 
     /// Issues in system UI the app doesn't control: returning `true` ignores them.
+    @MainActor
     static func isKnownSystemIssue(_ issue: XCUIAccessibilityAuditIssue) -> Bool {
         // The tab bar and navigation bar chrome belong to the system.
         guard let element = issue.element else { return false }
