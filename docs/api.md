@@ -203,8 +203,10 @@ POST /v1/control
 { "action": "start", "speed": 120 }            // or "pause", or "reset" (optionally with "preset")
 ```
 
-`speed` is scenario seconds per real second, from 1 to 600. `reset` starts the scenario
-again from minute 0 and clears every crew command.
+`speed` is scenario seconds per real second, from 1 to 600. `reset` restarts the scenario
+at the configured start minute (`FIREWATCH_START_MINUTE`, 60 by default), clears every
+crew command, and closes every stream so clients resync. A finished replay reports
+`"state": "finished"`.
 
 ```http
 POST /v1/control/faults

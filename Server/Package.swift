@@ -4,7 +4,7 @@ import PackageDescription
 // The simulator server lives in its own package so the iOS app never resolves Vapor.
 let package = Package(
     name: "FireWatchServer",
-    platforms: [.macOS(.v14)],
+    platforms: [.macOS(.v15)],
     dependencies: [
         .package(path: ".."),
         .package(url: "https://github.com/vapor/vapor.git", from: "4.122.0"),

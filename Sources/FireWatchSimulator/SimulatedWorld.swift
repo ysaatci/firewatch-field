@@ -58,8 +58,12 @@ public struct SimulatedWorld: Sendable {
 
     /// Events with times in `from..<to`, in time order.
     public func events(from: Date, to: Date) -> [FeedEvent] {
-        let lower = minute(at: from)
-        let upper = minute(at: to)
+        events(fromMinute: minute(at: from), toMinute: minute(at: to))
+    }
+
+    /// Events in scenario minutes `fromMinute..<toMinute`, in time order. Consecutive
+    /// windows sharing a bound never repeat or skip an event.
+    public func events(fromMinute lower: Double, toMinute upper: Double) -> [FeedEvent] {
         let first = timeline.partitioningIndex { $0.minute >= lower }
         return timeline[first...].prefix { $0.minute < upper }.map(event)
     }
