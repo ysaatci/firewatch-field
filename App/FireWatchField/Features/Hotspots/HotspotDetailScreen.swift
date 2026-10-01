@@ -17,6 +17,7 @@ struct HotspotDetailScreen: View {
                 whereabouts(hotspot)
                 actions(hotspot)
             }
+            .readableSecondaryText()
             .navigationTitle("Hotspot")
             .navigationBarTitleDisplayMode(.inline)
         } else {
