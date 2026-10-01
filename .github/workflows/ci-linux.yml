@@ -34,6 +34,9 @@ jobs:
       - name: Test
         run: swift test --skip-build
 
+      - name: Coverage (FireWatchCore at least 80 %)
+        run: scripts/coverage.sh 80
+
       - name: Smoke-test fwgen
         run: swift run fwgen --out /tmp/fixtures && test -s /tmp/fixtures/snapshot.json
 

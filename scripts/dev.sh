@@ -8,6 +8,7 @@
 #   format   Rewrite sources with swift-format
 #   lint     Fail if any source is not formatted
 #   shell    Open a shell in the dev container
+#   coverage Fail if FireWatchCore line coverage is below 80 %
 #   server   Run the simulator server on http://localhost:8080 (docker compose)
 set -euo pipefail
 
@@ -50,6 +51,7 @@ case "${1:-help}" in
     shell)  run bash ;;
     format) run swift format format --in-place --recursive --parallel $SOURCES ;;
     lint)   run bash -c "$LINT" ;;
+    coverage) run scripts/coverage.sh ;;
     server) cd "$ROOT" && docker compose up --build ;;
-    *)      sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'; exit 1 ;;
+    *)      sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'; exit 1 ;;
 esac
