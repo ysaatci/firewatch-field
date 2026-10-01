@@ -58,8 +58,10 @@ struct ReportScreen: View {
             }
 
             Section("Photo") {
+                // The picker's label closure is Sendable, so it gets a copy rather than reading state.
+                let hasPhoto = photo != nil
                 PhotosPicker(selection: $photoItem, matching: .images) {
-                    Label(photo == nil ? "Add a photo" : "Replace the photo", systemImage: "photo")
+                    Label(hasPhoto ? "Replace the photo" : "Add a photo", systemImage: "photo")
                 }
                 if let photo, let image = UIImage(data: photo) {
                     Image(uiImage: image)
