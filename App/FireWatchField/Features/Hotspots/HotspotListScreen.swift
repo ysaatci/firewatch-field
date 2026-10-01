@@ -63,25 +63,52 @@ struct HotspotRow: View {
     let asOf: Date?
     let user: Coordinate?
 
+    @Environment(\.dynamicTypeSize) private var typeSize
+
     var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: hotspot.severity.symbol)
-                .foregroundStyle(hotspot.severity.color)
-                .font(.title2)
-                .frame(width: 32)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(Format.temperature(hotspot.temperatureCelsius))
-                    .font(.headline.monospacedDigit())
-                Text(details)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+        Group {
+            if typeSize.isAccessibilitySize {
+                // Too big for one line: icons above, so the text gets the full width.
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        severity
+                        Spacer()
+                        status
+                    }
+                    text
+                }
+            } else {
+                HStack(spacing: 12) {
+                    severity.frame(width: 32)
+                    text
+                    Spacer()
+                    status
+                }
             }
-            Spacer()
-            Label(resource: hotspot.status.label, systemImage: hotspot.status.symbol)
-                .labelStyle(.iconOnly)
-                .foregroundStyle(.blue)
         }
         .accessibilityElement(children: .combine)
+    }
+
+    private var severity: some View {
+        Image(systemName: hotspot.severity.symbol)
+            .foregroundStyle(hotspot.severity.color)
+            .font(.title2)
+    }
+
+    private var text: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(Format.temperature(hotspot.temperatureCelsius))
+                .font(.headline.monospacedDigit())
+            Text(details)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private var status: some View {
+        Label(resource: hotspot.status.label, systemImage: hotspot.status.symbol)
+            .labelStyle(.iconOnly)
+            .foregroundStyle(.blue)
     }
 
     private var details: String {
