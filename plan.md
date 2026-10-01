@@ -226,7 +226,7 @@ as README screenshots.
 - [x] 0.6 `docs/architecture.md` with the diagrams from this plan; copy decisions into `docs/decisions/`
 
 ### M1: Core domain model
-- [ ] 1.1 `Coordinate`, `BoundingBox`, haversine distance and bearing (with tests against known city pairs)
+- [x] 1.1 `Coordinate`, `BoundingBox`, haversine distance and bearing (with tests against known city pairs)
 - [ ] 1.2 `Hotspot` (id, coordinate, temperatureC, confidence, firstSeen, lastSeen, status, history)
 - [ ] 1.3 `HotspotStatus` state machine with legal transitions and tests for illegal ones
 - [ ] 1.4 `FirePerimeter` (polygon rings, timestamp) and a point-in-polygon test
