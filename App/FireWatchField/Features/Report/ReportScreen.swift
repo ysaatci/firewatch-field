@@ -40,6 +40,7 @@ struct ReportScreen: View {
                 Text("Where")
             } footer: {
                 Text("Move the map so the cross is on what you saw. It starts at your position.")
+                    .font(.footnote)  // explicit, so it scales with Dynamic Type
             }
 
             Section("How bad") {

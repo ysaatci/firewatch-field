@@ -42,7 +42,9 @@ struct SettingsScreen: View {
                 Text(
                     useServer
                         ? "Connects to the simulator server, for example one started with docker compose."
-                        : "A simulated wildfire near Manavgat plays on this phone. No network needed.")
+                        : "A simulated wildfire near Manavgat plays on this phone. No network needed."
+                )
+                .font(.footnote)
             }
 
             Section {
@@ -52,6 +54,7 @@ struct SettingsScreen: View {
                 Text(
                     "Actions and reports wait on this phone and are sent when you turn this off, just as with real loss of signal."
                 )
+                .font(.footnote)
             }
 
             Section("Alerts") {
