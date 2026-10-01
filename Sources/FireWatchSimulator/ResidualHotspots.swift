@@ -37,7 +37,7 @@ public struct ResidualHotspot: Hashable, Sendable {
 /// Decides where hotspots are left behind and how they cool.
 public struct ResidualHotspotModel: Sendable {
     /// Chance a burned-out cell keeps smouldering, multiplied by its fuel (heavy fuel smoulders longer).
-    public var smoulderChance = 0.08
+    public var smoulderChance = 0.3
     public var peakCelsius: ClosedRange<Double> = 150...650
     public var coolingMinutes: ClosedRange<Double> = 40...180
     public var flareUpChance = 0.25

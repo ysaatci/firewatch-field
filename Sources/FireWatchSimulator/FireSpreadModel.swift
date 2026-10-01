@@ -30,7 +30,7 @@ public struct Wind: Hashable, Sendable {
 /// with its fuel, then burns out.
 public struct FireSpreadModel: Sendable {
     /// Per-minute ignition chance between adjacent, fully fuelled, flat cells in calm air.
-    public var ignitionRate = 0.12
+    public var ignitionRate = 0.055
     public var wind: Wind
     /// Strength of the wind bias, per m/s. Downwind spread is multiplied by `exp(effect × speed)`.
     public var windEffect = 0.15
