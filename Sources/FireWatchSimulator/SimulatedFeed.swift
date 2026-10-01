@@ -11,7 +11,9 @@ public actor SimulatedFeed: DetectionFeed, CommandSink {
     private let now: @Sendable () -> Date
     private let tickInterval: Duration
     private let sleep: @Sendable (Duration) async throws -> Void
-    private var subscribers: [UUID: AsyncStream<FeedUpdate>.Continuation] = [:]
+    private let broadcast = Broadcast<FeedUpdate>()
+    /// One clock for everyone watching; runs only while someone is.
+    private var ticking: Task<Void, Never>?
 
     public init(
         preset: ScenarioPreset = .default,
@@ -30,48 +32,44 @@ public actor SimulatedFeed: DetectionFeed, CommandSink {
     }
 
     public nonisolated func updates() -> AsyncStream<FeedUpdate> {
-        let (stream, continuation) = AsyncStream.makeStream(of: FeedUpdate.self)
-        let id = UUID()
-        let ticking = Task { await self.run(id, continuation) }
-        continuation.onTermination = { _ in
-            ticking.cancel()
-            Task { await self.unsubscribe(id) }
-        }
+        let (id, stream) = broadcast.subscribe { Task { await self.stopTickingIfUnwatched() } }
+        Task { await welcome(id) }
         return stream
     }
 
-    private func run(_ id: UUID, _ continuation: AsyncStream<FeedUpdate>.Continuation) async {
-        subscribers[id] = continuation
-        continuation.yield(.connection(.live))
-        continuation.yield(.snapshot(session.state, asOf: session.scenarioNow))
-        while !Task.isCancelled {
-            do {
-                try await sleep(tickInterval)
-            } catch {
-                return
+    /// Greets a new subscriber with the current state, and starts the clock if it is the first.
+    private func welcome(_ id: UUID) {
+        broadcast.yield(.connection(.live), to: id)
+        broadcast.yield(.snapshot(session.state, asOf: session.scenarioNow), to: id)
+        guard ticking == nil else { return }
+        ticking = Task {
+            while !Task.isCancelled {
+                do {
+                    try await sleep(tickInterval)
+                } catch {
+                    return
+                }
+                tick()
             }
-            tick()
         }
     }
 
-    private func unsubscribe(_ id: UUID) {
-        subscribers[id] = nil
+    private func stopTickingIfUnwatched() {
+        guard !broadcast.hasSubscribers else { return }
+        ticking?.cancel()
+        ticking = nil
     }
 
     /// Advances the replay to now and shares what happened.
     func tick() {
         let events = session.advance(to: now())
-        if !events.isEmpty { broadcast(.events(events)) }
-    }
-
-    private func broadcast(_ update: FeedUpdate) {
-        for subscriber in subscribers.values { subscriber.yield(update) }
+        if !events.isEmpty { broadcast.yield(.events(events)) }
     }
 
     public func submit(_ command: HotspotCommand) throws(SubmissionError) -> SubmissionOutcome {
         do {
             let (outcome, event) = try session.execute(command)
-            if let event { broadcast(.events([event])) }
+            if let event { broadcast.yield(.events([event])) }
             return outcome
         } catch {
             throw .rejected(error.description)

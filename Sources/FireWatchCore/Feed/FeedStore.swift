@@ -27,7 +27,7 @@ public actor FeedStore {
     private var connection = ConnectionStatus.connecting
     private var receivedAt: Date?
     private var pending: [HotspotCommand] = []
-    private var subscribers: [UUID: AsyncStream<FieldState>.Continuation] = [:]
+    private let broadcast = Broadcast<FieldState>()
     private let now: @Sendable () -> Date
 
     public init(now: @escaping @Sendable () -> Date = Date.init) {
@@ -43,10 +43,8 @@ public actor FeedStore {
 
     /// The current state now, then every change. Slow readers only ever get the newest state.
     public nonisolated func states() -> AsyncStream<FieldState> {
-        let (stream, continuation) = AsyncStream.makeStream(of: FieldState.self, bufferingPolicy: .bufferingNewest(1))
-        let id = UUID()
-        Task { await subscribe(id, continuation) }
-        continuation.onTermination = { _ in Task { await self.unsubscribe(id) } }
+        let (id, stream) = broadcast.subscribe(bufferingPolicy: .bufferingNewest(1))
+        Task { await broadcast.yield(current, to: id) }
         return stream
     }
 
@@ -79,18 +77,8 @@ public actor FeedStore {
         publish()
     }
 
-    private func subscribe(_ id: UUID, _ continuation: AsyncStream<FieldState>.Continuation) {
-        subscribers[id] = continuation
-        continuation.yield(current)
-    }
-
-    private func unsubscribe(_ id: UUID) {
-        subscribers[id] = nil
-    }
-
     private func publish() {
-        guard !subscribers.isEmpty else { return }
-        let state = current
-        for subscriber in subscribers.values { subscriber.yield(state) }
+        guard broadcast.hasSubscribers else { return }
+        broadcast.yield(current)
     }
 }

@@ -16,3 +16,4 @@ Each record states the choice, the main alternative, and why. New decisions get 
 - [D12. Swift 6 strict concurrency from day one](0012-swift-6-strict-concurrency-from-day-one.md)
 - [D13. Two CI jobs](0013-two-ci-jobs.md)
 - [D14. Snapshot tests (swift-snapshot-testing) on the macOS runner](0014-snapshot-tests-swift-snapshot-testing-on-the.md)
+- [D15. Idempotent reducer, and a fresh snapshot after every reconnect](0015-idempotent-reducer-and-resnapshot-on-reconnect.md)

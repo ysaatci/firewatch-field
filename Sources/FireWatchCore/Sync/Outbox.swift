@@ -73,7 +73,7 @@ public actor Outbox {
     private let random: @Sendable () -> Double
     private let sleep: @Sendable (Duration) async throws -> Void
     private var entries: [OutboxEntry] = []
-    private var subscribers: [UUID: AsyncStream<OutboxEvent>.Continuation] = [:]
+    private let broadcast = Broadcast<OutboxEvent>()
     /// Signals ``run()`` that there may be work while it waits on an empty queue.
     private let wakeUps: AsyncStream<Void>
     private let wake: AsyncStream<Void>.Continuation
@@ -109,10 +109,8 @@ public actor Outbox {
 
     /// The current queue now, then every change and rejection.
     public nonisolated func events() -> AsyncStream<OutboxEvent> {
-        let (stream, continuation) = AsyncStream.makeStream(of: OutboxEvent.self)
-        let id = UUID()
-        Task { await subscribe(id, continuation) }
-        continuation.onTermination = { _ in Task { await self.unsubscribe(id) } }
+        let (id, stream) = broadcast.subscribe()
+        Task { await broadcast.yield(.pending(entries), to: id) }
         return stream
     }
 
@@ -147,7 +145,7 @@ public actor Outbox {
                 switch error {
                 case .rejected(let reason):
                     entries.removeFirst()
-                    broadcast(.rejected(entry.item, reason: reason))
+                    broadcast.yield(.rejected(entry.item, reason: reason))
                 case .unavailable:
                     entries[0].attempts += 1
                     await changed()
@@ -179,19 +177,6 @@ public actor Outbox {
 
     private func changed() async {
         try? await store.save(entries)
-        broadcast(.pending(entries))
-    }
-
-    private func broadcast(_ event: OutboxEvent) {
-        for subscriber in subscribers.values { subscriber.yield(event) }
-    }
-
-    private func subscribe(_ id: UUID, _ continuation: AsyncStream<OutboxEvent>.Continuation) {
-        subscribers[id] = continuation
-        continuation.yield(.pending(entries))
-    }
-
-    private func unsubscribe(_ id: UUID) {
-        subscribers[id] = nil
+        broadcast.yield(.pending(entries))
     }
 }
