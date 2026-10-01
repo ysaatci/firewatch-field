@@ -7,6 +7,14 @@ struct AppConfiguration: Hashable, Sendable {
         case demo
         /// The simulator server, or later the real backend.
         case server(url: URL, token: String)
+
+        /// Keeps each source's cache and queue apart, so demo actions never reach a server.
+        var storageKey: String {
+            switch self {
+            case .demo: "demo"
+            case .server(let url, _): "server:\(url.absoluteString)"
+            }
+        }
     }
 
     var source: Source = .demo

@@ -18,6 +18,9 @@ final class AppModel {
     private(set) var isReady = false
 
     @ObservationIgnored private var session: FieldSession?
+    @ObservationIgnored private let container = Storage.makeContainer()
+    /// Simulated loss of signal; starts on with the `simulateOutage` default (UI tests).
+    @ObservationIgnored let outage = Outage(active: UserDefaults.standard.bool(forKey: "simulateOutage"))
     @ObservationIgnored private var tasks: [Task<Void, Never>] = []
     /// Kept here so a restarted session still knows where the user is.
     @ObservationIgnored private var userLocation: Coordinate?
@@ -29,7 +32,7 @@ final class AppModel {
     /// Starts (or restarts) the session for the current configuration.
     func start() async {
         await stop()
-        let session = await AppEnvironment.makeSession(for: configuration)
+        let session = await AppEnvironment.makeSession(for: configuration, container: container, outage: outage)
         await session.setUserLocation(userLocation)
         await session.start()
         self.session = session
@@ -68,6 +71,11 @@ final class AppModel {
 
     func submit(_ report: SightingReport) async {
         await session?.submit(report)
+    }
+
+    /// Saves the current state now, so the next launch opens with it.
+    func saveCache() async {
+        await session?.saveCache()
     }
 
     func setUserLocation(_ location: Coordinate?) async {

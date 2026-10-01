@@ -315,11 +315,11 @@ as README screenshots.
 - [x] 9.4 `BGAppRefreshTask` for a background snapshot refresh (NFR-5)
 
 ### M10: Offline and persistence (FR-9, NFR-3)
-- [ ] 10.1 SwiftData models and a `HotspotStore` adapter (snapshot cache)
-- [ ] 10.2 SwiftData `OutboxStore` adapter
-- [ ] 10.3 Launch from cache first, then refresh (NFR-2 launch target)
-- [ ] 10.4 Offline banner showing data age, and a badge with the queued-action count
-- [ ] 10.5 UI test: go offline (server fault injection), make changes, kill and relaunch, reconnect, check everything synced
+- [x] 10.1 SwiftData models and a `HotspotStore` adapter (snapshot cache)
+- [x] 10.2 SwiftData `OutboxStore` adapter
+- [x] 10.3 Launch from cache first, then refresh (NFR-2 launch target)
+- [x] 10.4 Offline banner showing data age, and a badge with the queued-action count
+- [x] 10.5 UI test: go offline (server fault injection), make changes, kill and relaunch, reconnect, check everything synced
 
 ### M11: Report a sighting (FR-7)
 - [ ] 11.1 Report form: severity, note, current location (editable pin)

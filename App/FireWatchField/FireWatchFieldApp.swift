@@ -39,7 +39,9 @@ struct FireWatchFieldApp: App {
                 }
         }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .background { Self.scheduleRefresh() }
+            guard phase == .background else { return }
+            Self.scheduleRefresh()
+            Task { await model.saveCache() }
         }
         .backgroundTask(.appRefresh(Self.refreshTaskID)) { [model, notifications] in
             Self.scheduleRefresh()
