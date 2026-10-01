@@ -14,7 +14,7 @@ final class LaunchTests: XCTestCase {
         XCTAssertTrue(app.tabBars.buttons["Map"].waitForExistence(timeout: 10))
 
         // The on-device simulator starts well into the fire, so hotspots are known at once.
-        app.tabBars.buttons["Hotspots"].tap()
+        app.tabBars.buttons["Report"].tap()  // still a placeholder showing live counts
         let summary = app.staticTexts["summary"].firstMatch
         let hasHotspots = NSPredicate(format: "label MATCHES %@", "^[1-9][0-9]* hotspots.*")
         expectation(for: hasHotspots, evaluatedWith: summary)

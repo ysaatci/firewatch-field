@@ -306,7 +306,7 @@ as README screenshots.
 - [x] 8.2 `HotspotDetailScreen`: stats, temperature sparkline (Swift Charts), distance and bearing
 - [x] 8.3 "Open in Maps" walking directions
 - [x] 8.4 Status actions that follow the state machine, enqueue to the Outbox and update optimistically
-- [ ] 8.5 UI test: assign → extinguish → verify flow, with screenshots
+- [x] 8.5 UI test: assign → extinguish → verify flow, with screenshots
 
 ### M9: Live alerts (FR-8)
 - [ ] 9.1 Connection-status indicator (live / reconnecting / offline)
