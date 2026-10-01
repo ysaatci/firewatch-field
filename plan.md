@@ -290,7 +290,7 @@ as README screenshots.
 - [x] 6.2 Minimal `FireWatchFieldApp` with a `TabView` (Map / List / Report / Settings), all placeholders
 - [x] 6.3 `ci-ios.yml`: install XcodeGen, generate, build for the iPhone simulator
 - [x] 6.4 One UI test that launches the app and attaches a screenshot; CI exports `.xcresult` attachments as an artifact
-- [ ] 6.5 Simulator screen recording (`xcrun simctl io booted recordVideo`) during UI tests, uploaded as an artifact
+- [x] 6.5 Simulator screen recording (`xcrun simctl io booted recordVideo`) during UI tests, uploaded as an artifact
 - [ ] 6.6 App-wide dependency container (`AppEnvironment`) choosing `SimulatedFeed` or `ServerFeed`
 
 ### M7: Map (FR-1, FR-2, FR-3)

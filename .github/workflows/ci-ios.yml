@@ -44,6 +44,14 @@ jobs:
           -derivedDataPath DerivedData
           CODE_SIGNING_ALLOWED=NO
 
+      - name: Start screen recording
+        run: |
+          xcrun simctl boot "$SIMULATOR" || true
+          xcrun simctl bootstatus "$SIMULATOR" -b
+          mkdir -p artifacts
+          xcrun simctl io "$SIMULATOR" recordVideo --codec h264 --force artifacts/ui-tests.mp4 &
+          echo "RECORDER=$!" >> "$GITHUB_ENV"
+
       - name: Test
         run: >
           xcodebuild test-without-building
@@ -63,4 +71,18 @@ jobs:
         with:
           name: screenshots
           path: artifacts/screenshots
+          if-no-files-found: warn
+
+      - name: Stop screen recording
+        if: always()
+        run: |
+          if [ -n "${RECORDER:-}" ]; then kill -INT "$RECORDER" || true; sleep 3; fi
+          ls -la artifacts/ui-tests.mp4 || true
+
+      - name: Upload screen recording
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ui-tests-video
+          path: artifacts/ui-tests.mp4
           if-no-files-found: warn
