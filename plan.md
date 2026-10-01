@@ -206,9 +206,9 @@ as README screenshots.
 ## 6. Development loop without a Mac
 
 1. Edit in VS Code (Swift extension + sourcekit-lsp; Core resolves fully).
-2. `make test`: runs `swift test` inside the `swift:6.x` Docker image. Docker Desktop
+2. `scripts/dev.sh test`: runs `swift test` inside the `swift:6.3` Docker image. Docker Desktop
    must be started manually first.
-3. `make server`: runs the simulator server in Docker at `localhost:8080`.
+3. `scripts/dev.sh server`: runs the simulator server in Docker at `localhost:8080`.
 4. Push the branch, then download screenshots and video from the `ci-ios` run artifacts.
 5. Rent a cloud Mac (MacinCloud, Scaleway, etc.) for a few hours only when interactive UI
    debugging is unavoidable.
@@ -220,8 +220,8 @@ as README screenshots.
 ### M0: Repository and tooling
 - [x] 0.1 `git init`, `.gitignore` (Swift, Xcode, DerivedData, `.build`), MIT licence, README skeleton
 - [x] 0.2 `Package.swift` with empty `FireWatchCore` and one passing test; Swift 6 language mode
-- [ ] 0.3 Docker dev setup (`docker/Dockerfile.dev`) and `Makefile` targets `test`, `format`, `server`
-- [ ] 0.4 swift-format config and a `make lint` check
+- [x] 0.3 Docker dev setup (`docker/Dockerfile.dev`) and `scripts/dev.sh` commands `test`, `build`, `shell`, `server` (no `make` on this machine)
+- [ ] 0.4 swift-format config and `scripts/dev.sh format` / `lint` commands
 - [ ] 0.5 `ci-linux.yml`: build, test, warnings-as-errors and format check on push
 - [ ] 0.6 `docs/architecture.md` with the diagrams from this plan; copy decisions into `docs/decisions/`
 

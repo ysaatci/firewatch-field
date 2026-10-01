@@ -1,0 +1,5 @@
+# Linux Swift toolchain used for local development and CI.
+# Keep the version in sync with .github/workflows/ci-linux.yml.
+FROM swift:6.3
+
+WORKDIR /src
