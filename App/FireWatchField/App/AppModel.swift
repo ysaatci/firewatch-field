@@ -44,7 +44,7 @@ final class AppModel {
         self.session = session
         tasks = [
             Task { [weak self] in
-                for await state in session.store.states() { self?.field = state }
+                for await state in session.store.states() { self?.update(state) }
             },
             Task { [weak self] in
                 for await alert in session.alerts() { self?.receive(alert) }
@@ -103,6 +103,14 @@ final class AppModel {
         guard let (latest, _) = try? await client.snapshot() else { return [] }
         let engine = AlertEngine(radiusMetres: configuration.alertRadiusMetres)
         return engine.alerts(from: field.fire, to: latest, near: userLocation)
+    }
+
+    private func update(_ state: FieldState) {
+        // Sent reports leave the queue; their photos aren't needed any more.
+        if state.queuedReports != field.queuedReports {
+            PhotoStore.prune(keeping: Set(state.queuedReports.compactMap(\.photoFileName)))
+        }
+        field = state
     }
 
     private func receive(_ alert: HotspotAlert) {

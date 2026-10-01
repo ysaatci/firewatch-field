@@ -51,4 +51,16 @@ enum PhotoStore {
     static func load(_ name: String) -> Data? {
         try? Data(contentsOf: directory.appendingPathComponent(name))
     }
+
+    /// Deletes photos no queued report refers to any more, once they are a minute old, so a
+    /// photo saved just before its report is queued is never caught in between.
+    static func prune(keeping names: Set<String>, now: Date = .now) {
+        let files =
+            (try? FileManager.default.contentsOfDirectory(
+                at: directory, includingPropertiesForKeys: [.creationDateKey])) ?? []
+        for file in files where !names.contains(file.lastPathComponent) {
+            let created = (try? file.resourceValues(forKeys: [.creationDateKey]).creationDate) ?? now
+            if now.timeIntervalSince(created) > 60 { try? FileManager.default.removeItem(at: file) }
+        }
+    }
 }
