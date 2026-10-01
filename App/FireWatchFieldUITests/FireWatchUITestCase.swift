@@ -6,11 +6,14 @@ class FireWatchUITestCase: XCTestCase {
     override func setUp() {
         continueAfterFailure = false
         addUIInterruptionMonitor(withDescription: "Location permission") { alert in
-            for label in ["Allow While Using App", "Allow Once"] where alert.buttons[label].exists {
-                alert.buttons[label].tap()
-                return true
+            // XCTest calls interruption handlers on the main thread.
+            MainActor.assumeIsolated {
+                for label in ["Allow While Using App", "Allow Once"] where alert.buttons[label].exists {
+                    alert.buttons[label].tap()
+                    return true
+                }
+                return false
             }
-            return false
         }
     }
 
