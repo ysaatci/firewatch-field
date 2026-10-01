@@ -15,6 +15,9 @@ actor FireSimulation {
     private(set) var state: FireState
     /// Events before this scenario minute have been applied and handed out.
     private var emittedMinute: Double
+    /// IDs of commands already applied, so retries are recognised.
+    private var appliedCommands: Set<HotspotCommand.ID> = []
+    private(set) var reports: [SightingReport.ID: SightingReport] = [:]
 
     init(preset: ScenarioPreset, speed: Double, startMinute: Double, now: @escaping @Sendable () -> Date) {
         self.now = now
@@ -46,6 +49,8 @@ actor FireSimulation {
         (state, scenarioNow)
     }
 
+    // MARK: Time
+
     /// Applies and returns the events since the previous call, in time order.
     func advance() -> [FeedEvent] {
         let minute = clock.minute(at: now())
@@ -69,35 +74,61 @@ actor FireSimulation {
         )
     }
 
-    /// Starts, pauses or resets the replay.
+    /// Starts, pauses or resets the replay. Nothing changes unless the whole request is valid.
     /// - Returns: The new status, and whether the scenario restarted, in which case clients must resync.
     /// - Throws: ``APIFailure`` for a speed out of range or an unknown preset.
     func control(_ request: ReplayControlDTO) throws(APIFailure) -> (status: ReplayStatusDTO, restarted: Bool) {
-        let current = now()
-        if let speed = request.speed {
-            guard ReplayControlDTO.speedRange.contains(speed) else {
-                throw .invalidPayload("speed must be within \(ReplayControlDTO.speedRange)")
-            }
-            clock.setSpeed(speed, at: current)
+        if let speed = request.speed, !ReplayControlDTO.speedRange.contains(speed) {
+            throw .invalidPayload("speed must be within \(ReplayControlDTO.speedRange)")
         }
+        var newPreset = preset
+        if let name = request.preset {
+            guard let named = ScenarioPreset(rawValue: name) else { throw .invalidPayload("unknown preset \(name)") }
+            newPreset = named
+        }
+
+        let current = now()
+        if let speed = request.speed { clock.setSpeed(speed, at: current) }
         switch request.action {
         case .start:
             clock.start(at: current)
         case .pause:
             clock.pause(at: current)
         case .reset:
-            if let name = request.preset {
-                guard let preset = ScenarioPreset(rawValue: name) else {
-                    throw .invalidPayload("unknown preset \(name)")
-                }
-                self.preset = preset
-            }
+            preset = newPreset
             let scenario = scenarios[preset] ?? Scenario(preset.configuration)
             scenarios[preset] = scenario
             (world, clock, state, emittedMinute) = Self.begin(
                 scenario, atMinute: startMinute, speed: clock.speed, now: current)
+            appliedCommands = []
+            reports = [:]
             return (status(), true)
         }
         return (status(), false)
+    }
+
+    // MARK: Crews
+
+    /// Applies a crew command, stamped with the current scenario time: at replay speed the
+    /// device's own clock means nothing to the scenario.
+    /// - Returns: `.duplicate` for a retry of an applied command; otherwise `.applied` and the event to broadcast.
+    /// - Throws: ``CommandRejection`` when the hotspot is unknown or the action isn't allowed now.
+    func execute(_ command: HotspotCommand) throws(CommandRejection) -> (
+        outcome: ReceiptDTO.Outcome, event: FeedEvent?
+    ) {
+        guard !appliedCommands.contains(command.id) else { return (.duplicate, nil) }
+        var stamped = command
+        stamped.issuedAt = scenarioNow
+        let event = try state.execute(stamped)
+        world.intervene(stamped)
+        appliedCommands.insert(command.id)
+        return (.applied, event)
+    }
+
+    /// Stores a sighting report; a retry with the same ID is recognised as a duplicate.
+    func submit(_ report: SightingReport) -> ReceiptDTO.Outcome {
+        guard reports[report.id] == nil else { return .duplicate }
+        reports[report.id] = report
+        return .applied
     }
 }

@@ -21,6 +21,7 @@ public func configure(_ app: Application, configuration: ServerConfiguration) as
     let api = app.grouped(PathComponent(stringLiteral: API.pathPrefix))
     try api.register(collection: FeedController(simulation: services.simulation))
     try api.register(collection: StreamController(hub: services.hub))
+    try api.register(collection: CrewController(simulation: services.simulation, hub: services.hub))
     try api.register(collection: ControlController(simulation: services.simulation, hub: services.hub))
 }
 

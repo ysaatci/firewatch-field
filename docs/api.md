@@ -165,6 +165,9 @@ POST /v1/commands
 { "id": "6f1c…", "outcome": "applied" }
 ```
 
+The server replaces `issuedAt` with its own current scenario time before applying and
+broadcasting the command: at replay speed, the device's clock means nothing to the scenario.
+
 The server checks the action against the hotspot's **current** status. A command queued
 offline can therefore be refused if things changed meanwhile, for example `verifyCold`
 after a drone saw the spot flare up (`409 notAllowed`). The client then drops it and
