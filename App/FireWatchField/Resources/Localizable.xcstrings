@@ -1,0 +1,976 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ from you · tap to open" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sizden %@ uzakta · açmak için dokunun"
+          }
+        }
+      }
+    },
+    "%@ hotspot, %@, %@" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ sıcak nokta, %2$@, %3$@"
+          }
+        }
+      }
+    },
+    "%lld h %lld min ago" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld sa %2$lld dk önce"
+          }
+        }
+      }
+    },
+    "%lld hotspots, worst %@" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld sıcak nokta, en kötüsü %2$@"
+          }
+        }
+      }
+    },
+    "%lld min ago" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld dk önce"
+          }
+        }
+      }
+    },
+    "%lld waiting to send" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld gönderilmeyi bekliyor"
+          }
+        }
+      }
+    },
+    "A hotspot flared up nearby" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yakında bir sıcak nokta yeniden alevlendi"
+          }
+        }
+      }
+    },
+    "A simulated wildfire near Manavgat plays on this phone. No network needed." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manavgat yakınlarında simüle edilmiş bir orman yangını bu telefonda oynatılır. Ağ gerekmez."
+          }
+        }
+      }
+    },
+    "About" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hakkında"
+          }
+        }
+      }
+    },
+    "Access token" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erişim anahtarı"
+          }
+        }
+      }
+    },
+    "Actions" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İşlemler"
+          }
+        }
+      }
+    },
+    "Actions and reports wait on this phone and are sent when you turn this off, just as with real loss of signal." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İşlemler ve raporlar bu telefonda bekler ve bunu kapattığınızda gönderilir; gerçek sinyal kaybında olduğu gibi."
+          }
+        }
+      }
+    },
+    "Add a photo" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotoğraf ekle"
+          }
+        }
+      }
+    },
+    "Alert radius" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uyarı yarıçapı"
+          }
+        }
+      }
+    },
+    "Alerts" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uyarılar"
+          }
+        }
+      }
+    },
+    "Apply and restart" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uygula ve yeniden başlat"
+          }
+        }
+      }
+    },
+    "Assigned" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Üstlenildi"
+          }
+        }
+      }
+    },
+    "Automatic" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otomatik"
+          }
+        }
+      }
+    },
+    "Confidence" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Güven"
+          }
+        }
+      }
+    },
+    "Connecting…" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bağlanıyor…"
+          }
+        }
+      }
+    },
+    "Connects to the simulator server, for example one started with docker compose." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simülatör sunucusuna bağlanır; örneğin docker compose ile başlatılmış olana."
+          }
+        }
+      }
+    },
+    "Data" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veri"
+          }
+        }
+      }
+    },
+    "Data source" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veri kaynağı"
+          }
+        }
+      }
+    },
+    "Demo on this device" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu cihazda demo"
+          }
+        }
+      }
+    },
+    "Details and actions" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ayrıntılar ve işlemler"
+          }
+        }
+      }
+    },
+    "Dismiss" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kapat"
+          }
+        }
+      }
+    },
+    "Drone %@, battery %lld percent" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ dronu, pil yüzde %2$lld"
+          }
+        }
+      }
+    },
+    "Extinguished" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Söndürüldü"
+          }
+        }
+      }
+    },
+    "Extreme" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aşırı"
+          }
+        }
+      }
+    },
+    "Filter" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filtre"
+          }
+        }
+      }
+    },
+    "Fire perimeter" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yangın sınırı"
+          }
+        }
+      }
+    },
+    "First seen" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İlk görülme"
+          }
+        }
+      }
+    },
+    "Flare-ups" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeniden alevlenmeler"
+          }
+        }
+      }
+    },
+    "Flared up" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeniden alevlendi"
+          }
+        }
+      }
+    },
+    "From %@ to %@ over %lld readings" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%3$lld ölçümde %1$@ değerinden %2$@ değerine"
+          }
+        }
+      }
+    },
+    "From you" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Size uzaklık"
+          }
+        }
+      }
+    },
+    "Hand it back" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bırak"
+          }
+        }
+      }
+    },
+    "High" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yüksek"
+          }
+        }
+      }
+    },
+    "Hotspot" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sıcak nokta"
+          }
+        }
+      }
+    },
+    "Hotspot %@" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sıcak nokta %@"
+          }
+        }
+      }
+    },
+    "Hotspot no longer known" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu sıcak nokta artık bilinmiyor"
+          }
+        }
+      }
+    },
+    "Hotspots" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sıcak noktalar"
+          }
+        }
+      }
+    },
+    "How bad" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ne kadar ciddi"
+          }
+        }
+      }
+    },
+    "Imperial (°F, mi)" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İngiliz (°F, mil)"
+          }
+        }
+      }
+    },
+    "Last measured" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Son ölçüm"
+          }
+        }
+      }
+    },
+    "Last measured %@" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Son ölçüm %@"
+          }
+        }
+      }
+    },
+    "Live" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Canlı"
+          }
+        }
+      }
+    },
+    "Location" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konum"
+          }
+        }
+      }
+    },
+    "Location of the sighting; move the map to adjust" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gözlemin konumu; ayarlamak için haritayı kaydırın"
+          }
+        }
+      }
+    },
+    "Low" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düşük"
+          }
+        }
+      }
+    },
+    "Map" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Harita"
+          }
+        }
+      }
+    },
+    "Mark extinguished" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Söndürüldü olarak işaretle"
+          }
+        }
+      }
+    },
+    "Metric (°C, km)" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metrik (°C, km)"
+          }
+        }
+      }
+    },
+    "Minimum severity" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En düşük önem"
+          }
+        }
+      }
+    },
+    "Moderate" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Orta"
+          }
+        }
+      }
+    },
+    "Move the map so the cross is on what you saw. It starts at your position." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artıyı gördüğünüz yere getirmek için haritayı kaydırın. Konumunuzdan başlar."
+          }
+        }
+      }
+    },
+    "New" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni"
+          }
+        }
+      }
+    },
+    "New %@ hotspot nearby" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yakında yeni %@ sıcak nokta"
+          }
+        }
+      }
+    },
+    "No hotspots" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sıcak nokta yok"
+          }
+        }
+      }
+    },
+    "No signal? Actions and reports wait on the phone and send later." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sinyal yok mu? İşlemler ve raporlar telefonda bekler, sonra gönderilir."
+          }
+        }
+      }
+    },
+    "Nothing matches the filter yet. Drones report new hotspots as they find them." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Henüz filtreye uyan bir şey yok. Dronlar yeni sıcak noktaları buldukça bildirir."
+          }
+        }
+      }
+    },
+    "Offline · data from %@ · retry in %lld s" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çevrimdışı · veri %1$@ · %2$lld sn sonra yeniden denenecek"
+          }
+        }
+      }
+    },
+    "Offline · retry in %lld s" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çevrimdışı · %lld sn sonra yeniden denenecek"
+          }
+        }
+      }
+    },
+    "Perimeter time" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sınır zamanı"
+          }
+        }
+      }
+    },
+    "Photo" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotoğraf"
+          }
+        }
+      }
+    },
+    "Remove the photo" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotoğrafı kaldır"
+          }
+        }
+      }
+    },
+    "Replace the photo" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotoğrafı değiştir"
+          }
+        }
+      }
+    },
+    "Replay speed" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oynatma hızı"
+          }
+        }
+      }
+    },
+    "Report" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapor"
+          }
+        }
+      }
+    },
+    "Report saved. It is sent as soon as there's signal." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapor kaydedildi. Sinyal olur olmaz gönderilecek."
+          }
+        }
+      }
+    },
+    "Saved on this device; it will sync when the connection allows." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu cihaza kaydedildi; bağlantı olduğunda eşitlenecek."
+          }
+        }
+      }
+    },
+    "See hotspots that drones found, the fire's edge, and where the drones are." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dronların bulduğu sıcak noktaları, yangının sınırını ve dronların yerini görün."
+          }
+        }
+      }
+    },
+    "Send report" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raporu gönder"
+          }
+        }
+      }
+    },
+    "Server address" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sunucu adresi"
+          }
+        }
+      }
+    },
+    "Settings" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ayarlar"
+          }
+        }
+      }
+    },
+    "Severity" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Önem"
+          }
+        }
+      }
+    },
+    "Show verified cold" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soğuk olduğu doğrulananları göster"
+          }
+        }
+      }
+    },
+    "Simulate no signal" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sinyal yokmuş gibi yap"
+          }
+        }
+      }
+    },
+    "Simulator server" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simülatör sunucusu"
+          }
+        }
+      }
+    },
+    "Smoke behind the ridge, flames, people at risk…" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sırtın arkasında duman, alevler, tehlikedeki insanlar…"
+          }
+        }
+      }
+    },
+    "Source code" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaynak kodu"
+          }
+        }
+      }
+    },
+    "Start" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başla"
+          }
+        }
+      }
+    },
+    "Take this hotspot" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu sıcak noktayı üstlen"
+          }
+        }
+      }
+    },
+    "Temperature" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sıcaklık"
+          }
+        }
+      }
+    },
+    "Temperature trend" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sıcaklık eğilimi"
+          }
+        }
+      }
+    },
+    "This is a demo: a simulated wildfire near Manavgat plays on this phone. Settings can connect to the simulator server instead." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu bir demo: Manavgat yakınlarında simüle edilmiş bir orman yangını bu telefonda oynatılır. Ayarlar'dan bunun yerine simülatör sunucusuna bağlanabilirsiniz."
+          }
+        }
+      }
+    },
+    "Units" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Birimler"
+          }
+        }
+      }
+    },
+    "Verified cold" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soğuk olduğu doğrulandı"
+          }
+        }
+      }
+    },
+    "Verify cold" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soğuk olduğunu doğrula"
+          }
+        }
+      }
+    },
+    "Version" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sürüm"
+          }
+        }
+      }
+    },
+    "Walking directions" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yürüyüş yol tarifi"
+          }
+        }
+      }
+    },
+    "What you see" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ne görüyorsunuz"
+          }
+        }
+      }
+    },
+    "Where" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nerede"
+          }
+        }
+      }
+    },
+    "Work hotspots from new to verified cold, most urgent first." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sıcak noktaları yeniden soğuk olarak doğrulanana kadar işleyin; en acil olan önce."
+          }
+        }
+      }
+    },
+    "Your %@ report, waiting to send" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ raporunuz gönderilmeyi bekliyor"
+          }
+        }
+      }
+    },
+    "just now" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "az önce"
+          }
+        }
+      }
+    },
+    "seen %@" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "görülme: %@"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

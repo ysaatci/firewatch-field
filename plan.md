@@ -330,7 +330,7 @@ as README screenshots.
 - [x] 12.1 Settings screen: data source, server URL, alert radius, units
 - [x] 12.2 Token entry stored in Keychain (D11)
 - [x] 12.3 Demo mode as the first-launch default, with a short onboarding card
-- [ ] 12.4 String Catalog with a full Turkish translation; units formatted with `Measurement`
+- [x] 12.4 String Catalog with a full Turkish translation; units formatted with `Measurement`
 
 ### M13: Quality pass (NFR-2, NFR-6)
 - [ ] 13.1 Performance tests: launch metric, plus map scrolling with the 2,000-hotspot fixture
