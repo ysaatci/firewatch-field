@@ -43,3 +43,24 @@ jobs:
           -destination "id=$SIMULATOR"
           -derivedDataPath DerivedData
           CODE_SIGNING_ALLOWED=NO
+
+      - name: Test
+        run: >
+          xcodebuild test-without-building
+          -project App/FireWatchField.xcodeproj
+          -scheme FireWatchField
+          -destination "id=$SIMULATOR"
+          -derivedDataPath DerivedData
+          -resultBundlePath artifacts/Tests.xcresult
+
+      - name: Export screenshots
+        if: always()
+        run: scripts/ci/export-screenshots.sh artifacts/Tests.xcresult artifacts/screenshots
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: screenshots
+          path: artifacts/screenshots
+          if-no-files-found: warn
