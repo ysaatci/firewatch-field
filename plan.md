@@ -247,7 +247,7 @@ as README screenshots.
 - [x] 2.3 `FireSpreadModel`: cell states and a wind-biased ignition step, with tests (no spread without fuel, downwind bias)
 - [x] 2.4 Perimeter extraction (trace cell boundaries of the burned mask → rings with holes, then smooth)
 - [x] 2.5 Residual hotspots: spawn behind the front, exponential cooling, flare-up probability
-- [ ] 2.6 Drone planner: lawnmower survey pattern; a detection happens only when a drone's footprint covers a hotspot
+- [x] 2.6 Drone planner: lawnmower survey pattern; a detection happens only when a drone's footprint covers a hotspot
 - [ ] 2.7 `FeedEvent` vocabulary and `FireState` reducer in Core (observations create/update hotspots; detection-driven flare-up rule)
 - [ ] 2.8 `Scenario` timeline: precomputed fire, hotspots, drone passes and perimeters; determinism and golden-summary tests
 - [ ] 2.9 `SimulatedWorld`: scenario plus crew interventions (an extinguished hotspot reads cool until its scheduled flare-up); `events(in:)`
