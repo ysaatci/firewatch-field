@@ -8,8 +8,8 @@ import Foundation
 ///
 /// Platform-neutral, so the whole flow is tested on Linux; the app only chooses the feed and sink.
 public actor FieldSession {
-    public let store: FeedStore
-    public let outbox: Outbox
+    public nonisolated let store: FeedStore
+    public nonisolated let outbox: Outbox
     private let feed: any DetectionFeed
     private var alertEngine: AlertEngine
     private let now: @Sendable () -> Date

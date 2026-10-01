@@ -5,6 +5,7 @@ set -euo pipefail
 
 result="$1"
 out="$2"
+[ -d "$result" ] || { echo "No result bundle at $result (did the build fail?)"; exit 0; }
 mkdir -p "$out"
 xcrun xcresulttool export attachments --path "$result" --output-path "$out"
 
