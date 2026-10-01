@@ -12,14 +12,14 @@ public struct FieldState: Hashable, Sendable {
     public var receivedAt: Date?
     /// Commands made on this device that the feed hasn't confirmed yet.
     public var pendingCommands: [HotspotCommand]
-    /// Sighting reports made on this device that haven't been sent yet.
-    public var queuedReports: Int
+    /// Sighting reports made on this device that haven't been sent yet, for showing as pending.
+    public var queuedReports: [SightingReport]
 
     /// Everything still waiting to be sent from this device.
-    public var queuedCount: Int { pendingCommands.count + queuedReports }
+    public var queuedCount: Int { pendingCommands.count + queuedReports.count }
 
     public static let empty = FieldState(
-        fire: FireState(), asOf: nil, connection: .connecting, receivedAt: nil, pendingCommands: [], queuedReports: 0)
+        fire: FireState(), asOf: nil, connection: .connecting, receivedAt: nil, pendingCommands: [], queuedReports: [])
 }
 
 /// Holds the feed's state and publishes what the app should show (D9).
@@ -32,7 +32,7 @@ public actor FeedStore {
     private var connection = ConnectionStatus.connecting
     private var receivedAt: Date?
     private var pending: [HotspotCommand] = []
-    private var queuedReports = 0
+    private var queuedReports: [SightingReport] = []
     private let broadcast = Broadcast<FieldState>()
     private let now: @Sendable () -> Date
 
@@ -92,8 +92,8 @@ public actor FeedStore {
         asOf.map { CachedFire(state: base, asOf: $0, receivedAt: receivedAt) }
     }
 
-    /// Replaces the commands shown optimistically on top of the feed's state.
-    public func setPending(_ commands: [HotspotCommand], queuedReports: Int = 0) {
+    /// Replaces the commands shown optimistically on top of the feed's state, and the queued reports.
+    public func setPending(_ commands: [HotspotCommand], queuedReports: [SightingReport] = []) {
         self.queuedReports = queuedReports
         pending = commands
         publish()
