@@ -219,7 +219,7 @@ as README screenshots.
 
 ### M0: Repository and tooling
 - [x] 0.1 `git init`, `.gitignore` (Swift, Xcode, DerivedData, `.build`), MIT licence, README skeleton
-- [ ] 0.2 `Package.swift` with empty `FireWatchCore` and one passing test; Swift 6 language mode
+- [x] 0.2 `Package.swift` with empty `FireWatchCore` and one passing test; Swift 6 language mode
 - [ ] 0.3 Docker dev setup (`docker/Dockerfile.dev`) and `Makefile` targets `test`, `format`, `server`
 - [ ] 0.4 swift-format config and a `make lint` check
 - [ ] 0.5 `ci-linux.yml`: build, test, warnings-as-errors and format check on push
