@@ -1,3 +1,4 @@
+import FireWatchClient
 import FireWatchCore
 import Foundation
 import Observation
@@ -10,12 +11,16 @@ final class AppModel {
     private(set) var configuration: AppConfiguration
     /// Recent alerts, newest first.
     private(set) var alerts: [HotspotAlert] = []
+    /// The alert shown across the top of the app, until dismissed or opened.
+    var banner: HotspotAlert?
     /// The latest action the server refused, until dismissed.
     var rejection: FieldSession.Rejection?
     private(set) var isReady = false
 
     @ObservationIgnored private var session: FieldSession?
     @ObservationIgnored private var tasks: [Task<Void, Never>] = []
+    /// Kept here so a restarted session still knows where the user is.
+    @ObservationIgnored private var userLocation: Coordinate?
 
     init(configuration: AppConfiguration = .fromDefaults()) {
         self.configuration = configuration
@@ -25,6 +30,7 @@ final class AppModel {
     func start() async {
         await stop()
         let session = await AppEnvironment.makeSession(for: configuration)
+        await session.setUserLocation(userLocation)
         await session.start()
         self.session = session
         tasks = [
@@ -32,7 +38,7 @@ final class AppModel {
                 for await state in session.store.states() { self?.field = state }
             },
             Task { [weak self] in
-                for await alert in session.alerts() { self?.alerts.insert(alert, at: 0) }
+                for await alert in session.alerts() { self?.receive(alert) }
             },
             Task { [weak self] in
                 for await rejection in session.rejections() { self?.rejection = rejection }
@@ -65,6 +71,23 @@ final class AppModel {
     }
 
     func setUserLocation(_ location: Coordinate?) async {
+        userLocation = location
         await session?.setUserLocation(location)
+    }
+
+    /// Checks the server for alerts while the app is in the background (NFR-5). The live
+    /// stream isn't running then, so this fetches one snapshot and compares it with the last
+    /// state seen. Demo mode has nothing to fetch.
+    func alertsFromBackgroundRefresh() async -> [HotspotAlert] {
+        guard case .server(let url, let token) = configuration.source else { return [] }
+        let client = APIClient(configuration: .init(baseURL: url, token: token))
+        guard let (latest, _) = try? await client.snapshot() else { return [] }
+        let engine = AlertEngine(radiusMetres: configuration.alertRadiusMetres)
+        return engine.alerts(from: field.fire, to: latest, near: userLocation)
+    }
+
+    private func receive(_ alert: HotspotAlert) {
+        alerts.insert(alert, at: 0)
+        banner = alert
     }
 }

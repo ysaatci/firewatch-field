@@ -51,6 +51,11 @@ targets:
         NSLocationWhenInUseUsageDescription: >-
           Your location ranks nearby hotspots first and lets the app alert you to new
           hotspots and flare-ups close to you.
+        # Background refresh checks the server for nearby changes (FR-8, NFR-5).
+        BGTaskSchedulerPermittedIdentifiers:
+          - dev.ysaatci.firewatchfield.refresh
+        UIBackgroundModes:
+          - fetch
         # Plain HTTP only to local addresses, for the simulator server (NFR-8).
         NSAppTransportSecurity:
           NSAllowsLocalNetworking: true

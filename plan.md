@@ -309,10 +309,10 @@ as README screenshots.
 - [x] 8.5 UI test: assign → extinguish → verify flow, with screenshots
 
 ### M9: Live alerts (FR-8)
-- [ ] 9.1 Connection-status indicator (live / reconnecting / offline)
-- [ ] 9.2 In-app alert banner driven by `AlertEngine`
-- [ ] 9.3 Local notifications (permission flow; tapping one deep-links to the hotspot)
-- [ ] 9.4 `BGAppRefreshTask` for a background snapshot refresh (NFR-5)
+- [x] 9.1 Connection-status indicator (live / reconnecting / offline)
+- [x] 9.2 In-app alert banner driven by `AlertEngine`
+- [x] 9.3 Local notifications (permission flow; tapping one deep-links to the hotspot)
+- [x] 9.4 `BGAppRefreshTask` for a background snapshot refresh (NFR-5)
 
 ### M10: Offline and persistence (FR-9, NFR-3)
 - [ ] 10.1 SwiftData models and a `HotspotStore` adapter (snapshot cache)

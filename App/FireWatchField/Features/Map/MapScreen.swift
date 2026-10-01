@@ -51,7 +51,7 @@ struct MapScreen: View {
         }
         .sheet(item: $summary) { id in
             HotspotSummaryCard(hotspotID: id)
-                .presentationDetents([.height(240)])
+                .presentationDetents([.height(300)])
         }
         .navigationTitle("Map")
         .navigationBarTitleDisplayMode(.inline)

@@ -48,10 +48,10 @@ jobs:
         run: |
           xcrun simctl boot "$SIMULATOR" || true
           xcrun simctl bootstatus "$SIMULATOR" -b
-          # No permission prompt in UI tests, and a position ~1 km from the demo fire, so
+          # No permission prompt in UI tests, and a position by where the demo fire starts, so
           # distances, ranking and alerts are exercised.
           xcrun simctl privacy "$SIMULATOR" grant location dev.ysaatci.firewatchfield
-          xcrun simctl location "$SIMULATOR" set 36.825,31.47
+          xcrun simctl location "$SIMULATOR" set 36.826,31.456
 
       - name: Start screen recording
         run: |

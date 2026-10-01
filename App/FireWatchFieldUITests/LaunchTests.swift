@@ -40,7 +40,9 @@ extension XCUIApplication {
     /// permission beforehand and places the simulator near the fire.
     static func demo(speed: Int = 60) -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments += ["-demoSpeed", "\(speed)", "-demoStartMinute", "150"]
+        app.launchArguments += [
+            "-demoSpeed", "\(speed)", "-demoStartMinute", "150", "-skipNotificationPermission", "YES",
+        ]
         return app
     }
 }

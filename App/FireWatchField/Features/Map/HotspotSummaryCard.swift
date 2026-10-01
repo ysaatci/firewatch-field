@@ -4,6 +4,8 @@ import SwiftUI
 /// A compact card for a hotspot tapped on the map.
 struct HotspotSummaryCard: View {
     @Environment(AppModel.self) private var model
+    @Environment(Router.self) private var router
+    @Environment(\.dismiss) private var dismiss
     let hotspotID: Hotspot.ID
 
     var body: some View {
@@ -24,6 +26,13 @@ struct HotspotSummaryCard: View {
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
+                Button {
+                    dismiss()
+                    router.open(hotspotID)
+                } label: {
+                    Label("Details and actions", systemImage: "chevron.right.circle")
+                }
+                .buttonStyle(.bordered)
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
