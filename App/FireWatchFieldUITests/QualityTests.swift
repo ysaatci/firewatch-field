@@ -62,6 +62,10 @@ final class QualityTests: FireWatchUITestCase {
     static func isKnownSystemIssue(_ issue: XCUIAccessibilityAuditIssue) -> Bool {
         // The tab bar and navigation bar chrome belong to the system.
         guard let element = issue.element else { return false }
+        // The audit's own failure message doesn't say which element failed, so log it.
+        print(
+            "Accessibility audit: \(issue.compactDescription) on \(element.elementType.rawValue)",
+            "id '\(element.identifier)' label '\(element.label)' frame \(element.frame)")
         return element.elementType == .tabBar || element.elementType == .navigationBar
             || element.identifier.hasPrefix("_")
             // The status badge sits in a toolbar, which doesn't scale with Dynamic Type.
