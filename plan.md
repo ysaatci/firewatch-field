@@ -250,7 +250,7 @@ as README screenshots.
 - [x] 2.6 Drone planner: lawnmower survey pattern; a detection happens only when a drone's footprint covers a hotspot
 - [x] 2.7 `FeedEvent` vocabulary and `FireState` reducer in Core (observations create/update hotspots; detection-driven flare-up rule)
 - [x] 2.8 `Scenario` timeline: precomputed fire, hotspots, drone passes and perimeters; determinism and golden-summary tests
-- [ ] 2.9 `SimulatedWorld`: scenario plus crew interventions (an extinguished hotspot reads cool until its scheduled flare-up); `events(in:)`
+- [x] 2.9 `SimulatedWorld`: scenario plus crew interventions (an extinguished hotspot reads cool until its scheduled flare-up); `events(in:)`
 - [ ] 2.10 Presets: default (Manavgat) and a 2,000-hotspot stress scenario
 
 ### M3: API contract
