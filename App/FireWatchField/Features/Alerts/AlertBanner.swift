@@ -17,7 +17,9 @@ struct AlertBanner: View {
                     .font(.headline)
                 Text(alert.subtitle)
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    // Not `.secondary`: that is vibrant on the material, and renders black on
+                    // black when the banner is drawn off-screen (snapshots) in dark mode.
+                    .foregroundStyle(Color.secondaryText)
             }
             Spacer()
             Button(action: dismiss) {
