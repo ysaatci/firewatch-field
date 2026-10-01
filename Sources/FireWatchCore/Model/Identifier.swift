@@ -17,3 +17,8 @@ extension Identifier: ExpressibleByStringLiteral {
         self.init(value)
     }
 }
+
+extension Identifier: Identifiable {
+    /// An identifier identifies itself, so it can drive SwiftUI sheets and lists directly.
+    public var id: Self { self }
+}
