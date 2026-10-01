@@ -278,7 +278,7 @@ as README screenshots.
 - [x] 5.1 Extract `ReplaySession` and `ReplayClock` into the Simulator, so the server and the on-device demo share one implementation
 - [x] 5.2 `DetectionFeed` and `CommandSink` protocols plus `FixtureFeed` in Core; `SimulatedFeed` (in-process `ReplaySession` on a clock) in the Simulator
 - [x] 5.3 `FireWatchClient` module: `HTTPTransport` protocol, a `URLSession` implementation and a fake; `APIClient` with typed errors
-- [ ] 5.4 `ReconnectingSocket` actor with backoff and jitter (Core); `URLSessionWebSocketTask` adapter (Client); tests with fakes (NFR-4)
+- [x] 5.4 `ReconnectingSocket` with backoff and jitter (Core); `URLSessionWebSocketTask` adapter (Client); tests with fakes (NFR-4)
 - [ ] 5.5 `ServerFeed` (snapshot, then stream; fresh snapshot after every reconnect) and `ServerCommandSink`
 - [ ] 5.6 `FeedStore` actor: applies feed updates, replays pending commands over server state (D9), publishes an `AsyncStream` of state
 - [ ] 5.7 `Outbox` actor + `OutboxStore` protocol (in-memory impl): enqueue, flush in order, retry with backoff, drop rejected
