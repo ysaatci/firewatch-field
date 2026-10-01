@@ -64,7 +64,9 @@ struct FieldSessionTests {
         await session.setUserLocation(.manavgat)
         var alerts = session.alerts().makeAsyncIterator()
         feed.send(.snapshot(FireState(events: [observed("far", metresEast: 9_000)]), asOf: start))
-        try await eventually { await session.store.current.fire.hotspots.count == 1 }
+        // States reach the session newest-first, and the first fire it sees never alerts (a cold
+        // start), so wait until the snapshot is its baseline.
+        try await eventually { await session.lastFire.hotspots.count == 1 }
         feed.send(.events([observed("near", minute: 1)]))
         feed.send(.events([observed("near", minute: 2)]))  // the same hotspot again: no second alert
         feed.send(.events([observed("other", metresEast: 600, minute: 3)]))
@@ -115,10 +117,13 @@ struct FieldSessionCacheTests {
         feed.send(.snapshot(FireState(events: [observed("hs-1", minute: 0)]), asOf: start))
         try await eventually { await cache.saveCount == 1 }
         feed.send(.events([observed("hs-2", minute: 1)]))  // within the interval: not saved
+        try await eventually { await session.store.current.fire.hotspots["hs-2"] != nil }
+        #expect(await cache.saveCount == 1)
         clock.advance(seconds: 31)
         feed.send(.events([observed("hs-3", minute: 2)]))
         try await eventually { await cache.saveCount == 2 }
-        #expect(await cache.saved?.state.hotspots.count == 3)
+        // The save holds the store's latest state, which has hs-2 by now and may already have hs-3.
+        #expect(await cache.saved?.state.hotspots["hs-2"] != nil)
         await session.stop()
     }
 

@@ -18,7 +18,8 @@ public actor FieldSession {
     private var alertEngine: AlertEngine
     private let now: @Sendable () -> Date
     private var userLocation: Coordinate?
-    private var lastFire = FireState()
+    /// The fire as of the last handled state: alerts are changes since then. Internal for tests.
+    private(set) var lastFire = FireState()
     private var alerted: Set<String> = []
     private var tasks: [Task<Void, Never>] = []
     private let alertBroadcast = Broadcast<HotspotAlert>()
