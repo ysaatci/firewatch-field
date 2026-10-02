@@ -86,3 +86,17 @@ extension Color {
                 : UIColor(red: 0.40, green: 0.40, blue: 0.43, alpha: 1)
         })
 }
+
+/// A form section title in ``Color/secondaryText``: the system grey is too faint to read
+/// outdoors and fails the contrast audit.
+struct SectionHeader: View {
+    let title: LocalizedStringKey
+
+    init(_ title: LocalizedStringKey) {
+        self.title = title
+    }
+
+    var body: some View {
+        Text(title).foregroundStyle(Color.secondaryText)
+    }
+}

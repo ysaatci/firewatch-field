@@ -37,13 +37,14 @@ struct ReportScreen: View {
                 .listRowInsets(EdgeInsets())
                 .accessibilityLabel("Location of the sighting; move the map to adjust")
             } header: {
-                Text("Where")
+                SectionHeader("Where")
             } footer: {
                 Text("Move the map so the cross is on what you saw. It starts at your position.")
                     .font(.footnote)  // explicit, so it scales with Dynamic Type
+                    .foregroundStyle(Color.secondaryText)
             }
 
-            Section("How bad") {
+            Section {
                 Picker("Severity", selection: $severity) {
                     ForEach(Severity.allCases, id: \.self) { level in
                         Text(level.label).tag(level)
@@ -51,15 +52,19 @@ struct ReportScreen: View {
                 }
                 .pickerStyle(.segmented)
                 .accessibilityIdentifier("severity")
+            } header: {
+                SectionHeader("How bad")
             }
 
-            Section("What you see") {
+            Section {
                 TextField("Smoke behind the ridge, flames, people at risk…", text: $note, axis: .vertical)
                     .lineLimit(3...6)
                     .accessibilityIdentifier("note")
+            } header: {
+                SectionHeader("What you see")
             }
 
-            Section("Photo") {
+            Section {
                 // The picker's label closure is Sendable, so it gets a copy rather than reading state.
                 let hasPhoto = photo != nil
                 PhotosPicker(selection: $photoItem, matching: .images) {
@@ -73,6 +78,8 @@ struct ReportScreen: View {
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                     Button("Remove the photo", role: .destructive) { self.photo = nil }
                 }
+            } header: {
+                SectionHeader("Photo")
             }
 
             Section {
@@ -92,7 +99,7 @@ struct ReportScreen: View {
             }
 
             if !model.field.queuedReports.isEmpty {
-                Section("Waiting to send") {
+                Section {
                     ForEach(model.field.queuedReports) { report in
                         Label {
                             Text(report.note).lineLimit(2)
@@ -101,6 +108,8 @@ struct ReportScreen: View {
                         }
                         .accessibilityIdentifier("queuedReport")
                     }
+                } header: {
+                    SectionHeader("Waiting to send")
                 }
             }
         }

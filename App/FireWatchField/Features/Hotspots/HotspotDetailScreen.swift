@@ -51,7 +51,7 @@ struct HotspotDetailScreen: View {
     }
 
     private func trend(_ hotspot: Hotspot) -> some View {
-        Section("Temperature") {
+        Section {
             Chart {
                 ForEach(Severity.thresholds, id: \.0) { threshold in
                     RuleMark(y: .value("Threshold", Format.temperatureValue(threshold.1)))
@@ -76,11 +76,13 @@ struct HotspotDetailScreen: View {
             .frame(height: 160)
             .accessibilityLabel("Temperature trend")
             .accessibilityValue(Text(trendDescription(hotspot)))
+        } header: {
+            SectionHeader("Temperature")
         }
     }
 
     private func whereabouts(_ hotspot: Hotspot) -> some View {
-        Section("Location") {
+        Section {
             if let user = location.coordinate {
                 LabeledContent("From you", value: Direction(from: user, to: hotspot.coordinate).text)
             }
@@ -89,6 +91,8 @@ struct HotspotDetailScreen: View {
             } label: {
                 Label("Walking directions", systemImage: "figure.walk")
             }
+        } header: {
+            SectionHeader("Location")
         }
     }
 
@@ -108,13 +112,14 @@ struct HotspotDetailScreen: View {
             }
             .listRowSeparator(.hidden)
         } header: {
-            Text("Actions")
+            SectionHeader("Actions")
         } footer: {
             if model.field.pendingCommands.contains(where: { $0.hotspotID == hotspot.id }) {
                 Label(
                     "Saved on this device; it will sync when the connection allows.",
                     systemImage: "arrow.triangle.2.circlepath"
                 )
+                .foregroundStyle(Color.secondaryText)
                 .accessibilityIdentifier("pending")
             }
         }

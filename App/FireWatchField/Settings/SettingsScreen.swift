@@ -37,7 +37,7 @@ struct SettingsScreen: View {
                 Button("Apply and restart") { apply() }
                     .disabled(useServer && URL(string: serverURL)?.scheme == nil)
             } header: {
-                Text("Data source")
+                SectionHeader("Data source")
             } footer: {
                 Text(
                     useServer
@@ -45,6 +45,7 @@ struct SettingsScreen: View {
                         : "A simulated wildfire near Manavgat plays on this phone. No network needed."
                 )
                 .font(.footnote)
+                .foregroundStyle(Color.secondaryText)
             }
 
             Section {
@@ -55,23 +56,30 @@ struct SettingsScreen: View {
                     "Actions and reports wait on this phone and are sent when you turn this off, just as with real loss of signal."
                 )
                 .font(.footnote)
+                .foregroundStyle(Color.secondaryText)
             }
 
-            Section("Alerts") {
+            Section {
                 LabeledContent("Alert radius", value: Format.distance(alertRadius))
                 Slider(value: $alertRadius, in: 500...10_000, step: 500)
                     .accessibilityLabel("Alert radius")
+            } header: {
+                SectionHeader("Alerts")
             }
 
-            Section("Units") {
+            Section {
                 Picker("Units", selection: $units) {
                     ForEach(UnitSystem.allCases) { Text($0.label).tag($0) }
                 }
+            } header: {
+                SectionHeader("Units")
             }
 
-            Section("About") {
+            Section {
                 LabeledContent("Version", value: Bundle.main.versionDescription)
                 Link("Source code", destination: URL(staticString: "https://github.com/ysaatci/firewatch-field"))
+            } header: {
+                SectionHeader("About")
             }
         }
         .navigationTitle("Settings")
