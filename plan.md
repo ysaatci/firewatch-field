@@ -333,15 +333,15 @@ as README screenshots.
 - [x] 12.4 String Catalog with a full Turkish translation; units formatted with `Measurement`
 
 ### M13: Quality pass (NFR-2, NFR-6)
-- [ ] 13.1 Performance tests: launch metric, plus map scrolling with the 2,000-hotspot fixture
-- [ ] 13.2 `performAccessibilityAudit()` in UI tests; fix the findings
-- [ ] 13.3 Dynamic Type AX5 and dark/high-contrast snapshot tests
-- [ ] 13.4 Snapshot test suite in both EN and TR (D14)
+- [x] 13.1 Performance tests: launch metric, plus map scrolling with the 2,000-hotspot fixture
+- [x] 13.2 `performAccessibilityAudit()` in UI tests; fix the findings
+- [x] 13.3 Dynamic Type AX5 and dark snapshot tests (high contrast is not covered yet)
+- [x] 13.4 Snapshot test suite in both EN and TR (D14)
 
 ### M14: Presentation
-- [ ] 14.1 README: one-paragraph pitch, GIF (from the CI video), screenshots, architecture diagram
-- [ ] 14.2 README "Design decisions" section linking to `docs/decisions/`
-- [ ] 14.3 "Run it yourself" instructions: demo mode with no server; server with `docker compose up`
+- [x] 14.1 README: one-paragraph pitch, GIF (from the CI video), screenshots, architecture diagram
+- [x] 14.2 README "Design decisions" section linking to `docs/decisions/`
+- [x] 14.3 "Run it yourself" instructions: demo mode with no server; server with `docker compose up`
 - [ ] 14.4 Tag `v1.0.0` and write release notes
 
 ### M15 (optional): TestFlight
