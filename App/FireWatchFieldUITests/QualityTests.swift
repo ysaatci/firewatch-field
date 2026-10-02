@@ -78,6 +78,9 @@ final class QualityTests: FireWatchUITestCase {
             || element.identifier.hasPrefix("_")
             // The status badge sits in a toolbar, which doesn't scale with Dynamic Type.
             || element.identifier == "connection"
+            // Section headers use `.headline`, which scales (see the AX5 snapshots), yet the audit
+            // still reports them as partially unsupported, even with the font set explicitly.
+            || (issue.auditType == .dynamicType && element.identifier == "sectionHeader")
             // List rows scrolled under the floating tab bar, or into the blurred scroll edge
             // just above it, are measured against the blur.
             || element.frame.intersects(underTabBar)
