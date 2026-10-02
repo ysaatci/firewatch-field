@@ -38,27 +38,35 @@ final class QualityTests: FireWatchUITestCase {
 
     // MARK: Accessibility
 
-    /// Apple's automated audit (contrast, labels, hit regions, Dynamic Type) on every main screen.
+    /// Apple's automated audit (contrast, labels, hit regions, clipping) on every main screen.
     @MainActor
     func testScreensPassTheAccessibilityAudit() throws {
         // Audit every screen even after a finding, so one run lists them all.
         continueAfterFailure = true
         let app = XCUIApplication.demo(speed: 1)
+        // Far from the fire, so no alert banner covers what is being audited.
+        if let index = app.launchArguments.firstIndex(of: "-fixedLocation") {
+            app.launchArguments[index + 1] = "37.2,31.9"
+        }
         app.launch()
+        // Not Dynamic Type: on this SwiftUI app it reports text that does scale (`.headline`,
+        // explicit `.footnote`, `@ScaledMetric`), differently on every run. The AX5 snapshot
+        // tests cover Dynamic Type instead.
+        let checks = XCUIAccessibilityAuditType.all.subtracting(.dynamicType)
         XCTAssertTrue(app.tabBars.buttons["Map"].waitForExistence(timeout: 20))
 
         for tab in ["Hotspots", "Report", "Settings"] {
             app.tabBars.buttons[tab].tap()
-            try app.performAccessibilityAudit { issue in MainActor.assumeIsolated { Self.isKnownSystemIssue(issue) } }
+            try app.performAccessibilityAudit(for: checks) { issue in
+                MainActor.assumeIsolated { Self.isKnownSystemIssue(issue) }
+            }
         }
         app.tabBars.buttons["Hotspots"].tap()
         let firstRow = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'row.'")).firstMatch
         XCTAssertTrue(firstRow.waitForExistence(timeout: 20))
         firstRow.tap()
         XCTAssertTrue(app.buttons["action.assign"].waitForExistence(timeout: 5))
-        // On this screen the audit's Dynamic Type check flags different, scalable text on every
-        // run (even `@ScaledMetric` sizes); the AX5 snapshots cover its Dynamic Type instead.
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(.dynamicType)) { issue in
+        try app.performAccessibilityAudit(for: checks) { issue in
             MainActor.assumeIsolated { Self.isKnownSystemIssue(issue) }
         }
     }
@@ -82,9 +90,6 @@ final class QualityTests: FireWatchUITestCase {
             || element.identifier.hasPrefix("_")
             // The status badge sits in a toolbar, which doesn't scale with Dynamic Type.
             || element.identifier == "connection"
-            // Section headers use `.headline`, which scales (see the AX5 snapshots), yet the audit
-            // still reports them as partially unsupported, even with the font set explicitly.
-            || (issue.auditType == .dynamicType && element.identifier == "sectionHeader")
             // List rows scrolled under the floating tab bar, or into the blurred scroll edge
             // just above it, are measured against the blur.
             || element.frame.intersects(underTabBar)
