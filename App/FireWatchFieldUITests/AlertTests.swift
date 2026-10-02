@@ -9,7 +9,9 @@ final class AlertTests: FireWatchUITestCase {
         let app = XCUIApplication.demo(speed: 120, startMinute: 60)
         app.launch()
 
-        let banner = app.descendants(matching: .any)["alertBanner"].firstMatch
+        // A button (the banner combines its children and has the button trait): querying every
+        // descendant of a map with thousands of markers can time out.
+        let banner = app.buttons["alertBanner"]
         XCTAssertTrue(banner.waitForExistence(timeout: 90), "no alert within the timeout")
         attachScreenshot(of: app, named: "06-alert-banner")
 
