@@ -97,6 +97,8 @@ struct SectionHeader: View {
     }
 
     var body: some View {
-        Text(title).foregroundStyle(Color.secondaryText)
+        Text(title)
+            .font(.headline)  // explicit: the default header font doesn't fully scale
+            .foregroundStyle(Color.secondaryText)
     }
 }
