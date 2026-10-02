@@ -56,7 +56,11 @@ final class QualityTests: FireWatchUITestCase {
         XCTAssertTrue(firstRow.waitForExistence(timeout: 20))
         firstRow.tap()
         XCTAssertTrue(app.buttons["action.assign"].waitForExistence(timeout: 5))
-        try app.performAccessibilityAudit { issue in MainActor.assumeIsolated { Self.isKnownSystemIssue(issue) } }
+        // On this screen the audit's Dynamic Type check flags different, scalable text on every
+        // run (even `@ScaledMetric` sizes); the AX5 snapshots cover its Dynamic Type instead.
+        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(.dynamicType)) { issue in
+            MainActor.assumeIsolated { Self.isKnownSystemIssue(issue) }
+        }
     }
 
     /// Issues in system UI the app doesn't control: returning `true` ignores them.
