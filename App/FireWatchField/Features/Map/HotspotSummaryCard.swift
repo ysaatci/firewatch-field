@@ -6,6 +6,8 @@ struct HotspotSummaryCard: View {
     @Environment(AppModel.self) private var model
     @Environment(Router.self) private var router
     @Environment(\.dismiss) private var dismiss
+    /// The headline temperature, scaled with Dynamic Type.
+    @ScaledMetric(relativeTo: .largeTitle) private var temperatureSize = 40.0
     let hotspotID: Hotspot.ID
 
     var body: some View {
@@ -20,7 +22,7 @@ struct HotspotSummaryCard: View {
                         .font(.subheadline)
                 }
                 Text(Format.temperature(hotspot.temperatureCelsius))
-                    .font(.system(size: 40, weight: .bold, design: .rounded).monospacedDigit())
+                    .font(.system(size: temperatureSize, weight: .bold, design: .rounded).monospacedDigit())
                 if let asOf = model.field.asOf {
                     Text("Last measured \(RelativeTime(from: hotspot.lastSeen, to: asOf).text)")
                         .font(.subheadline)

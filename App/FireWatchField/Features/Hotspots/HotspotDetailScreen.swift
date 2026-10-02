@@ -7,6 +7,8 @@ import SwiftUI
 struct HotspotDetailScreen: View {
     @Environment(AppModel.self) private var model
     @Environment(LocationProvider.self) private var location
+    /// The headline temperature, scaled with Dynamic Type.
+    @ScaledMetric(relativeTo: .largeTitle) private var temperatureSize = 44.0
     let hotspotID: Hotspot.ID
 
     var body: some View {
@@ -28,7 +30,7 @@ struct HotspotDetailScreen: View {
         Section {
             HStack(alignment: .firstTextBaseline) {
                 Text(Format.temperature(hotspot.temperatureCelsius))
-                    .font(.system(size: 44, weight: .bold, design: .rounded).monospacedDigit())
+                    .font(.system(size: temperatureSize, weight: .bold, design: .rounded).monospacedDigit())
                     .accessibilityIdentifier("temperature")
                 Spacer()
                 VStack(alignment: .trailing) {
