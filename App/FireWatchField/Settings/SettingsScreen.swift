@@ -74,7 +74,6 @@ struct SettingsScreen: View {
                 Link("Source code", destination: URL(staticString: "https://github.com/ysaatci/firewatch-field"))
             }
         }
-        .readableSecondaryText()
         .navigationTitle("Settings")
         .onAppear { simulateOutage = model.outage.isActive }
         .onChange(of: simulateOutage) { _, active in model.outage.isActive = active }

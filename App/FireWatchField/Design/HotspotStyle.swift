@@ -86,11 +86,3 @@ extension Color {
                 : UIColor(red: 0.40, green: 0.40, blue: 0.43, alpha: 1)
         })
 }
-
-extension View {
-    /// Draws `.secondary` content, such as form section headers, footers and values, in
-    /// ``Color/secondaryText``, which stays readable outdoors where the system grey is too faint.
-    func readableSecondaryText() -> some View {
-        foregroundStyle(.primary, Color.secondaryText)
-    }
-}

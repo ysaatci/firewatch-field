@@ -104,7 +104,6 @@ struct ReportScreen: View {
                 }
             }
         }
-        .readableSecondaryText()
         .navigationTitle("Report")
         .onChange(of: photoItem) { _, item in
             Task {
