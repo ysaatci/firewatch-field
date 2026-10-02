@@ -9,6 +9,7 @@ struct HotspotDetailScreen: View {
     @Environment(LocationProvider.self) private var location
     /// The headline temperature, scaled with Dynamic Type.
     @ScaledMetric(relativeTo: .largeTitle) private var temperatureSize = 44.0
+    @Environment(\.dynamicTypeSize) private var typeSize
     let hotspotID: Hotspot.ID
 
     var body: some View {
@@ -28,18 +29,18 @@ struct HotspotDetailScreen: View {
 
     private func summary(_ hotspot: Hotspot) -> some View {
         Section {
-            HStack(alignment: .firstTextBaseline) {
-                Text(Format.temperature(hotspot.temperatureCelsius))
-                    .font(.system(size: temperatureSize, weight: .bold, design: .rounded).monospacedDigit())
-                    .accessibilityIdentifier("temperature")
-                Spacer()
-                VStack(alignment: .trailing) {
-                    Label(resource: hotspot.severity.label, systemImage: hotspot.severity.symbol)
-                        .foregroundStyle(hotspot.severity.color)
-                    Label(resource: hotspot.status.label, systemImage: hotspot.status.symbol)
-                        .accessibilityIdentifier("status")
+            if typeSize.isAccessibilitySize {
+                // Too big for one line: the temperature above its labels, both full width.
+                VStack(alignment: .leading, spacing: 8) {
+                    temperature(hotspot)
+                    badges(hotspot, alignment: .leading)
                 }
-                .font(.subheadline.bold())
+            } else {
+                HStack(alignment: .firstTextBaseline) {
+                    temperature(hotspot)
+                    Spacer()
+                    badges(hotspot, alignment: .trailing)
+                }
             }
             LabeledContent("Confidence", value: hotspot.confidence.formatted(.percent.precision(.fractionLength(0))))
             if let asOf = model.field.asOf {
@@ -50,6 +51,22 @@ struct HotspotDetailScreen: View {
                 LabeledContent("Flare-ups", value: "\(hotspot.workflow.flareUps)")
             }
         }
+    }
+
+    private func temperature(_ hotspot: Hotspot) -> some View {
+        Text(Format.temperature(hotspot.temperatureCelsius))
+            .font(.system(size: temperatureSize, weight: .bold, design: .rounded).monospacedDigit())
+            .accessibilityIdentifier("temperature")
+    }
+
+    private func badges(_ hotspot: Hotspot, alignment: HorizontalAlignment) -> some View {
+        VStack(alignment: alignment) {
+            Label(resource: hotspot.severity.label, systemImage: hotspot.severity.symbol)
+                .foregroundStyle(hotspot.severity.color)
+            Label(resource: hotspot.status.label, systemImage: hotspot.status.symbol)
+                .accessibilityIdentifier("status")
+        }
+        .font(.subheadline.bold())
     }
 
     private func trend(_ hotspot: Hotspot) -> some View {

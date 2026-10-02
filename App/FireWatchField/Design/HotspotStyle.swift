@@ -100,5 +100,7 @@ struct SectionHeader: View {
         Text(title)
             .font(.headline)  // explicit: the default header font doesn't fully scale
             .foregroundStyle(Color.secondaryText)
+            .accessibilityAddTraits(.isHeader)
+            .accessibilityIdentifier("sectionHeader")
     }
 }
